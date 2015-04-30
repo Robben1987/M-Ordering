@@ -26,7 +26,7 @@
     NSMutableArray* _menuArray;
     NSMutableData*  _responseData;
     
-    UIViewController* _viewCtrl;
+    id _viewCtrl;
     unsigned _ordered;
 }
 @end
@@ -122,7 +122,7 @@
 
 #pragma mark- http interface
 
--(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(UIViewController*)viewCtrl
+-(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(id)viewCtrl
 {
     _userName = name;
     _passWord = password;
@@ -139,14 +139,16 @@
     [MODataOperation logout:self];
     return TRUE;
 }
--(BOOL)sendOrder:(unsigned)index
+-(BOOL)sendOrder:(unsigned)index viewController:(id)viewCtrl
 {
+    _viewCtrl = viewCtrl;
     [MODataOperation order: index delegate:self];
     return TRUE;
 
 }
--(BOOL)cancelOrder:(unsigned)index
+-(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl
 {
+    _viewCtrl = viewCtrl;
     [MODataOperation cancel: index delegate:self];
     return TRUE;
 }
@@ -174,7 +176,7 @@
 
 
 
--(void)backToMain:(MOLoginViewController*)ctrl
+-(void)backToMain:(id)ctrl
 {
     [ctrl backToMain];
 }
@@ -239,9 +241,13 @@
             MO_SHOW_HIDE;
             MO_SHOW_FAIL(@"订餐失败");
             [self clearOrdered];
+
+            MO_BACK_TO_MAIN_THREAD(_viewCtrl);//reload tableview
+        }else
+        {
+            MO_SHOW_HIDE;
+            MO_SHOW_SUCC(@"订餐成功");
         }
-        MO_SHOW_HIDE;
-        MO_SHOW_SUCC(@"订餐成功");
     }else if([MODataOperation isCancleOrderRequest: url])
     {
         if(![MODataOperation isCancelOrderSuccessfully: body])
@@ -249,11 +255,13 @@
             NSLog(@"cancel order failed");//failed cause
             MO_SHOW_HIDE;
             MO_SHOW_FAIL(@"取消订餐失败");
+            MO_BACK_TO_MAIN_THREAD(_viewCtrl);
+        }else
+        {
+            [self clearOrdered];
+            MO_SHOW_HIDE;
+            MO_SHOW_SUCC(@"取消订餐成功");
         }
-        
-        [self clearOrdered];
-        MO_SHOW_HIDE;
-        MO_SHOW_SUCC(@"取消订餐成功");
     }else if([MODataOperation isMyHistoryRequest: url])
     {
         
