@@ -8,6 +8,8 @@
 
 #import "MODiscoveryViewController.h"
 #import "MOToolGroup.h"
+#import "MORefreshViewController.h"
+#import "MOShakeViewController.h"
 
 @interface MODiscoveryViewController ()
 {
@@ -104,19 +106,27 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if(indexPath.section == 1)
+    if(indexPath.section == 0)
     {
-        if(indexPath.row == 1)
+        if(indexPath.row == 0)
         {
-            //[];
+            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_OTHERS];
+            [self.navigationController pushViewController:vc animated:YES];
         }
-    }else if(indexPath.section == 2)
+    }else if(indexPath.section == 1)
     {
-        
+        if(indexPath.row == 0)
+        {
+            MOShakeViewController* vc = [[MOShakeViewController alloc] init];
+            [vc setTitle:@"摇一摇点餐"];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }else
     {
         
     }
+
+    
     /*
     UIViewController* vc = [[UIViewController alloc] init];
     [vc.view setBackgroundColor:[UIColor yellowColor]];

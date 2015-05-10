@@ -25,4 +25,5 @@
 
 #pragma mark static constructor
 +(MOMenuEntry *)initWithName:(NSString *)name andIndex:(unsigned)index;
+
 @end

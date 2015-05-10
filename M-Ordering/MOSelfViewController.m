@@ -9,6 +9,7 @@
 #import "MOSelfViewController.h"
 #import "MOMainController.h"
 #import "MOToolGroup.h"
+#import "MORefreshViewController.h"
 
 @interface MOSelfViewController ()
 {
@@ -148,16 +149,49 @@
     
     return cell;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark 点击行进入新页面
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if(indexPath.section == 0)
+    {
+        if(indexPath.row == 0)
+        {
+            UIViewController* vc = [[UIViewController alloc] init];
+            [vc.view setBackgroundColor:[UIColor yellowColor]];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }else if(indexPath.section == 1)
+    {
+        if(indexPath.row == 1)
+        {
+            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            //MOShakeViewController* vc = [[MOShakeViewController alloc] init];
+            //[vc setTitle:@"摇一摇点餐"];
+            //[self.navigationController pushViewController:vc animated:YES];
+        }
+    }else
+    {
+        
+    }
+    
+    
+    /*
+     UIViewController* vc = [[UIViewController alloc] init];
+     [vc.view setBackgroundColor:[UIColor yellowColor]];
+     [self.navigationController pushViewController:vc animated:YES];
+     */
+    
+    //    //创建弹出窗口
+    //    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"System Info" message:[contact getName] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    //    alert.alertViewStyle=UIAlertViewStylePlainTextInput; //设置窗口内容样式
+    //    UITextField *textField= [alert textFieldAtIndex:0]; //取得文本框
+    //    textField.text=contact.phoneNumber; //设置文本框内容
+    //    [alert show]; //显示窗口
 }
-*/
+
 
 @end
 

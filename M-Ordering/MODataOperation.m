@@ -8,7 +8,6 @@
 
 #import "MODataOperation.h"
 #import "hpple/TFHpple.h"
-#import "MOMenuEntry.h"
 #import "MOMenuGroup.h"
 #import "MOCommon.h"
 
@@ -98,51 +97,7 @@
     return [url isEqualToString:HTTP_URL_PASSWORD];
 }
 
-
-
-+(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)menus
-{
-#if NETWORK_ACTIVE
-    
-    //get restaurants
-    NSString* htmlBody = [MODataOperation sendHttpRequestSync:HTTP_URL_RESTAURANT];
-    [MODataOperation getRestaurants:restaurants fromHtml:htmlBody];
-    
-    // get menu list
-    unsigned pageNum = 0xffffffff;
-    for(unsigned index = 1; index <= pageNum; index++)
-    {
-        NSString* url = [NSString stringWithFormat:HTTP_URL_MENU_NEXT, index];
-        NSString* html = [MODataOperation sendHttpRequestSync:url];
-        if(!html)
-        {
-            NSLog(@"get url(%@) failed", url);
-            return FALSE;
-        }
-        unsigned num = [MODataOperation getMenuList:menus fromHtml:html];
-        
-        if(pageNum == 0xffffffff) pageNum = num;
-    }
-    
-#else
-    NSString* html = [MODataOperation getHtmlfromUrl:HTTP_URL_RESTAURANT];
-    [MODataOperation getRestaurants:restaurants fromHtml:html];
-    
-    
-    html = [MODataOperation getHtmlfromUrl: HTTP_URL_MENU_LIST];
-    unsigned num = [MODataOperation getMenuList:menus fromHtml:html];
-    NSLog(@"page num: %u", num);
-    
-#endif
-    
-    for (MOMenuEntry* entry in menus)
-    {
-        MOMenuGroup* group = [restaurants objectForKey:[entry restaurant]];
-        [[group entrys] addObject:entry];
-    }
-    
-    return TRUE;
-}
+#pragma mark- html method
 +(unsigned)getMenuList:(NSMutableArray*)array fromHtml:(NSString*)htmlString
 {
     static unsigned pageNum = 0;
@@ -204,8 +159,28 @@
     }
     return;
 }
++(void)getOtherOrders:(NSMutableArray*)array fromHtml:(NSString*)htmlString
+{
+    NSData *htmlData=[htmlString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    //NSData *htmlData=[htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    NSArray *elements  = [xpathParser searchWithXPathQuery:@"//a"];
+    //NSLog(@"elements: count:%lu",elements.count);
+    
+    //Parser the Restaurants list
+    for(unsigned i = 0; i < (elements.count); i+=2)
+    {
+        MOMenuGroup* entry = [MOMenuGroup initWithName:[elements[i] content] andDetail:[elements[i+1] content] andEntrys:[[NSMutableArray alloc] init]];
+        
+        [entry setHref:[elements[i] objectForKey:@"href"]];
+        [entry setTel:[[elements[i] objectForKey:@"title"] substringFromIndex:5]];
+        [array addObject:entry];
+    }
+    return;
+}
 
-#pragma mark- http methord
+#pragma mark- http method
 +(void)login:(NSString*)userName andPassword:(NSString*)passWord delegate:(id)delegate
 {
     // get the url
@@ -331,6 +306,49 @@
     NSLog(@"logout succ");
     return TRUE;
 }
++(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)menus
+{
+#if NETWORK_ACTIVE
+    
+    //get restaurants
+    NSString* htmlBody = [MODataOperation sendHttpRequestSync:HTTP_URL_RESTAURANT];
+    [MODataOperation getRestaurants:restaurants fromHtml:htmlBody];
+    
+    // get menu list
+    unsigned pageNum = 0xffffffff;
+    for(unsigned index = 1; index <= pageNum; index++)
+    {
+        NSString* url = [NSString stringWithFormat:HTTP_URL_MENU_NEXT, index];
+        NSString* html = [MODataOperation sendHttpRequestSync:url];
+        if(!html)
+        {
+            NSLog(@"get url(%@) failed", url);
+            return FALSE;
+        }
+        unsigned num = [MODataOperation getMenuList:menus fromHtml:html];
+        
+        if(pageNum == 0xffffffff) pageNum = num;
+    }
+    
+#else
+    NSString* html = [MODataOperation getHtmlfromUrl:HTTP_URL_RESTAURANT];
+    [MODataOperation getRestaurants:restaurants fromHtml:html];
+    
+    
+    html = [MODataOperation getHtmlfromUrl: HTTP_URL_MENU_LIST];
+    unsigned num = [MODataOperation getMenuList:menus fromHtml:html];
+    NSLog(@"page num: %u", num);
+    
+#endif
+    
+    for (MOMenuEntry* entry in menus)
+    {
+        MOMenuGroup* group = [restaurants objectForKey:[entry restaurant]];
+        [[group entrys] addObject:entry];
+    }
+    
+    return TRUE;
+}
 +(void)order:(unsigned)index delegate:(id)delegate
 {
     NSString* url = [NSString stringWithFormat:HTTP_URL_ORDER];
@@ -352,6 +370,26 @@
         return FALSE;
     }
 
+    NSLog(@"order succ");
+    return TRUE;
+}
++(BOOL)orderRandom:(MOMenuEntry*)entry
+{
+    NSString* html = [self sendHttpRequestSync: [NSString stringWithFormat:HTTP_URL_ORDER_RANDOM]];
+    if(!html)
+    {
+        NSLog(@"order failed");
+        return FALSE;
+    }
+    
+    if(![self isSentOrderSuccessfully: html])
+    {
+        NSLog(@"order failed: %@", html);//failed cause
+        return FALSE;
+    }
+    
+    //get the order info
+    //entry = ;
     NSLog(@"order succ");
     return TRUE;
 }
@@ -408,11 +446,11 @@
     NSLog(@"get my history succ");
     return TRUE;
 }
-+(void)getOtherOrders:(id)delegate
+/*+(void)getOtherOrders:(id)delegate
 {
     [MODataOperation sendHttpRequestNonSync:HTTP_URL_OTHER_ORDERS delegate:delegate];
-}
-+(BOOL)getOtherOrders
+}*/
++(BOOL)getOtherOrders:(NSMutableArray*)array
 {
     NSString* html = [self sendHttpRequestSync: HTTP_URL_OTHER_ORDERS];
     if(!html)
@@ -423,10 +461,11 @@
 
     if(![self isOtherOrdersPage: html])
     {
-        NSLog(@"get other orders failed: %@", html);//failed cause
+        NSLog(@"get other orders failed");//failed cause
         return FALSE;
     }
 
+    [MODataOperation getOtherOrders:array fromHtml:html];
     NSLog(@"get other orders succ");
     return TRUE;
 }
