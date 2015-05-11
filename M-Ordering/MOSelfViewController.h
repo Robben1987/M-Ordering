@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MODataController.h"
 
 #pragma MOSelfViewController
 @interface MOSelfViewController : UITableViewController
+
+@property(nonatomic, retain)MODataController* dataCtrl;
 
 @end

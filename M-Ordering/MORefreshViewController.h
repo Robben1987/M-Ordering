@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MODataController.h"
 typedef enum
 {
     MO_REFRESH_MY_HISTORY,
@@ -17,6 +17,7 @@ typedef enum
 @interface MORefreshViewController : UIViewController
 
 @property(nonatomic, assign)MO_REFRESH_TABLE_TYPE type;
+@property(nonatomic, retain)MODataController* dataCtrl;
 
--(MORefreshViewController*)initWithType:(MO_REFRESH_TABLE_TYPE)type;
+-(MORefreshViewController*)initWithType:(MO_REFRESH_TABLE_TYPE)type andDataCtrl:(MODataController*)ctrl;
 @end

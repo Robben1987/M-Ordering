@@ -10,4 +10,6 @@
 
 @interface MODiscoveryViewController : UITableViewController
 
+@property(nonatomic, retain)MODataController* dataCtrl;
+
 @end

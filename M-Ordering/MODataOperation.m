@@ -161,24 +161,118 @@
 }
 +(void)getOtherOrders:(NSMutableArray*)array fromHtml:(NSString*)htmlString
 {
-    NSData *htmlData=[htmlString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
-    //NSData *htmlData=[htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    static unsigned pageNum = 0;
+    
+    NSRange rangStart=[htmlString rangeOfString:@"<table class=\"en\""];
+    NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
+    
+    NSRange rangEnd=[tableStart rangeOfString:@"</table>"];
+    NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location + rangEnd.length)]];
+    
+    //NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
     
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-    NSArray *elements  = [xpathParser searchWithXPathQuery:@"//a"];
-    //NSLog(@"elements: count:%lu",elements.count);
+    NSArray *elements  = [xpathParser searchWithXPathQuery:@"//tr"];
     
-    //Parser the Restaurants list
-    for(unsigned i = 0; i < (elements.count); i+=2)
+    //Parser the menu list
+    for(unsigned i = 2; i < (elements.count-1); i++)
     {
-        MOMenuGroup* entry = [MOMenuGroup initWithName:[elements[i] content] andDetail:[elements[i+1] content] andEntrys:[[NSMutableArray alloc] init]];
+        NSArray* children =[elements[i] children];
+        NSArray* grandChildren =[children[0] children];
         
-        [entry setHref:[elements[i] objectForKey:@"href"]];
-        [entry setTel:[[elements[i] objectForKey:@"title"] substringFromIndex:5]];
-        [array addObject:entry];
+        MOMenuEntry* menuEntry = [[MOMenuEntry alloc] init];
+        [menuEntry setRestaurant: [grandChildren[1] content]];
+        [menuEntry setEntryName: [grandChildren[2] content]];
+        //others, eg: the date...
+        
+        [orderEntry setPerson: [grandChildren[0] content]];
+        [orderEntry setUrl: [[children[1] children] attribute]];
+        [orderEntry setMenuEntry: menuEntry];
+        //[entry setRestaurant:[[children[4] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        //[entry dumpEntry];
+        
+        [array addObject:orderEntry];
     }
-    return;
+    
+    if(!pageNum)
+    {
+        NSArray* nexts  = [xpathParser searchWithXPathQuery:@"//strong"];
+        NSArray* children = [nexts[0] children];
+        NSString* page = [[children[children.count - 1] content] substringFromIndex:1];
+        pageNum = [page intValue];
+    }
+    
+    return pageNum;
 }
++(void)getMyHistory:(NSMutableArray*)array fromHtml:(NSString*)htmlString
+{
+    static unsigned pageNum = 0;
+    
+    NSRange rangStart=[htmlString rangeOfString:@"<table class=\"en\""];
+    NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
+    
+    NSRange rangEnd=[tableStart rangeOfString:@"</table>"];
+    NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location + rangEnd.length)]];
+    
+    //NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
+    
+    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    NSArray *elements  = [xpathParser searchWithXPathQuery:@"//tr"];
+    
+    //Parser the menu list
+    for(unsigned i = 2; i < (elements.count-1); i++)
+    {
+        NSArray* children =[elements[i] children];
+                
+        MOMenuEntry* menuEntry = [[MOMenuEntry alloc] init];
+        [menuEntry setEntryName: [children[1] content]];
+        [menuEntry setRestaurant: [children[2] content]];
+        //others, eg: the date...
+        
+        [orderEntry setDate: [children[3] content]];
+        [orderEntry setUrl: [[children[1] children] attribute]];
+        [orderEntry setMenuEntry: menuEntry];
+        //[entry setRestaurant:[[children[4] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        //[entry dumpEntry];
+        
+        [array addObject:orderEntry];
+    }
+    
+    if(!pageNum)
+    {
+        NSArray* nexts  = [xpathParser searchWithXPathQuery:@"//strong"];
+        NSArray* children = [nexts[0] children];
+        NSString* page = [[children[children.count - 1] content] substringFromIndex:1];
+        pageNum = [page intValue];
+    }
+    
+    return pageNum;
+}
++(void)getComments:(NSMutableArray*)array fromHtml:(NSString*)htmlString
+{    
+    NSRange rangStart=[htmlString rangeOfString:@"<body>"];
+    NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
+    
+    NSRange rangEnd=[tableStart rangeOfString:@"</body>"];
+    NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location + rangEnd.length)]];
+    
+    //NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
+    
+    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    NSArray *elements  = [xpathParser searchWithXPathQuery:@"//tr"];
+    
+    //Parser the menu list
+    for(unsigned i = 2; i < (elements.count-1); i++)
+    {
+        NSArray* children =[elements[i] children];
+        //NSString
+        //[array addObject:orderEntry];
+    }
+}
+
 
 #pragma mark- http method
 +(void)login:(NSString*)userName andPassword:(NSString*)passWord delegate:(id)delegate
@@ -373,26 +467,7 @@
     NSLog(@"order succ");
     return TRUE;
 }
-+(BOOL)orderRandom:(MOMenuEntry*)entry
-{
-    NSString* html = [self sendHttpRequestSync: [NSString stringWithFormat:HTTP_URL_ORDER_RANDOM]];
-    if(!html)
-    {
-        NSLog(@"order failed");
-        return FALSE;
-    }
-    
-    if(![self isSentOrderSuccessfully: html])
-    {
-        NSLog(@"order failed: %@", html);//failed cause
-        return FALSE;
-    }
-    
-    //get the order info
-    //entry = ;
-    NSLog(@"order succ");
-    return TRUE;
-}
+
 +(void)cancel:(unsigned)index delegate:(id)delegate
 {
     NSString* url = [NSString stringWithFormat:HTTP_URL_CANCEL];
@@ -428,7 +503,7 @@
 {
     [MODataOperation sendHttpRequestNonSync:HTTP_URL_ORDER_HISTORY delegate:delegate];
 }
-+(BOOL)getMyHistory
++(BOOL)getMyHistory:(NSMutableArray*)array
 {
     NSString* html = [self sendHttpRequestSync: HTTP_URL_ORDER_HISTORY];
     if(!html)
@@ -443,6 +518,7 @@
         return FALSE;
     }
 
+    [MODataOperation getMyHistory:array fromHtml:html]
     NSLog(@"get my history succ");
     return TRUE;
 }
@@ -474,7 +550,7 @@
     NSString* url = [NSString stringWithFormat: HTTP_URL_COMMENTS];
     [MODataOperation sendHttpRequestNonSync:[url stringByAppendingFormat: @"%d", index] delegate:delegate];
 }
-+(BOOL)getComments:(unsigned)index
++(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index
 {
     NSString* url = [NSString stringWithFormat: HTTP_URL_COMMENTS];
     NSString* html = [self sendHttpRequestSync: [url stringByAppendingFormat: @"%d", index]];
@@ -490,9 +566,11 @@
         return FALSE;
     }
 
+    [MODataOperation getComments:array fromHtml:html];
     NSLog(@"get comments succ");
     return TRUE;
 }
+
 
 +(NSString*)sendHttpRequestSync:(NSString*)urlString
 {

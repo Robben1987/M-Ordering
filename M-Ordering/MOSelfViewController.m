@@ -20,6 +20,16 @@
 
 @implementation MOSelfViewController 
 
+-(MOSelfViewController*)initWithType:(MO_REFRESH_TABLE_TYPE)type andDataCtrl:(MODataController*)ctrl
+{
+    self = [super init];
+    if(self)
+    {
+        self.type = type;
+        self.dataCtrl = ctrl;
+    }
+    return self;
+}
 - (void)loadView
 {
     [super loadView];
@@ -165,12 +175,10 @@
     {
         if(indexPath.row == 1)
         {
-            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY];
+            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
+            [vc setTitle:@"我的订餐记录"];
             [self.navigationController pushViewController:vc animated:YES];
             
-            //MOShakeViewController* vc = [[MOShakeViewController alloc] init];
-            //[vc setTitle:@"摇一摇点餐"];
-            //[self.navigationController pushViewController:vc animated:YES];
         }
     }else
     {

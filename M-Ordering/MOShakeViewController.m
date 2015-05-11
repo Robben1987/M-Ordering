@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 Li Robben. All rights reserved.
 //
 
+//#include<stdlib.h> 
 #import <AudioToolbox/AudioToolbox.h>
 #import "MOShakeViewController.h"
 #import "MOCommon.h"
@@ -26,17 +27,27 @@ typedef enum
     UIImageView* _imgUp;
     UIImageView* _imgDown;
     UIActivityIndicatorView* _indicatorView;
-    MOMenuEntry* _ordered;
+
+    BOOL        _isMove;
 }
 @end
 
 @implementation MOShakeViewController
+
+-(MOShakeViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    self = [super init];
+    if (self)
+    {
+        self.dataCtrl = ctrl;
+    }
+    return self;
+}
+
 -(void)initView
 {
     [self.view setBackgroundColor:[UIColor blackColor]];
-    
-    _ordered = [[MOMenuEntry alloc] init];
-    //[self clearOrdered];
+    _isMove = FALSE;
     
     CGRect upRect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * 0.5);
     CGRect downRect = CGRectMake(0, upRect.size.height, self.view.frame.size.width, self.view.frame.size.height);
@@ -71,17 +82,32 @@ typedef enum
     [self becomeFirstResponder];
     
 }
+-(void)moveImageView
+{
+    _isMove = TRUE;
+    [UIView animateWithDuration:MO_SHAKE_ANIMATE_DURATION animations:^{
+            [_imgUp setFrame: CGRectMake((_imgUp.frame.origin.x), (_imgUp.frame.origin.y - MO_SHAKE_SUBVIEW_OFFSET), _imgUp.frame.size.width, _imgUp.frame.size.height)];
+            [_imgDown setFrame:CGRectMake((_imgDown.frame.origin.x), (_imgDown.frame.origin.y + MO_SHAKE_SUBVIEW_OFFSET), _imgDown.frame.size.width, _imgDown.frame.size.height)];
+        }];
+}
+-(void)backImageView
+{
+    _isMove = FALSE;
+    [UIView animateWithDuration:MO_SHAKE_ANIMATE_DURATION animations:^{
+        [_imgUp setFrame: CGRectMake((_imgUp.frame.origin.x), (_imgUp.frame.origin.y + MO_SHAKE_SUBVIEW_OFFSET), _imgUp.frame.size.width, _imgUp.frame.size.height)];
+        [_imgDown setFrame:CGRectMake((_imgDown.frame.origin.x), (_imgDown.frame.origin.y - MO_SHAKE_SUBVIEW_OFFSET), _imgDown.frame.size.width, _imgDown.frame.size.height)];
+     }];
+}
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     
     if (motion == UIEventSubtypeMotionShake)
     {
         NSLog(@"start shark");
-        [UIView animateWithDuration:MO_SHAKE_ANIMATE_DURATION animations:^{
-            [_imgUp setFrame: CGRectMake((_imgUp.frame.origin.x), (_imgUp.frame.origin.y - MO_SHAKE_SUBVIEW_OFFSET), _imgUp.frame.size.width, _imgUp.frame.size.height)];
-            [_imgDown setFrame:CGRectMake((_imgDown.frame.origin.x), (_imgDown.frame.origin.y + MO_SHAKE_SUBVIEW_OFFSET), _imgDown.frame.size.width, _imgDown.frame.size.height)];
-            [_indicatorView startAnimating];
-        }];
+        if(!_isMove)
+        {
+            [self moveImageView];
+        }
     }
 }
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
@@ -89,101 +115,79 @@ typedef enum
     if (motion == UIEventSubtypeMotionShake)
     {
         NSLog(@"finish shark");
-        [self sendHttpRequestByThread];
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        [self showDetailView: [[self.dataCtrl getMenuList] objectAtIndex:[self getRandomIndex]]];
     }
 }
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     NSLog(@"cancel shark");
-}
--(BOOL)isOrdered
-{
-    return (_ordered.index != MO_INVALID_UINT);
-}
--(void)clearOrdered
-{
-    [_ordered setIndex:MO_INVALID_UINT];
+    if(_isMove)
+    {
+        [self backImageView];
+    }
 }
 
--(void)showDetailView
+
+-(unsigned)getRandomIndex()
+{
+    return (unsigned)(arc4random() % [[self.dataCtrl getMenuList] count]);
+}
+
+-(void)showDetailView:(MOMenuEntry*)entry
 {
     //320 * 0.85 = 272
-    UIView* infoView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width * 0.85, MO_SHAKE_SUBVIEW_OFFSET)];
+    UIView* infoView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width * 0.85, MO_SHAKE_SUBVIEW_OFFSET*2)];
     [infoView setCenter:self.view.center];
     [infoView setBackgroundColor:[UIColor whiteColor]];
     
-    UILabel* infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, MO_SHAKE_SUBVIEW_OFFSET)];
-    infoLabel.text = @"您预订了。。。。。。";
+    UILabel* infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 272, MO_SHAKE_SUBVIEW_OFFSET)];
+    infoLabel.text = @"您摇到了。。。。。。";
     
-    UIButton* infoButton = [[UIButton alloc] initWithFrame:CGRectMake(200, 0, 72, MO_SHAKE_SUBVIEW_OFFSET)];
-    [infoButton setBackgroundColor: [UIColor grayColor]];
-    [infoButton setTitle:@"不满意,取消" forState:UIControlStateNormal];
-    [infoButton addTarget:self action:@selector(orderCancel:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton* sendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, MO_SHAKE_SUBVIEW_OFFSET, 136, MO_SHAKE_SUBVIEW_OFFSET)];
+    [sendButton setBackgroundColor: [UIColor grayColor]];
+    [sendButton setTitle:@"就订它" forState:UIControlStateNormal];
+    [sendButton addTarget:self action:@selector(orderCancel:) forControlEvents:UIControlEventTouchUpInside];
     
+    UIButton* cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(136, MO_SHAKE_SUBVIEW_OFFSET, 136, MO_SHAKE_SUBVIEW_OFFSET)];
+    [cancelButton setBackgroundColor: [UIColor grayColor]];
+    [cancelButton setTitle:@"继续摇一摇" forState:UIControlStateNormal];
     
     [infoView addSubview:infoLabel];
-    [infoView addSubview:infoButton];
+    [infoView addSubview:sendButton];
+    [infoView addSubview:cancelButton];
     
     [self.view addSubview:infoView];
 }
+
 #pragma mark - 发送异步请求
--(void)orderCancel:(UIButton*)btn
-{
-    NSLog(@"orderCancel");
-    [self sendHttpRequestByThread];
-}
 -(void)showResult:(NSString*)result
 {
-    [UIView animateWithDuration:MO_SHAKE_ANIMATE_DURATION animations:^{
-        [_imgUp setFrame: CGRectMake((_imgUp.frame.origin.x), (_imgUp.frame.origin.y + MO_SHAKE_SUBVIEW_OFFSET), _imgUp.frame.size.width, _imgUp.frame.size.height)];
-        [_imgDown setFrame:CGRectMake((_imgDown.frame.origin.x), (_imgDown.frame.origin.y - MO_SHAKE_SUBVIEW_OFFSET), _imgDown.frame.size.width, _imgDown.frame.size.height)];
-        [_indicatorView stopAnimating];
-     }];
-    
+    [self backImageView];   
     if(result)
     {
         MO_SHOW_FAIL(result);
-    }
-    
-    if([self isOrdered])
-    {
-        //todo: set ordered in data ctrl
-        
-        [self showDetailView];
-    }
-
-}
-- (void)sendRequest
-{
-    sleep(5);
-     NSString* result = nil;
-    if(![self isOrdered])
-    {
-        if(![MODataOperation orderRandom:_ordered])
-        {
-            result = @"网络错误...";
-        }
-    
-        [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
     }else
     {
-        if(![MODataOperation cancel:[_ordered index]])
-        {
-            result = @"网络错误...";
-        }else
-        {
-            [self clearOrdered];
-        }
-        
-        [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
+        MO_SHOW_SUCC(@"恭喜您,订餐成功!");
     }
 }
-- (void)sendHttpRequestByThread
+- (void)sendOrder:(UIButton*)btn
 {
-    [NSThread detachNewThreadSelector:@selector(sendRequest) toTarget:self withObject:nil];
+    sleep(5);
+    NSString* result = nil;
+    if(![self.dataCtrl sendOrder: btn.tag])
+    {
+        result = @"网络错误...";
+    }
+    
+    [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
 }
-
+-(void)clickButton:(UIButton*)btn
+{
+    [_indicatorView startAnimating];
+    [NSThread detachNewThreadSelector:@selector(sendRequest) toTarget:self withObject:btn];
+}
 
 
 

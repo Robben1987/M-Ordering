@@ -18,7 +18,6 @@ const NSInteger MORefreshFooterHeight = 50;
 {
     MORefreshTableView*   _tableView;
     
-    NSMutableArray*       _dataSource;
     BOOL                  _reload;
 }
 
@@ -27,12 +26,13 @@ const NSInteger MORefreshFooterHeight = 50;
 
 @implementation MORefreshViewController
 
--(MORefreshViewController*)initWithType:(MO_REFRESH_TABLE_TYPE)type;
+-(MORefreshViewController*)initWithType:(MO_REFRESH_TABLE_TYPE)type andDataCtrl:(MODataController*)ctrl
 {
     self = [super init];
     if (self)
     {
         self.type = type;
+        self.dataCtrl = ctrl;
     }
     return self;
 }
@@ -53,9 +53,8 @@ const NSInteger MORefreshFooterHeight = 50;
     //_tableView = [[MORefreshTableView alloc] initWithFrame:tableFrame showRefreshHeader:YES showRefreshFooter:NO];
     _tableView.refreshHeaderHeight = MORefreshHeaderHeight;
     _tableView.refreshFooterHeight = MORefreshFooterHeight;
-    _dataSource = [NSMutableArray arrayWithObjects: @"Row", @"Row", @"Row", @"Row", @"Row", @"Row", @"Row", @"Row", nil];
-    
-    __weak MORefreshViewController *vc = self;
+    _tableView.dataSource = self;
+    __weak MORefreshViewController *vc = self;    
     _tableView.dragEndBlock = ^(MORefreshViewType type)
     {
         if (type == MORefreshViewTypeHeader)
@@ -67,7 +66,6 @@ const NSInteger MORefreshFooterHeight = 50;
             //[vc addMoreDataInOtherThread];
         }
     };
-    _tableView.dataSource = self;
     
     [self.view addSubview:_tableView];
 }
@@ -80,19 +78,36 @@ const NSInteger MORefreshFooterHeight = 50;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_dataSource count];
+    NSMutableArray* array = nil;
+    if(self.type == MO_REFRESH_OTHERS)
+    {
+        array = [self.dataCtrl getOtherOrders];
+    }else
+    {
+        array = [self.dataCtrl getMyHistory];
+    }
+    return [array count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"otherHistory";
+    NSMutableArray* array = nil;
+    if(self.type == MO_REFRESH_OTHERS)
+    {
+        array = [self.dataCtrl getOtherOrders];
+    }else
+    {
+        array = [self.dataCtrl getMyHistory];
+    }
     
+    static NSString* cellIdentifier = @"refereshTableView";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.text = @"Row";
+        //todo
     }
     
     return cell;
@@ -113,7 +128,17 @@ const NSInteger MORefreshFooterHeight = 50;
 {
     sleep(5);
     NSString* str = nil;
-    if(![MODataOperation getOtherOrders:_dataSource])
+    BOOL result = FALSE;
+
+    if(self.type == MO_REFRESH_OTHERS)
+    {
+        result = [self.dataCtrl updateOtherOrders];
+    }else
+    {
+        result = [self.dataCtrl updateMyHistory];
+    }
+    
+    if(!result)
     {
         str = [NSString stringWithFormat:@"更新失败..."];
     }

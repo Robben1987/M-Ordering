@@ -26,6 +26,10 @@
     NSMutableArray* _menuArray;
     NSMutableData*  _responseData;
     
+    NSMutableArray* _myHistory;
+    NSMutableArray* _otherOders;
+    NSMutableArray* _myFavourites;
+    
     id _viewCtrl;
     unsigned _ordered;
 }
@@ -41,6 +45,10 @@
     {
         _menuArray = [[NSMutableArray alloc] init];
         _restaurants = [[NSMutableDictionary alloc] init];
+        _myHistory = [[NSMutableArray alloc] init];
+        _otherOders = [[NSMutableArray alloc] init];
+        _myFavourites = [[NSMutableArray alloc] init];
+
         _ordered = MO_INVALID_UINT;
     }
     
@@ -59,19 +67,6 @@
 {
     _userName = @"李志兴";
     _passWord = @"123456";
-    //[self login:HTTP_URL_LOGIN];
-    
-    //[NSThread sleepForTimeInterval:10.0];
-    
-    //[self getHttpPage:HTTP_URL_MENU_LIST];
-    
-    //[self getHttpPage:HTTP_URL_ORDER_HISTORY];
-    
-    //[self getHttpPage:HTTP_URL_OTHER_ORDERS];
-    
-    //[self getHttpPage:HTTP_URL_MONEY];
-
-    //[self getHttpPage:HTTP_URL_LOGOUT];
 
     [MODataOperation getRestaurants:_restaurants andMenus:_menuArray];
     //[MODataOperation dumpAllMenuList: _menuArray];
@@ -119,6 +114,14 @@
 {
     _ordered = MO_INVALID_UINT;
 }
+-(NSMutableArray*)getMyFavourites
+{
+    return _myFavourites;
+}
+-(void)addMyFavourites:(MOMenuEntry*)entry
+{
+    [_myFavourites addObject: entry];
+}
 
 #pragma mark- http interface
 
@@ -146,33 +149,70 @@
     return TRUE;
 
 }
+-(BOOL)sendOrder:(unsigned)index
+{
+    if(![MODataOperation order: index])
+    {
+        return FALSE;
+    }
+    
+    _viewCtrl = viewCtrl;
+    return TRUE;
+
+}
 -(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl
 {
     _viewCtrl = viewCtrl;
     [MODataOperation cancel: index delegate:self];
     return TRUE;
 }
-
--(BOOL)getMyHistory
+-(BOOL)cancelOrder:(unsigned)index
 {
-    [MODataOperation getMyHistory:self];
+    if([MODataOperation cancel: index])
+    {
+        return FALSE;
+    }
+    
+    [self clearOrdered];
     return TRUE;
 }
--(BOOL)getOtherOrders
-{
-    //[MODataOperation getOtherOrders:self];
+
+-(NSMutableArray*)getMyHistory
+{   
+    return _myHistory;
+}
+-(BOOL)updateMyHistory
+{   
+    if(![MODataOperation getMyHistory: _myHistory])
+    {
+        return FALSE;
+    }
+    
     return TRUE;
+}
+-(NSMutableArray*)getOtherOrders
+{   
+    return _otherOders;
+}
+-(BOOL)updateOtherOrders
+{   
+    if(![MODataOperation getOtherOrders: _otherOders])
+    {
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+-(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index
+{   
+    return [MODataOperation getComments: _menuComments byIndex: index];
 }
 -(BOOL)sendComment:(NSString*)content to:(unsigned)index
 {
     [MODataOperation comment: content to: index];
     return TRUE;
 }
--(BOOL)getComments:(unsigned)index
-{
-    [MODataOperation getComments: index delegate:self];
-    return TRUE;
-}
+
 
 
 

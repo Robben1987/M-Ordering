@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MODataController.h"
+
 
 @interface MOShakeViewController : UIViewController
+
+@property(nonatomic, retain)MODataController* dataCtrl;
+
+-(MOShakeViewController*)initWithDataCtrl:(MODataController*)ctrl;
 
 @end
