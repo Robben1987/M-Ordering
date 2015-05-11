@@ -160,7 +160,7 @@
 }
 -(BOOL)getOtherOrders
 {
-    [MODataOperation getOtherOrders:self];
+    //[MODataOperation getOtherOrders:self];
     return TRUE;
 }
 -(BOOL)sendComment:(NSString*)content to:(unsigned)index

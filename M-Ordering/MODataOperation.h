@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MOMenuEntry.h"
 
 @interface MODataOperation : NSObject
 
@@ -50,21 +51,21 @@
 +(void)order:(unsigned)index delegate:(id)delegate;
 +(void)cancel:(unsigned)index delegate:(id)delegate;
 +(void)getMyHistory:(id)delegate;
-+(void)getOtherOrders:(id)delegate;
+//+(void)getOtherOrders:(id)delegate;
 +(void)getComments:(unsigned)index delegate:(id)delegate;
 
 #pragma mark- http interface sync
 +(BOOL)login:(NSString*)userName andPassword:(NSString*)passWord;
 +(BOOL)logout;
 +(BOOL)order:(unsigned)index;
++(BOOL)orderRandom:(MOMenuEntry*)entry;
 +(BOOL)cancel:(unsigned)index;
 +(BOOL)comment:(NSString*)content to:(unsigned)index;
 +(BOOL)getMyHistory;
-+(BOOL)getOtherOrders;
++(BOOL)getOtherOrders:(NSMutableArray*)array;
 +(BOOL)getComments:(unsigned)index;
 
 
 +(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)array;
 
-//+(void)sendHttpRequest:(NSString*)urlString;
 @end

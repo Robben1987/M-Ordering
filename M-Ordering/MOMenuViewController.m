@@ -329,7 +329,6 @@
         entry = [[self.dataCtrl getMenuListByRestaurant: self.title] objectAtIndex:btn.tag];
     }
     
-    [self.dataCtrl setOrdered:entry.index];
     
     NSString* detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
     
@@ -347,7 +346,7 @@
     {
         alert = [[UIAlertView alloc]initWithTitle:@"取消订单" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     }
-    unsigned cellAndIndex = ((entry.index) | (btn.tag << 16));
+    unsigned cellAndIndex = ((entry.index) | ((unsigned)btn.tag << 16));
     [alert setAlertViewStyle:UIAlertViewStyleDefault];
     [alert setTag:cellAndIndex];
     //[alert setTag:entry.index];
@@ -357,8 +356,10 @@
 #pragma mark 弹框的代理方法，下订单
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    unsigned entryIndex = ((unsigned)alertView.tag >> 16);
-    unsigned cellIndex = (((unsigned)alertView.tag << 16) >> 16);
+    unsigned cellIndex = ((unsigned)alertView.tag >> 16);
+    unsigned entryIndex = (((unsigned)alertView.tag << 16) >> 16);
+    //NSLog(@"tag:0x%08x, entryIndex:%u, cellIndex:%u", (unsigned)alertView.tag, entryIndex, cellIndex);
+    
     //当点击了第二个按钮（OK）
     if (buttonIndex == 1)
     {
@@ -366,22 +367,25 @@
         {
             NSLog(@"正在为您取消订单");
             MO_SHOW_INFO(@"正在为您取消订单");
-            [self.dataCtrl cancelOrder: entryIndex];
+            [self.dataCtrl cancelOrder: entryIndex viewController: self];
             //[self.dataCtrl cancelOrder: (unsigned)alertView.tag];
         }else
         {
             
             NSLog(@"订单已经发送");
             MO_SHOW_INFO(@"正在为您订餐...");
-            [self.dataCtrl sendOrder: entryIndex];
+            [self.dataCtrl sendOrder: entryIndex viewController: self];
             //[self.dataCtrl sendOrder: (unsigned)alertView.tag];
+            
+            [self.dataCtrl setOrdered:entryIndex];
         }
+        
+        //reload current cell
+        //[self.tableView reloadData];
+        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:cellIndex inSection:0];
+        NSArray *indexPaths=@[indexPath];
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
     }
-
-    //reload current cell
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:cellIndex inSection:0];
-    NSArray *indexPaths=@[indexPath];
-    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
     
     return;
 }

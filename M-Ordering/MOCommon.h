@@ -28,6 +28,7 @@
 #define HTTP_URL_CANCEL (@"http://10.2.2.188/Menu.asp?at=rmdd&ddid=%d")
 #define HTTP_URL_COMMENT (@"http://10.2.2.188/Menu.asp?at=addpl") //send comment
 #define HTTP_URL_COMMENTS (@"http://10.2.2.188/Menu.asp?at=pl&Fid=")//get comments
+#define HTTP_URL_ORDER_RANDOM (@"http://10.2.2.188/Menu.asp?at=sj")
 #else
 #define HTTP_URL_REFERER (@"http://10.2.2.188/")
 #define HTTP_URL_LOGIN (@"http://10.2.2.188/index.asp?at=chk")
@@ -43,6 +44,7 @@
 #define HTTP_URL_CANCEL (@"http://10.2.2.188/Menu.asp?at=rmdd&ddid=")
 #define HTTP_URL_COMMENT (@"http://10.2.2.188/Menu.asp?at=addpl") //send comment
 #define HTTP_URL_COMMENTS (@"http://10.2.2.188/Menu.asp?at=pl&Fid=")//get comments
+#define HTTP_URL_ORDER_RANDOM (@"http://10.2.2.188/Menu.asp?at=sj")
 #endif
 
 
@@ -51,11 +53,23 @@
 #define MO_SHOW_FAIL(msg) [MBProgressHUD showError:msg]
 #define MO_SHOW_HIDE      [MBProgressHUD hideHUD]
 
-//#define MO_LOG(format, args) NSLog(<#NSString *format, ...#>)
+//#define MO_LOG(format, args...) NSLog(@"[%s - %s : %d]"format@"\n", __FILE__, __FUNCTION__,__LINE__, ##args)
+#define MO_LOG(format, args...) NSLog(@"[%s : %d]"format@"\n", __FUNCTION__,__LINE__, ##args)
 
-//#define todo
 
 #define MO_INVALID_UINT (0xFFFFFFFF)
+
+#define MO_SHOW_POINT(str, point)\
+            MO_LOG(@"%@ point:(%lf,%lf)", str, point.x, point.y)
+
+#define MO_SHOW_SIZE(str, size)\
+            MO_LOG(@"%@ size:(%lf,%lf)", str, size.width, size.height)
+
+#define MO_SHOW_RECT(str, rect)\
+            MO_LOG(@"%@ Rect:(%lf,%lf)(%lf,%lf)", str, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height)
+
+#define MO_SHOW_EDGEINSET(str, inset)\
+            MO_LOG(@"%@ EdgeInset:(%lf,%lf)(%lf,%lf)", str, inset.left, inset.right, inset.top, inset.bottom)
 
 
 #endif

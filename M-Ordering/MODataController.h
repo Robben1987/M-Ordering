@@ -31,8 +31,8 @@
 -(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(UIViewController*)viewCtrl;
 //-(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password ;
 -(BOOL)logout;
--(BOOL)sendOrder:(unsigned)index;
--(BOOL)cancelOrder:(unsigned)index;
+-(BOOL)sendOrder:(unsigned)index viewController:(id)viewCtrl;
+-(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl;
 -(BOOL)sendComment:(NSString*)content to:(unsigned)index;
 -(BOOL)getMyHistory;
 -(BOOL)getOtherOrders;
