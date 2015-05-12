@@ -25,7 +25,7 @@
 		0E8B38EE1ABE4FD00018AF81 /* MOToolGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8B38ED1ABE4FD00018AF81 /* MOToolGroup.m */; };
 		0E8B38F71ABE5AA20018AF81 /* MOQuickOrderTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8B38F61ABE5AA20018AF81 /* MOQuickOrderTableViewController.m */; };
 		0E90ECA91AFDB239008DE99C /* MORefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90ECA81AFDB239008DE99C /* MORefreshTableView.m */; };
-		0E90ECAC1AFDB264008DE99C /* MORefreshViewController.h.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90ECAB1AFDB264008DE99C /* MORefreshViewController.h.m */; };
+		0E90ECAC1AFDB264008DE99C /* MORefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90ECAB1AFDB264008DE99C /* MORefreshViewController.m */; };
 		0E95FB701AFE127900A657C3 /* MOShakeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E95FB6F1AFE127900A657C3 /* MOShakeViewController.m */; };
 		0E95FB741AFE2F0600A657C3 /* shake_bk.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E95FB711AFE2F0500A657C3 /* shake_bk.png */; };
 		0E95FB751AFE2F0600A657C3 /* Shake_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E95FB721AFE2F0600A657C3 /* Shake_down.png */; };
@@ -49,6 +49,8 @@
 		0EC3657D1ABC6D84005B556F /* MOLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EC3657C1ABC6D84005B556F /* MOLoginViewController.m */; };
 		0ECA20191AED26CC0027B469 /* frx.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ECA20171AED26CC0027B469 /* frx.png */; };
 		0ECA201A1AED26CC0027B469 /* zgf.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ECA20181AED26CC0027B469 /* zgf.png */; };
+		0ECF34241B00DD7000AC94FF /* MOOrderEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF34231B00DD7000AC94FF /* MOOrderEntry.m */; };
+		0ECF34271B02449800AC94FF /* MOCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECF34261B02449800AC94FF /* MOCommentViewController.m */; };
 		0ED2F2671ABDC12200328E6E /* Robben.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0ED2F2661ABDC12200328E6E /* Robben.jpg */; };
 		0EE100221ABAFD0400F18651 /* MOMenuEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE100211ABAFD0400F18651 /* MOMenuEntry.m */; };
 		0EE100251ABAFF6300F18651 /* MOMenuGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE100241ABAFF6300F18651 /* MOMenuGroup.m */; };
@@ -104,7 +106,7 @@
 		0E90ECA71AFDB239008DE99C /* MORefreshTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MORefreshTableView.h; sourceTree = "<group>"; };
 		0E90ECA81AFDB239008DE99C /* MORefreshTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORefreshTableView.m; sourceTree = "<group>"; };
 		0E90ECAA1AFDB264008DE99C /* MORefreshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MORefreshViewController.h; sourceTree = "<group>"; };
-		0E90ECAB1AFDB264008DE99C /* MORefreshViewController.h.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORefreshViewController.h.m; sourceTree = "<group>"; };
+		0E90ECAB1AFDB264008DE99C /* MORefreshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORefreshViewController.m; sourceTree = "<group>"; };
 		0E95FB6E1AFE127900A657C3 /* MOShakeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOShakeViewController.h; sourceTree = "<group>"; };
 		0E95FB6F1AFE127900A657C3 /* MOShakeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOShakeViewController.m; sourceTree = "<group>"; };
 		0E95FB711AFE2F0500A657C3 /* shake_bk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shake_bk.png; sourceTree = "<group>"; };
@@ -135,6 +137,10 @@
 		0EC3657C1ABC6D84005B556F /* MOLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOLoginViewController.m; sourceTree = "<group>"; };
 		0ECA20171AED26CC0027B469 /* frx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = frx.png; sourceTree = "<group>"; };
 		0ECA20181AED26CC0027B469 /* zgf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zgf.png; sourceTree = "<group>"; };
+		0ECF34221B00DD7000AC94FF /* MOOrderEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOOrderEntry.h; sourceTree = "<group>"; };
+		0ECF34231B00DD7000AC94FF /* MOOrderEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOOrderEntry.m; sourceTree = "<group>"; };
+		0ECF34251B02449700AC94FF /* MOCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCommentViewController.h; sourceTree = "<group>"; };
+		0ECF34261B02449800AC94FF /* MOCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCommentViewController.m; sourceTree = "<group>"; };
 		0ED2F2641ABD7BBA00328E6E /* MOLoginDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOLoginDelegate.h; sourceTree = "<group>"; };
 		0ED2F2661ABDC12200328E6E /* Robben.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Robben.jpg; sourceTree = "<group>"; };
 		0EE100201ABAFD0400F18651 /* MOMenuEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMenuEntry.h; sourceTree = "<group>"; };
@@ -206,6 +212,8 @@
 		0E50BE311AB707BD0055B711 /* M-Ordering */ = {
 			isa = PBXGroup;
 			children = (
+				0ECF34221B00DD7000AC94FF /* MOOrderEntry.h */,
+				0ECF34231B00DD7000AC94FF /* MOOrderEntry.m */,
 				0E9FADA71ACAD6F2007530E4 /* data */,
 				0ED2F2631ABD7B3C00328E6E /* protocol */,
 				0E50BE361AB707BD0055B711 /* AppDelegate.h */,
@@ -238,9 +246,11 @@
 				0E90ECA71AFDB239008DE99C /* MORefreshTableView.h */,
 				0E90ECA81AFDB239008DE99C /* MORefreshTableView.m */,
 				0E90ECAA1AFDB264008DE99C /* MORefreshViewController.h */,
-				0E90ECAB1AFDB264008DE99C /* MORefreshViewController.h.m */,
+				0E90ECAB1AFDB264008DE99C /* MORefreshViewController.m */,
 				0E95FB6E1AFE127900A657C3 /* MOShakeViewController.h */,
 				0E95FB6F1AFE127900A657C3 /* MOShakeViewController.m */,
+				0ECF34251B02449700AC94FF /* MOCommentViewController.h */,
+				0ECF34261B02449800AC94FF /* MOCommentViewController.m */,
 				0E50BE421AB707BD0055B711 /* Images.xcassets */,
 				0E50BE321AB707BD0055B711 /* Supporting Files */,
 			);
@@ -507,6 +517,7 @@
 			files = (
 				0E05C2AD1AF90A9000C78B49 /* MORefreshView.m in Sources */,
 				0E50BE651AB7123B0055B711 /* MOSelfViewController.m in Sources */,
+				0ECF34241B00DD7000AC94FF /* MOOrderEntry.m in Sources */,
 				0EC229391AE37BED00D2623B /* MBProgressHUD+MJ.m in Sources */,
 				0E8421931AB9B7400021AE9C /* MOMenuViewController.m in Sources */,
 				0E50BE381AB707BD0055B711 /* AppDelegate.m in Sources */,
@@ -525,9 +536,10 @@
 				0E95FB701AFE127900A657C3 /* MOShakeViewController.m in Sources */,
 				0EE100251ABAFF6300F18651 /* MOMenuGroup.m in Sources */,
 				0EA9022D1AC8414B00BB9026 /* MODataController.m in Sources */,
-				0E90ECAC1AFDB264008DE99C /* MORefreshViewController.h.m in Sources */,
+				0E90ECAC1AFDB264008DE99C /* MORefreshViewController.m in Sources */,
 				0E8B38F71ABE5AA20018AF81 /* MOQuickOrderTableViewController.m in Sources */,
 				0E50BE351AB707BD0055B711 /* main.m in Sources */,
+				0ECF34271B02449800AC94FF /* MOCommentViewController.m in Sources */,
 				0EFA083A1AC9809700CC11E2 /* XPathQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
