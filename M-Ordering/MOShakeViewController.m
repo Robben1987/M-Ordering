@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 Li Robben. All rights reserved.
 //
 
-//#include<stdlib.h> 
+#import <stdlib.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "MOShakeViewController.h"
 #import "MOCommon.h"
@@ -129,7 +129,7 @@ typedef enum
 }
 
 
--(unsigned)getRandomIndex()
+-(unsigned)getRandomIndex
 {
     return (unsigned)(arc4random() % [[self.dataCtrl getMenuList] count]);
 }
@@ -147,7 +147,7 @@ typedef enum
     UIButton* sendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, MO_SHAKE_SUBVIEW_OFFSET, 136, MO_SHAKE_SUBVIEW_OFFSET)];
     [sendButton setBackgroundColor: [UIColor grayColor]];
     [sendButton setTitle:@"就订它" forState:UIControlStateNormal];
-    [sendButton addTarget:self action:@selector(orderCancel:) forControlEvents:UIControlEventTouchUpInside];
+    [sendButton addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton* cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(136, MO_SHAKE_SUBVIEW_OFFSET, 136, MO_SHAKE_SUBVIEW_OFFSET)];
     [cancelButton setBackgroundColor: [UIColor grayColor]];
@@ -176,17 +176,18 @@ typedef enum
 {
     sleep(5);
     NSString* result = nil;
-    if(![self.dataCtrl sendOrder: btn.tag])
+    if(![self.dataCtrl sendOrder: (unsigned)btn.tag])
     {
         result = @"网络错误...";
     }
     
     [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
 }
+
 -(void)clickButton:(UIButton*)btn
 {
     [_indicatorView startAnimating];
-    [NSThread detachNewThreadSelector:@selector(sendRequest) toTarget:self withObject:btn];
+    [NSThread detachNewThreadSelector:@selector(sendOrder:) toTarget:self withObject:btn];
 }
 
 

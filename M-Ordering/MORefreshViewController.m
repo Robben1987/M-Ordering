@@ -10,6 +10,7 @@
 #import "MORefreshTableView.h"
 #import "MOCommon.h"
 #import "MODataOperation.h"
+#import "MOOrderEntry.h"
 
 const NSInteger MORefreshHeaderHeight = 64;
 const NSInteger MORefreshFooterHeight = 50;
@@ -91,29 +92,102 @@ const NSInteger MORefreshFooterHeight = 50;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    MOOrderEntry* entry = nil;
     NSMutableArray* array = nil;
+    NSString* item = nil;
+    UIButton* order = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 50, 50)];
+    [order setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    
     if(self.type == MO_REFRESH_OTHERS)
     {
         array = [self.dataCtrl getOtherOrders];
+        entry = [array objectAtIndex: indexPath.row];
+        item  = [NSString stringWithFormat:@"%@点了%@的%@ %@",
+                 [entry person],
+                 [entry.menuEntry restaurant],
+                 [entry.menuEntry entryName],[entry date]];
+        [order setTitle:@"咱也来这个" forState:UIControlStateNormal];
+        [order addTarget:self action:@selector(touchOrder:) forControlEvents:UIControlEventTouchUpInside];
     }else
     {
         array = [self.dataCtrl getMyHistory];
+        entry = [array objectAtIndex: indexPath.row];
+        item  = [NSString stringWithFormat:@"%@点了%@的%@",
+                 [entry date],
+                 [entry.menuEntry restaurant],
+                 [entry.menuEntry entryName]];
+        [order setTitle: @"点评" forState:UIControlStateNormal];
+        [order addTarget:self action:@selector(touchComment:) forControlEvents:UIControlEventTouchUpInside];
     }
-    
+    [order setTag: indexPath.row];
+
     static NSString* cellIdentifier = @"refereshTableView";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.text = @"Row";
-        //todo
     }
     
+    [cell setAccessoryView:order];    
+    [cell.textLabel setText: item];
     return cell;
 }
+#pragma mark - Button TouchUpInside event
+-(void)touchOrder:(UIButton*)button
+{
+    if([self.dataCtrl isOrdered])
+    {
+        MO_SHOW_FAIL(([NSString stringWithFormat:@"您已经预定了:"]));
+        return;
+    }
+    
+    MOMenuEntry* entry = [[self.dataCtrl getOtherOrders] objectAtIndex:button.tag];
+    NSString* detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"您预订的是" message:detail delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert setAlertViewStyle:UIAlertViewStyleDefault];
+    [alert setTag:entry.index];
+    [alert show];
+}
+-(void)touchComment:(UIButton*)button
+{
+    //new view
+}
+-(void)showResult:(NSString*)result
+{
+    MO_SHOW_HIDE;
+    if(result)
+    {
+        MO_SHOW_FAIL(result);
+    }else
+    {
+        MO_SHOW_SUCC(@"恭喜您,订餐成功!");
+    }
+}
+-(void)sendOrder:(UIAlertView *)alertView
+{
+    NSString* result = nil;
+    if(![self.dataCtrl sendOrder: (unsigned)alertView.tag])
+    {
+        result = @"网络错误...";
+    }
+    
+    [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
+}
 
-#pragma mark - 获取数据
+#pragma mark Alert delegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{    
+    if (buttonIndex == 1)
+    {
+        MO_SHOW_INFO(@"正在为您订餐...");
+        [NSThread detachNewThreadSelector:@selector(sendOrder:) toTarget:self withObject:alertView];
+    }
+    
+    return;
+}
+
+#pragma mark - Reload data from internet
 - (void)reloadData:(NSString*)str
 {
     if(str)

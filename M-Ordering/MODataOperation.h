@@ -50,7 +50,7 @@
 +(void)logout:(id)delegate;
 +(void)order:(unsigned)index delegate:(id)delegate;
 +(void)cancel:(unsigned)index delegate:(id)delegate;
-+(void)getMyHistory:(id)delegate;
+//+(void)getMyHistory:(id)delegate;
 //+(void)getOtherOrders:(id)delegate;
 +(void)getComments:(unsigned)index delegate:(id)delegate;
 
@@ -58,12 +58,11 @@
 +(BOOL)login:(NSString*)userName andPassword:(NSString*)passWord;
 +(BOOL)logout;
 +(BOOL)order:(unsigned)index;
-+(BOOL)orderRandom:(MOMenuEntry*)entry;
 +(BOOL)cancel:(unsigned)index;
 +(BOOL)comment:(NSString*)content to:(unsigned)index;
-+(BOOL)getMyHistory;
++(BOOL)getMyHistory:(NSMutableArray*)array;
 +(BOOL)getOtherOrders:(NSMutableArray*)array;
-+(BOOL)getComments:(unsigned)index;
++(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
 
 
 +(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)array;

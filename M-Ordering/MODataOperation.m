@@ -9,6 +9,7 @@
 #import "MODataOperation.h"
 #import "hpple/TFHpple.h"
 #import "MOMenuGroup.h"
+#import "MOOrderEntry.h"
 #import "MOCommon.h"
 
 
@@ -161,8 +162,9 @@
 }
 +(void)getOtherOrders:(NSMutableArray*)array fromHtml:(NSString*)htmlString
 {
-    static unsigned pageNum = 0;
-    
+    //static unsigned pageNum = 0;
+    NSLog(@"htmlString: %@\n", htmlString);
+
     NSRange rangStart=[htmlString rangeOfString:@"<table class=\"en\""];
     NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
     
@@ -184,18 +186,18 @@
         MOMenuEntry* menuEntry = [[MOMenuEntry alloc] init];
         [menuEntry setRestaurant: [grandChildren[1] content]];
         [menuEntry setEntryName: [grandChildren[2] content]];
-        //others, eg: the date...
         
+        MOOrderEntry* orderEntry = [[MOOrderEntry alloc] init];
         [orderEntry setPerson: [grandChildren[0] content]];
-        [orderEntry setUrl: [[children[1] children] attribute]];
+        [orderEntry setUrl: [[children[1] children][0] objectForKey:@"href"]];
+        [orderEntry setDate: [[children[0] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
         [orderEntry setMenuEntry: menuEntry];
-        //[entry setRestaurant:[[children[4] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-        //[entry dumpEntry];
+        [orderEntry dumpEntry];
         
         [array addObject:orderEntry];
     }
     
-    if(!pageNum)
+    /*if(!pageNum)
     {
         NSArray* nexts  = [xpathParser searchWithXPathQuery:@"//strong"];
         NSArray* children = [nexts[0] children];
@@ -203,12 +205,13 @@
         pageNum = [page intValue];
     }
     
-    return pageNum;
+    return pageNum;*/
 }
 +(void)getMyHistory:(NSMutableArray*)array fromHtml:(NSString*)htmlString
 {
-    static unsigned pageNum = 0;
+    //static unsigned pageNum = 0;
     
+    NSLog(@"htmlString: %@\n", htmlString);
     NSRange rangStart=[htmlString rangeOfString:@"<table class=\"en\""];
     NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
     
@@ -227,20 +230,22 @@
         NSArray* children =[elements[i] children];
                 
         MOMenuEntry* menuEntry = [[MOMenuEntry alloc] init];
-        [menuEntry setEntryName: [children[1] content]];
-        [menuEntry setRestaurant: [children[2] content]];
-        //others, eg: the date...
+        [menuEntry setEntryName: [[children[1] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        [menuEntry setPrice: [[children[2] content] floatValue]];
+        [menuEntry setRestaurant: [[children[3] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
         
-        [orderEntry setDate: [children[3] content]];
-        [orderEntry setUrl: [[children[1] children] attribute]];
+        MOOrderEntry* orderEntry = [[MOOrderEntry alloc] init];
+        [orderEntry setPerson:@"我"];
+        [orderEntry setOrderId:[[children[0] content] intValue]];
+        [orderEntry setUrl:[[children[5] children][0] objectForKey:@"href"]];
+        [orderEntry setDate: [children[4] content]];
         [orderEntry setMenuEntry: menuEntry];
-        //[entry setRestaurant:[[children[4] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-        //[entry dumpEntry];
+        [orderEntry dumpEntry];
         
         [array addObject:orderEntry];
     }
     
-    if(!pageNum)
+    /*if(!pageNum)
     {
         NSArray* nexts  = [xpathParser searchWithXPathQuery:@"//strong"];
         NSArray* children = [nexts[0] children];
@@ -248,7 +253,7 @@
         pageNum = [page intValue];
     }
     
-    return pageNum;
+    return pageNum;*/
 }
 +(void)getComments:(NSMutableArray*)array fromHtml:(NSString*)htmlString
 {    
@@ -267,7 +272,7 @@
     //Parser the menu list
     for(unsigned i = 2; i < (elements.count-1); i++)
     {
-        NSArray* children =[elements[i] children];
+        //NSArray* children =[elements[i] children];
         //NSString
         //[array addObject:orderEntry];
     }
@@ -499,12 +504,13 @@
     NSLog(@"comment succ");
     return TRUE;  
 }
-+(void)getMyHistory:(id)delegate
+/*+(void)getMyHistory:(id)delegate
 {
     [MODataOperation sendHttpRequestNonSync:HTTP_URL_ORDER_HISTORY delegate:delegate];
-}
+}*/
 +(BOOL)getMyHistory:(NSMutableArray*)array
 {
+#if NETWORK_ACTIVE
     NSString* html = [self sendHttpRequestSync: HTTP_URL_ORDER_HISTORY];
     if(!html)
     {
@@ -517,8 +523,11 @@
         NSLog(@"get my history failed: %@", html);//failed cause
         return FALSE;
     }
-
-    [MODataOperation getMyHistory:array fromHtml:html]
+#else
+    NSString* html = [MODataOperation getHtmlfromUrl:HTTP_URL_ORDER_HISTORY];
+#endif
+    [MODataOperation getMyHistory:array fromHtml:html];
+    
     NSLog(@"get my history succ");
     return TRUE;
 }
@@ -528,6 +537,7 @@
 }*/
 +(BOOL)getOtherOrders:(NSMutableArray*)array
 {
+#if NETWORK_ACTIVE
     NSString* html = [self sendHttpRequestSync: HTTP_URL_OTHER_ORDERS];
     if(!html)
     {
@@ -540,7 +550,10 @@
         NSLog(@"get other orders failed");//failed cause
         return FALSE;
     }
-
+#else
+     NSString* html = [MODataOperation getHtmlfromUrl:HTTP_URL_OTHER_ORDERS];
+#endif
+    
     [MODataOperation getOtherOrders:array fromHtml:html];
     NSLog(@"get other orders succ");
     return TRUE;
@@ -567,6 +580,7 @@
     }
 
     [MODataOperation getComments:array fromHtml:html];
+    
     NSLog(@"get comments succ");
     return TRUE;
 }

@@ -59,7 +59,10 @@
 +(MODataController *)init
 {
     MODataController* dataCtrl = [[MODataController alloc] init];
-    
+
+#if !(NETWORK_ACTIVE)
+    [dataCtrl initData];
+#endif
     return dataCtrl;
 }
 
@@ -69,6 +72,9 @@
     _passWord = @"123456";
 
     [MODataOperation getRestaurants:_restaurants andMenus:_menuArray];
+    
+    //[self updateMyHistory];
+    //[self updateOtherOrders];
     //[MODataOperation dumpAllMenuList: _menuArray];
     //[MODataOperation dumpAllRestaurants:_restaurants];
     return;
@@ -156,7 +162,7 @@
         return FALSE;
     }
     
-    _viewCtrl = viewCtrl;
+    _ordered = index;
     return TRUE;
 
 }
@@ -204,8 +210,8 @@
     return TRUE;
 }
 -(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index
-{   
-    return [MODataOperation getComments: _menuComments byIndex: index];
+{
+    return [MODataOperation getComments:array byIndex:index];
 }
 -(BOOL)sendComment:(NSString*)content to:(unsigned)index
 {

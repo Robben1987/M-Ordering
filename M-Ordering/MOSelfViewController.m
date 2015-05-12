@@ -10,6 +10,7 @@
 #import "MOMainController.h"
 #import "MOToolGroup.h"
 #import "MORefreshViewController.h"
+#import "MOCommentViewController.h"
 
 @interface MOSelfViewController ()
 {
@@ -25,7 +26,6 @@
     self = [super init];
     if(self)
     {
-        self.type = type;
         self.dataCtrl = ctrl;
     }
     return self;
@@ -182,7 +182,10 @@
         }
     }else
     {
-        
+        MOCommentViewController* vc = [[MOCommentViewController alloc] init];
+        [vc setTitle:@"评论"];
+        [self.navigationController pushViewController:vc animated:YES];
+        //[self presentModalViewController:vc animated:YES];
     }
     
     

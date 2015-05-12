@@ -11,9 +11,12 @@
 
 @interface MOOrderEntry : NSObject
 
+@property (nonatomic,assign) unsigned      orderId;
 @property (nonatomic,copy) NSString*       person;
 @property (nonatomic,copy) NSString*       url;
 @property (nonatomic,copy) NSString*       date;
-@property (nonatomic,retain) MOMenuEntry*  menuEntry;
+@property (nonatomic,strong) MOMenuEntry*  menuEntry;
+
+-(void)dumpEntry;
 
 @end

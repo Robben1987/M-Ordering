@@ -12,7 +12,8 @@
 
 -(void)dumpEntry
 {
-    NSLog(@"MOOrderEntry---- person:%@, url:%@, date:%@", self.person, self.url, self.date);
+    NSLog(@"MOOrderEntry---- orderId:%u, person:%@, url:%@, date:%@",
+          self.orderId, self.person, self.url, self.date);
     [self.menuEntry dumpEntry];
 }
 

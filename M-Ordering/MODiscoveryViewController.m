@@ -110,7 +110,7 @@
     {
         if(indexPath.row == 0)
         {
-            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType: MO_REFRESH_OTHERS andDataCtrl: dataCtrl];
+            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType: MO_REFRESH_OTHERS andDataCtrl: self.dataCtrl];
             [vc setTitle:@"朋友们点了什么"];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -118,7 +118,7 @@
     {
         if(indexPath.row == 0)
         {
-            MOShakeViewController* vc = [[MOShakeViewController alloc] initWithDataCtrl: dataCtrl];
+            MOShakeViewController* vc = [[MOShakeViewController alloc] initWithDataCtrl: self.dataCtrl];
             [vc setTitle:@"摇一摇点餐"];
             [self.navigationController pushViewController:vc animated:YES];
         }

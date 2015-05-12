@@ -28,16 +28,21 @@
 -(void)setOrdered:(unsigned)index;
 -(BOOL)isOrdered;
 
+#pragma non-sync
 -(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(UIViewController*)viewCtrl;
 //-(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password ;
 -(BOOL)logout;
 -(BOOL)sendOrder:(unsigned)index viewController:(id)viewCtrl;
 -(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl;
 -(BOOL)sendComment:(NSString*)content to:(unsigned)index;
--(BOOL)getMyHistory;
--(BOOL)getOtherOrders;
--(BOOL)getComments:(unsigned)index;
+-(NSMutableArray*)getMyHistory;
+-(BOOL)updateMyHistory;
+-(NSMutableArray*)getOtherOrders;
+-(BOOL)updateOtherOrders;
+-(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
 
+#pragma sync
+-(BOOL)sendOrder:(unsigned)index;
 
 
 

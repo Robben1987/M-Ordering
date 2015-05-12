@@ -12,7 +12,7 @@
 #import "MODiscoveryViewController.h"
 #import "MOOthersViewController.h"
 #import "MOQuickOrderTableViewController.h"
-
+#import "MOCommon.h"
 @interface MOMainController ()
 {
 }
@@ -40,6 +40,7 @@
     MODiscoveryViewController* disView = [[MODiscoveryViewController alloc] init];
     UITabBarItem* disItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[UIImage imageNamed:@"1"] tag:1];
     disView.tabBarItem = disItem;
+    [disView setDataCtrl:self.dataCtrl];
     UINavigationController* disNav = [[UINavigationController alloc] initWithRootViewController:disView];
     
     //3. Self view
@@ -76,8 +77,12 @@
     
     [self initDataCtrl];
     
+#if !(NETWORK_ACTIVE)
+    [self loadViewControllers];
+#else
     //load login view first
     [self performSelectorOnMainThread:@selector(loadLoginView)withObject:nil waitUntilDone:NO];
+#endif
 }
 
 - (void)didReceiveMemoryWarning
