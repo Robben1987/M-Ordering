@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MOCommentEntry.h"
 
 @interface MODataController : NSObject
 
@@ -34,7 +35,7 @@
 -(BOOL)logout;
 -(BOOL)sendOrder:(unsigned)index viewController:(id)viewCtrl;
 -(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl;
--(BOOL)sendComment:(NSString*)content to:(unsigned)index;
+-(BOOL)sendComment:(MOCommentEntry*)entry;
 -(NSMutableArray*)getMyHistory;
 -(BOOL)updateMyHistory;
 -(NSMutableArray*)getOtherOrders;

@@ -23,7 +23,7 @@
 - (void)loadViewControllers
 {
     //1. Home view
-    MOHomeViewController* homeView = [[MOHomeViewController alloc] init];
+    MOHomeViewController* homeView = [[MOHomeViewController alloc] initWithDataCtrl:self.dataCtrl];
     UITabBarItem* homeItem = [[UITabBarItem alloc] initWithTitle:@"主页" image:[UIImage imageNamed:@"1"] tag:0];
     //homeItem.badgeValue = @"New";
     homeView.tabBarItem = homeItem;
@@ -37,16 +37,17 @@
     UINavigationController* quickNav = [[UINavigationController alloc] initWithRootViewController:quickView];
     
     //2. Discovery view
-    MODiscoveryViewController* disView = [[MODiscoveryViewController alloc] init];
+    MODiscoveryViewController* disView = [[MODiscoveryViewController alloc] initWithDataCtrl:self.dataCtrl];
     UITabBarItem* disItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[UIImage imageNamed:@"1"] tag:1];
     disView.tabBarItem = disItem;
-    [disView setDataCtrl:self.dataCtrl];
+    //[disView setDataCtrl:self.dataCtrl];
     UINavigationController* disNav = [[UINavigationController alloc] initWithRootViewController:disView];
     
     //3. Self view
-    MOSelfViewController* selfView = [[MOSelfViewController alloc] init];
+    MOSelfViewController* selfView = [[MOSelfViewController alloc] initWithDataCtrl:self.dataCtrl];
     UITabBarItem* selfItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[UIImage imageNamed:@"1"] tag:2];
     selfView.tabBarItem = selfItem;
+    //[selfView setDataCtrl:self.dataCtrl];
     UINavigationController* selfNav = [[UINavigationController alloc] initWithRootViewController:selfView];
     
     NSArray *viewControllers = @[homeNav, quickNav, disNav, selfNav];

@@ -51,7 +51,7 @@
 {
     return CONTAIN_SUBSTRING(htmlString, @"删除成功");
 }
-+(BOOL)isSendCommensSuccessfully:(NSString*)htmlString
++(BOOL)isSendCommentsSuccessfully:(NSString*)htmlString
 {
     return CONTAIN_SUBSTRING(htmlString, @"添加评论成功");
 }
@@ -497,13 +497,6 @@
     NSLog(@"order cancel succ");
     return TRUE;
 }
-+(BOOL)comment:(NSString*)content to:(unsigned)index
-{
-    //todo
-    //isSendCommensSuccessfully
-    NSLog(@"comment succ");
-    return TRUE;  
-}
 /*+(void)getMyHistory:(id)delegate
 {
     [MODataOperation sendHttpRequestNonSync:HTTP_URL_ORDER_HISTORY delegate:delegate];
@@ -557,6 +550,56 @@
     [MODataOperation getOtherOrders:array fromHtml:html];
     NSLog(@"get other orders succ");
     return TRUE;
+}
++(BOOL)comment:(MOCommentEntry*)entry
+{
+    // get the url
+    NSURL* url = [NSURL URLWithString:HTTP_URL_COMMENT];
+    
+    // get the url requrst
+    NSMutableURLRequest* httpReq = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5.0];
+    
+    // set http head
+    [httpReq setHTTPMethod:@"POST"];
+    NSString* referer = [NSString stringWithFormat:HTTP_URL_COMMENTS, entry.index];
+    [httpReq addValue:referer forHTTPHeaderField:@"Referer"];
+    
+    // set http body
+    NSString* body = [NSString stringWithFormat:@"addpl_con=%@&addpl_Lev=%d&addpl_FID=%d",
+                      entry.content, entry.level, entry.index];
+    [httpReq setHTTPBody:[body dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)]];
+    
+    [MODataOperation dumpHttpRequest:httpReq];
+    
+    // send http request
+    NSURLResponse* response = nil;
+    NSError* error = nil;
+    NSData* recv = [NSURLConnection sendSynchronousRequest:httpReq returningResponse:&response error:&error];
+    if(error)
+    {
+        NSLog(@"send http Request failed: %@", error);
+        return FALSE;
+    }
+    
+    [MODataOperation dumpHttpResponse:response];
+    
+    if([(NSHTTPURLResponse *)response statusCode] / 100 != 2)
+    {
+        NSLog(@"server response error:%ld", [(NSHTTPURLResponse *)response statusCode]);
+        return FALSE;
+    }
+    
+    NSString* html = [[NSString alloc] initWithData:recv encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    NSLog(@"body:\n%@", html);
+    
+    if([MODataOperation isSendCommentsSuccessfully: html])
+    {
+        NSLog(@"comment failed");
+        return FALSE;
+    }
+    
+    NSLog(@"comment succ");
+    return TRUE;  
 }
 +(void)getComments:(unsigned)index delegate:(id)delegate
 {

@@ -21,7 +21,7 @@
 
 @implementation MOSelfViewController 
 
--(MOSelfViewController*)initWithType:(MO_REFRESH_TABLE_TYPE)type andDataCtrl:(MODataController*)ctrl
+-(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl
 {
     self = [super init];
     if(self)
@@ -30,6 +30,7 @@
     }
     return self;
 }
+
 - (void)loadView
 {
     [super loadView];

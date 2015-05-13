@@ -12,8 +12,15 @@
 
 @interface MOHomeViewController ()
 
--(void)touchUpIndise:(UIButton*)button;
-@end
+-(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
+{
+    self = [super init];
+    if (self)
+    {
+        self.dataCtrl = dataCtrl;
+    }
+    return self;
+}
 
 @implementation MOHomeViewController
 
@@ -38,7 +45,8 @@
     [self addOtherViews];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning 
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }

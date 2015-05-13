@@ -20,6 +20,15 @@
 
 @implementation MODiscoveryViewController
 
+-(MODiscoveryViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    self = [super init];
+    if(self)
+    {
+        self.dataCtrl = ctrl;
+    }
+    return self;
+}
 - (void)loadView
 {
     [super loadView];

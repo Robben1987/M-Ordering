@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MODataController.h"
 
 @interface MOHomeViewController : UIViewController
+
+@property(nonatomic, retain)MODataController* dataCtrl;
+
+
+-(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl;
 
 @end

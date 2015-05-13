@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MOMenuEntry.h"
+#import "MOCommentEntry.h"
 
 @interface MODataOperation : NSObject
 
@@ -59,7 +60,7 @@
 +(BOOL)logout;
 +(BOOL)order:(unsigned)index;
 +(BOOL)cancel:(unsigned)index;
-+(BOOL)comment:(NSString*)content to:(unsigned)index;
++(BOOL)comment:(MOCommentEntry*)entry;
 +(BOOL)getMyHistory:(NSMutableArray*)array;
 +(BOOL)getOtherOrders:(NSMutableArray*)array;
 +(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
