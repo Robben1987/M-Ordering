@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "MOCommentEntry.h"
+#import "MOMenuEntry.h"
 
 @interface MODataController : NSObject
 
@@ -47,4 +48,5 @@
 
 
 
+-(MOMenuEntry*)getMenuEntrybyName:(NSString*)name;
 @end

@@ -56,6 +56,7 @@
 		0EE100251ABAFF6300F18651 /* MOMenuGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE100241ABAFF6300F18651 /* MOMenuGroup.m */; };
 		0EE934821AFF100700F1928B /* shake_down01.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EE934801AFF100700F1928B /* shake_down01.png */; };
 		0EE934831AFF100700F1928B /* shake_up01.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EE934811AFF100700F1928B /* shake_up01.png */; };
+		0EF3000D1B037E04006AFD02 /* MOCommentEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF3000C1B037E04006AFD02 /* MOCommentEntry.m */; };
 		0EFA08381AC9809700CC11E2 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFA08331AC9809700CC11E2 /* TFHpple.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0EFA08391AC9809700CC11E2 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFA08351AC9809700CC11E2 /* TFHppleElement.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0EFA083A1AC9809700CC11E2 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFA08371AC9809700CC11E2 /* XPathQuery.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -149,6 +150,8 @@
 		0EE100241ABAFF6300F18651 /* MOMenuGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMenuGroup.m; sourceTree = "<group>"; };
 		0EE934801AFF100700F1928B /* shake_down01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shake_down01.png; sourceTree = "<group>"; };
 		0EE934811AFF100700F1928B /* shake_up01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shake_up01.png; sourceTree = "<group>"; };
+		0EF3000B1B037E04006AFD02 /* MOCommentEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOCommentEntry.h; path = "M-Ordering/MOCommentEntry.h"; sourceTree = "<group>"; };
+		0EF3000C1B037E04006AFD02 /* MOCommentEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MOCommentEntry.m; path = "M-Ordering/MOCommentEntry.m"; sourceTree = "<group>"; };
 		0EFA08321AC9809700CC11E2 /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
 		0EFA08331AC9809700CC11E2 /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		0EFA08341AC9809700CC11E2 /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
@@ -190,6 +193,8 @@
 		0E50BE261AB707BD0055B711 = {
 			isa = PBXGroup;
 			children = (
+				0EF3000B1B037E04006AFD02 /* MOCommentEntry.h */,
+				0EF3000C1B037E04006AFD02 /* MOCommentEntry.m */,
 				0EA6FAFB1AFF719500049027 /* AudioToolbox.framework */,
 				0EC2292E1AE37BED00D2623B /* MBProgressHUD */,
 				0EFA08311AC9809700CC11E2 /* hpple */,
@@ -525,6 +530,7 @@
 				0E4C94BD1AB85AC90036152F /* MOOthersViewController.m in Sources */,
 				0E50BE621AB711250055B711 /* MOHomeViewController.m in Sources */,
 				0EC2293A1AE37BED00D2623B /* MBProgressHUD.m in Sources */,
+				0EF3000D1B037E04006AFD02 /* MOCommentEntry.m in Sources */,
 				0E90ECA91AFDB239008DE99C /* MORefreshTableView.m in Sources */,
 				0EE100221ABAFD0400F18651 /* MOMenuEntry.m in Sources */,
 				0E50BE681AB712740055B711 /* MODiscoveryViewController.m in Sources */,

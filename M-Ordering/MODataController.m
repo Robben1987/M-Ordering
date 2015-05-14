@@ -73,6 +73,8 @@
 
     [MODataOperation getRestaurants:_restaurants andMenus:_menuArray];
     
+    NSMutableArray* tmp = [NSMutableArray array];
+    [self getComments:tmp byIndex:0];
     //[self updateMyHistory];
     //[self updateOtherOrders];
     //[MODataOperation dumpAllMenuList: _menuArray];
@@ -127,6 +129,18 @@
 -(void)addMyFavourites:(MOMenuEntry*)entry
 {
     [_myFavourites addObject: entry];
+}
+-(MOMenuEntry*)getMenuEntrybyName:(NSString*)name
+{
+    for(MOMenuEntry* entry in _menuArray)
+    {
+        if([entry.entryName isEqualToString:name])
+        {
+            return entry;
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark- http interface
@@ -213,9 +227,9 @@
 {
     return [MODataOperation getComments:array byIndex:index];
 }
--(BOOL)sendComment:(NSString*)content to:(unsigned)index
+-(BOOL)sendComment:(MOCommentEntry*)content
 {
-    [MODataOperation comment: content to: index];
+    [MODataOperation comment: content];
     return TRUE;
 }
 

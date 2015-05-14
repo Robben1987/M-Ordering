@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MOOrderEntry.h"
+#import "MODataController.h"
 
 @interface MOCommentViewController : UIViewController
+
+@property(nonatomic, retain)MODataController* dataCtrl;
+@property(nonatomic, retain)MOOrderEntry*     orderEntry;
+
+
+-(MOCommentViewController*)initWithOrder:(MOOrderEntry*)orderEntry andDataCtrl:(MODataController*)ctrl;
 
 @end

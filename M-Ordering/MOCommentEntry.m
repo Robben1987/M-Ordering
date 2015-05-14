@@ -26,9 +26,9 @@
 }
 
 #pragma mark static constructor
-+(MOCommentEntry *)initWithContent:(NSString *)name andIndex:(unsigned)index
++(MOCommentEntry *)initWithContent:(NSString *)content andIndex:(unsigned)index
 {
-    MOCommentEntry* entry = [[MOCommentEntry alloc] initWithName:name andIndex:index];
+    MOCommentEntry* entry = [[MOCommentEntry alloc] initWithContent:content andIndex:index];
     
     return entry;
 }

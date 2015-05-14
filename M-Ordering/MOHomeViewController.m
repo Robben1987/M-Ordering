@@ -11,6 +11,13 @@
 #import "MOMainController.h"
 
 @interface MOHomeViewController ()
+{
+}
+@end
+
+
+@implementation MOHomeViewController
+
 
 -(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
 {
@@ -21,8 +28,6 @@
     }
     return self;
 }
-
-@implementation MOHomeViewController
 
 - (void)loadView
 {

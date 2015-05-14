@@ -43,7 +43,7 @@
 #define HTTP_URL_ORDER (@"http://10.2.2.188/Menu.asp?at=eat&Fid=")
 #define HTTP_URL_CANCEL (@"http://10.2.2.188/Menu.asp?at=rmdd&ddid=")
 #define HTTP_URL_COMMENT (@"http://10.2.2.188/Menu.asp?at=addpl") //send comment
-#define HTTP_URL_COMMENTS (@"http://10.2.2.188/Menu.asp?at=pl&Fid=")//get comments
+#define HTTP_URL_COMMENTS (@"file:///Users/Robben/Downloads/SampleAPP/httpss/%E5%91%98%E5%B7%A5%E7%82%B9%E9%A4%90%E7%B3%BB%E7%BB%9F-coments_files/menu_002.htm")//get comments
 #define HTTP_URL_ORDER_RANDOM (@"http://10.2.2.188/Menu.asp?at=sj")
 #endif
 
