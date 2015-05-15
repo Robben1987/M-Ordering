@@ -10,4 +10,8 @@
 
 @interface MOCommentViewController : UIViewController
 
+@property(nonatomic, retain)MODataController* dataCtrl;
+
+-(MOCommentViewController*)initWithDataCtrl:(MODataController*)ctrl;
+
 @end

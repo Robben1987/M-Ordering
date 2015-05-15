@@ -129,6 +129,7 @@
     [_myFavourites addObject: entry];
 }
 
+
 #pragma mark- http interface
 
 -(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(id)viewCtrl
