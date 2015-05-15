@@ -11,6 +11,8 @@
 #import "MOCommon.h"
 #import "MODataOperation.h"
 #import "MOOrderEntry.h"
+#import "MOCommentViewController.h"
+
 
 const NSInteger MORefreshHeaderHeight = 64;
 const NSInteger MORefreshFooterHeight = 50;
@@ -133,6 +135,7 @@ const NSInteger MORefreshFooterHeight = 50;
     [cell.textLabel setText: item];
     return cell;
 }
+
 #pragma mark - Button TouchUpInside event
 -(void)touchOrder:(UIButton*)button
 {
@@ -142,7 +145,7 @@ const NSInteger MORefreshFooterHeight = 50;
         return;
     }
     
-    MOMenuEntry* entry = [[self.dataCtrl getOtherOrders] objectAtIndex:button.tag];
+    MOMenuEntry* entry = [[[self.dataCtrl getOtherOrders] objectAtIndex:button.tag] menuEntry];
     NSString* detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"您预订的是" message:detail delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert setAlertViewStyle:UIAlertViewStyleDefault];
@@ -151,8 +154,24 @@ const NSInteger MORefreshFooterHeight = 50;
 }
 -(void)touchComment:(UIButton*)button
 {
-    //new view
+    MOOrderEntry* orderEntry = [[self.dataCtrl getMyHistory] objectAtIndex:button.tag];
+    MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithOrder:orderEntry andDataCtrl:self.dataCtrl];
+    [self presentViewController:commentView animated:YES completion:nil];
 }
+
+#pragma mark Alert delegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{    
+    if (buttonIndex == 1)
+    {
+        MO_SHOW_INFO(@"正在为您订餐...");
+        [NSThread detachNewThreadSelector:@selector(sendOrder:) toTarget:self withObject:alertView];
+    }
+    
+    return;
+}
+
+#pragma mark - Reload data from internet
 -(void)showResult:(NSString*)result
 {
     MO_SHOW_HIDE;
@@ -175,19 +194,6 @@ const NSInteger MORefreshFooterHeight = 50;
     [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
 }
 
-#pragma mark Alert delegate
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{    
-    if (buttonIndex == 1)
-    {
-        MO_SHOW_INFO(@"正在为您订餐...");
-        [NSThread detachNewThreadSelector:@selector(sendOrder:) toTarget:self withObject:alertView];
-    }
-    
-    return;
-}
-
-#pragma mark - Reload data from internet
 - (void)reloadData:(NSString*)str
 {
     if(str)

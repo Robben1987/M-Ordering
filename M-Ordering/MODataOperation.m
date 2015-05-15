@@ -51,7 +51,7 @@
 {
     return CONTAIN_SUBSTRING(htmlString, @"删除成功");
 }
-+(BOOL)isSendCommentsSuccessfully:(NSString*)htmlString
++(BOOL)isSendCommentSuccessfully:(NSString*)htmlString
 {
     return CONTAIN_SUBSTRING(htmlString, @"添加评论成功");
 }
@@ -256,26 +256,29 @@
     return pageNum;*/
 }
 +(void)getComments:(NSMutableArray*)array fromHtml:(NSString*)htmlString
-{    
-    NSRange rangStart=[htmlString rangeOfString:@"<body>"];
-    NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
+{
+    //NSLog(@"htmlString: %@\n", htmlString);
+    NSRange rangStart=[htmlString rangeOfString:@"</b>"];
+    NSMutableString* tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:(rangStart.location + rangStart.length)]];
+    //NSLog(@"------tableStart: %@\n", tableStart);
+
     
-    NSRange rangEnd=[tableStart rangeOfString:@"</body>"];
-    NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location + rangEnd.length)]];
+    NSRange rangEnd=[tableStart rangeOfString:@"<form method"];
+    NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location)]];
     
-    //NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
-    NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
-    
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
-    NSArray *elements  = [xpathParser searchWithXPathQuery:@"//tr"];
-    
-    //Parser the menu list
-    for(unsigned i = 2; i < (elements.count-1); i++)
+    //NSLog(@"------tableString: %@\n", tableString);
+    NSArray* tmpArray = [tableString componentsSeparatedByString:@"<br>"];
+    for(NSString* entry in tmpArray)
     {
-        //NSArray* children =[elements[i] children];
-        //NSString
-        //[array addObject:orderEntry];
+        [entry stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        [entry stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        if([entry length] && !CONTAIN_SUBSTRING(entry, @"相关评论")
+           && !CONTAIN_SUBSTRING(entry, @"\r\n"))
+        {
+            [array addObject:entry];
+        }
     }
+    return;
 }
 
 
@@ -561,8 +564,8 @@
     
     // set http head
     [httpReq setHTTPMethod:@"POST"];
-    NSString* referer = [NSString stringWithFormat:HTTP_URL_COMMENTS, entry.index];
-    [httpReq addValue:referer forHTTPHeaderField:@"Referer"];
+    NSString* referer = HTTP_URL_COMMENTS;
+    [httpReq addValue:[referer stringByAppendingFormat: @"%d", entry.index] forHTTPHeaderField:@"Referer"];
     
     // set http body
     NSString* body = [NSString stringWithFormat:@"addpl_con=%@&addpl_Lev=%d&addpl_FID=%d",
@@ -592,7 +595,7 @@
     NSString* html = [[NSString alloc] initWithData:recv encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
     NSLog(@"body:\n%@", html);
     
-    if([MODataOperation isSendCommentsSuccessfully: html])
+    if([MODataOperation isSendCommentSuccessfully: html])
     {
         NSLog(@"comment failed");
         return FALSE;
@@ -603,12 +606,13 @@
 }
 +(void)getComments:(unsigned)index delegate:(id)delegate
 {
-    NSString* url = [NSString stringWithFormat: HTTP_URL_COMMENTS];
+    NSString* url = HTTP_URL_COMMENTS;
     [MODataOperation sendHttpRequestNonSync:[url stringByAppendingFormat: @"%d", index] delegate:delegate];
 }
 +(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index
 {
-    NSString* url = [NSString stringWithFormat: HTTP_URL_COMMENTS];
+#if NETWORK_ACTIVE
+    NSString* url = HTTP_URL_COMMENTS;
     NSString* html = [self sendHttpRequestSync: [url stringByAppendingFormat: @"%d", index]];
     if(!html)
     {
@@ -621,7 +625,10 @@
         NSLog(@"get comments failed: %@", html);//failed cause
         return FALSE;
     }
-
+#else
+    NSString* html = [MODataOperation getHtmlfromUrl:HTTP_URL_COMMENTS];
+#endif
+    
     [MODataOperation getComments:array fromHtml:html];
     
     NSLog(@"get comments succ");
@@ -696,6 +703,7 @@
 {
     //NSLog(@"urlString:%@\n", urlString);
     NSError* error = nil;
+    //NSString* htmlString=[NSString stringWithContentsOfURL:[NSURL URLWithString:urlString] encoding:NSUTF8StringEncoding error:&error];
     NSString* htmlString=[NSString stringWithContentsOfURL:[NSURL URLWithString:urlString] encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000) error:&error];
     if(htmlString == nil)
     {

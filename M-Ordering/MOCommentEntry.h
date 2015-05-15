@@ -10,7 +10,7 @@
 
 @interface MOCommentEntry : NSObject
 
-@property (nonatomic,assign) unsigned  index;
+@property (nonatomic,assign) unsigned  index; //MOMenuEntry index
 @property (nonatomic,assign) unsigned  level;
 @property (nonatomic,copy) NSString*   content;
 

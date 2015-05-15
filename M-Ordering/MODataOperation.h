@@ -31,7 +31,7 @@
 +(BOOL)isCommentsPage:(NSString*)htmlString;
 +(BOOL)isSentOrderSuccessfully:(NSString*)htmlString;
 +(BOOL)isCancelOrderSuccessfully:(NSString*)htmlString;
-+(BOOL)isSendCommensSuccessfully:(NSString*)htmlString;
++(BOOL)isSendCommentSuccessfully:(NSString*)htmlString;
 
 
 +(BOOL)isLoginRequest:(NSString*)url;
