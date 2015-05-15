@@ -13,6 +13,16 @@
 
 
 #pragma mark constructor
+-(MOCommentEntry *)initWithIndex:(unsigned)index
+{
+    if((self=[super init]))
+    {
+        self.index   = index;
+    }
+    
+    return self;
+}
+
 -(MOCommentEntry *)initWithContent:(NSString *)content andIndex:(unsigned)index;
 {
     if((self=[super init]))

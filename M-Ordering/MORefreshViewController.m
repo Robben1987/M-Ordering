@@ -155,7 +155,10 @@ const NSInteger MORefreshFooterHeight = 50;
 -(void)touchComment:(UIButton*)button
 {
     MOOrderEntry* orderEntry = [[self.dataCtrl getMyHistory] objectAtIndex:button.tag];
-    MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithOrder:orderEntry andDataCtrl:self.dataCtrl];
+    MOMenuEntry* menuEntry = [self.dataCtrl getMenuEntrybyName: [orderEntry.menuEntry entryName]];
+    MOCommentEntry* commentEntry = [[MOCommentEntry alloc] initWithIndex: [menuEntry index]];
+    
+    MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithComment:commentEntry andDataCtrl:self.dataCtrl];
     [self presentViewController:commentView animated:YES completion:nil];
 }
 

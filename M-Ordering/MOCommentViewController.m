@@ -19,12 +19,12 @@
 
 @implementation MOCommentViewController
 
--(MOCommentViewController*)initWithOrder:(MOOrderEntry*)orderEntry andDataCtrl:(MODataController*)ctrl;
+-(MOCommentViewController*)initWithComment:(MOCommentEntry*)commentEntry andDataCtrl:(MODataController*)ctrl
 {
     self = [super init];
     if(self)
     {
-        self.orderEntry = orderEntry;
+        self.commentEntry = commentEntry;
         self.dataCtrl   = ctrl;
     }
     return self;
@@ -39,15 +39,17 @@
 
 - (void)initSubView
 {
-    CGRect barFrame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-    CGRect textFrame = CGRectMake(5, 120, (self.view.frame.size.width - 10), 180);
-    CGRect buttonFrame = CGRectMake(5, 300, (self.view.frame.size.width - 10), 30);
+    //get statusbar rect
+    CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
     
-    //[self.view endEditing:YES];
-    
+    CGRect barFrame = CGRectMake(0, rectStatus.size.height, self.view.frame.size.width, 44);
+    CGRect textFrame = CGRectMake(5, (rectStatus.size.height + barFrame.size.height + 10), (self.view.frame.size.width - 10), 200);
+        
     UINavigationItem* naviItem = [[UINavigationItem alloc] initWithTitle:@"我的评论"];
-    UIBarButtonItem*  naviButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(touchCancel)]; 
-    [naviItem setLeftBarButtonItem:naviButton];
+    UIBarButtonItem*  barCancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(touchCancel)]; 
+    UIBarButtonItem*  barPublish = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(touchPublish)]; 
+    [naviItem setLeftBarButtonItem:barCancel];
+    [naviItem setRightBarButtonItem:barPublish];
     
     _naviBar = [[UINavigationBar alloc] initWithFrame:barFrame]; 
     [_naviBar pushNavigationItem:naviItem animated:NO];  
@@ -66,30 +68,22 @@
     //[_commentView]
     [self.view addSubview:_commentView];
     
-    _publishButton = [[UIButton alloc] initWithFrame:buttonFrame];
-    [_publishButton setBackgroundColor:[UIColor blueColor]];
-    [_publishButton setTitle:@"发布评论" forState:UIControlStateNormal];
-    [_publishButton addTarget:self action:@selector(touchPublish:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_publishButton];
-    
-    
     //UIMenuController 
     UIMenuItem *menuItem = [[UIMenuItem alloc]initWithTitle:@"分享到新浪微博" action:@selector(shareSina:)];
     UIMenuController *menu = [UIMenuController sharedMenuController];
     [menu setMenuItems:@[menuItem]];
 
-    
 }
 
 #pragma mark - Button TouchUpInside event
--(void)touchPublish:(UIButton*)button
+-(void)touchPublish
 {
-    MOMenuEntry* menuEntry = [self.dataCtrl getMenuEntrybyName: [self.orderEntry.menuEntry entryName]];
-    [self.orderEntry.menuEntry setIndex:[menuEntry index]];
+    [_commentView resignFirstResponder];
     
     //todo MOCommentEntry
-    
-    [NSThread detachNewThreadSelector:@selector(sendComment:) toTarget:self withObject:self.orderEntry];
+    [self.commentEntry setContent: [_commentView text]];
+    //[self.commentEntry setLevel: [_commentView text]];
+    [NSThread detachNewThreadSelector:@selector(sendComment:) toTarget:self withObject:self.commentEntry];
     MO_SHOW_INFO(@"正在为您发送...");
 }
 -(void)touchCancel
@@ -186,6 +180,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     //[_commentView resignFirstResponder];

@@ -17,6 +17,7 @@
 
 
 #pragma mark constructor
+-(MOCommentEntry *)initWithIndex:(unsigned)index;
 -(MOCommentEntry *)initWithContent:(NSString *)content andIndex:(unsigned)index;
 
 #pragma mark static constructor
