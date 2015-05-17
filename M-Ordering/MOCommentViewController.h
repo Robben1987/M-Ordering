@@ -9,14 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "MOOrderEntry.h"
 #import "MODataController.h" 
-#import "MOCommentEntry.h"
 
 
 @interface MOCommentViewController : UIViewController
 
 @property(nonatomic, retain)MODataController*   dataCtrl;
-@property(nonatomic, retain)MOCommentEntry*     commentEntry;
+@property(nonatomic, retain)MOOrderEntry*       orderEntry;
 
--(MOCommentViewController*)initWithComment:(MOCommentEntry*)commentEntry andDataCtrl:(MODataController*)ctrl;
 
+-(MOCommentViewController*)initWithComment:(MOOrderEntry*)order andDataCtrl:(MODataController*)ctrl;
 @end

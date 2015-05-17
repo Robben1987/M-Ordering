@@ -48,9 +48,9 @@
 #endif
 
 
-#define MO_SHOW_INFO(msg) [MBProgressHUD showMessage:msg]
-#define MO_SHOW_SUCC(msg) [MBProgressHUD showSuccess:msg]
-#define MO_SHOW_FAIL(msg) [MBProgressHUD showError:msg]
+#define MO_SHOW_INFO(msg) [MBProgressHUD showMessage:(msg)]
+#define MO_SHOW_SUCC(msg) [MBProgressHUD showSuccess:(msg)]
+#define MO_SHOW_FAIL(msg) [MBProgressHUD showError:(msg)]
 #define MO_SHOW_HIDE      [MBProgressHUD hideHUD]
 
 //#define MO_LOG(format, args...) NSLog(@"[%s - %s : %d]"format@"\n", __FILE__, __FUNCTION__,__LINE__, ##args)

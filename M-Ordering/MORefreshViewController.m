@@ -156,9 +156,9 @@ const NSInteger MORefreshFooterHeight = 50;
 {
     MOOrderEntry* orderEntry = [[self.dataCtrl getMyHistory] objectAtIndex:button.tag];
     MOMenuEntry* menuEntry = [self.dataCtrl getMenuEntrybyName: [orderEntry.menuEntry entryName]];
-    MOCommentEntry* commentEntry = [[MOCommentEntry alloc] initWithIndex: [menuEntry index]];
+    [orderEntry.menuEntry setIndex:[menuEntry index]];
     
-    MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithComment:commentEntry andDataCtrl:self.dataCtrl];
+    MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithComment:orderEntry andDataCtrl:self.dataCtrl];
     [self presentViewController:commentView animated:YES completion:nil];
 }
 
