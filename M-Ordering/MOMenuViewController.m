@@ -23,6 +23,8 @@
     UISearchDisplayController* _searchDisplayController;
     NSMutableArray*            _searchEntrys;//符合条件的搜索联系人
     UIButton* _button;
+    NSIndexPath*               _selectedIndexPath;
+    
 }
 @end
 
@@ -155,7 +157,7 @@
         }
     }
     
-    static NSString *cellIdentifier = @"UITableViewCellIdentifierKey1";
+    static NSString *cellIdentifier = @"menuTableView";
     UITableViewCell *cell=[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if(!cell)
     {
@@ -163,7 +165,7 @@
         
         UIButton* order = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 50, 50)];
         [order setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        [order addTarget:self action:@selector(orderEnter:) forControlEvents:UIControlEventTouchUpInside];
+        [order addTarget:self action:@selector(touchOrder:) forControlEvents:UIControlEventTouchUpInside];
         [order setTag:indexPath.row];
         [order.titleLabel setFont:[UIFont systemFontOfSize:22.0]];
         [cell setAccessoryView:order];
@@ -317,90 +319,99 @@
 }
 
 
-#pragma mark - 弹框管理
--(void)orderEnter:(UIButton*)btn
+#pragma mark - Button TouchUpInside event
+-(void)touchOrder:(UIButton*)button
 {
+    _selectedIndexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
+    
     MOMenuEntry* entry = nil;
-    if([self.title isEqual:@"快速订餐"])
-    {
-        entry = [[self.dataCtrl getMenuList] objectAtIndex:btn.tag];
-    }else
-    {
-        entry = [[self.dataCtrl getMenuListByRestaurant: self.title] objectAtIndex:btn.tag];
-    }
-    
-    
-    NSString* detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
-    
+    NSString*    detail = nil;
     UIAlertView* alert = nil;
-    if([btn.currentTitle isEqualToString:@"预定"])
+
+    if([self.dataCtrl isOrdered])
     {
-        if([self.dataCtrl isOrdered])
+        entry = [self.dataCtrl getOrderedMenuEntry];
+        detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
+        if([button.currentTitle isEqualToString:@"预订"])
         {
             MO_SHOW_FAIL(([NSString stringWithFormat:@"您已经预定了: %@", detail]));
             return;
+        }else
+        {
+            alert = [[UIAlertView alloc]initWithTitle:@"取消订单" message:detail delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         }
-        
-        alert = [[UIAlertView alloc]initWithTitle:@"您预订的是" message:detail delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                
     }else
     {
-        alert = [[UIAlertView alloc]initWithTitle:@"取消订单" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        if([self.title isEqual:@"快速订餐"])
+        {
+            entry = [[self.dataCtrl getMenuList] objectAtIndex:button.tag];
+        }else
+        {
+            entry = [[self.dataCtrl getMenuListByRestaurant: self.title] objectAtIndex:button.tag];
+        }
+
+        detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
+
+        alert = [[UIAlertView alloc]initWithTitle:@"您预订的是" message:detail delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     }
-    unsigned cellAndIndex = ((entry.index) | ((unsigned)btn.tag << 16));
+    
     [alert setAlertViewStyle:UIAlertViewStyleDefault];
-    [alert setTag:cellAndIndex];
-    //[alert setTag:entry.index];
+    [alert setTag:entry.index];
     [alert show];
 }
 
 #pragma mark 弹框的代理方法，下订单
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    unsigned cellIndex = ((unsigned)alertView.tag >> 16);
-    unsigned entryIndex = (((unsigned)alertView.tag << 16) >> 16);
-    //NSLog(@"tag:0x%08x, entryIndex:%u, cellIndex:%u", (unsigned)alertView.tag, entryIndex, cellIndex);
-    
-    //当点击了第二个按钮（OK）
     if (buttonIndex == 1)
     {
         if([alertView.title isEqualToString:@"取消订单"])
         {
             NSLog(@"正在为您取消订单");
+            [NSThread detachNewThreadSelector:@selector(cancelOrder:) toTarget:self withObject:alertView];
             MO_SHOW_INFO(@"正在为您取消订单");
-            [self.dataCtrl cancelOrder: entryIndex viewController: self];
-            //[self.dataCtrl cancelOrder: (unsigned)alertView.tag];
         }else
         {
-            
             NSLog(@"订单已经发送");
-            MO_SHOW_INFO(@"正在为您订餐...");
-            [self.dataCtrl sendOrder: entryIndex viewController: self];
-            //[self.dataCtrl sendOrder: (unsigned)alertView.tag];
-            
-            [self.dataCtrl setOrdered:entryIndex];
+            [NSThread detachNewThreadSelector:@selector(sendOrder:) toTarget:self withObject:alertView];
+            MO_SHOW_INFO(@"正在为您订餐..."); 
         }
-        
-        //reload current cell
-        //[self.tableView reloadData];
-        NSIndexPath* indexPath = [NSIndexPath indexPathForRow:cellIndex inSection:0];
-        NSArray *indexPaths=@[indexPath];
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
     }
     
     return;
 }
 
+#pragma mark - http method
+-(void)showResult:(NSString*)result
+{
+    MO_SHOW_HIDE;
+    if(result)
+    {
+        MO_SHOW_FAIL(result);
+    }else
+    {
+        //reload current cell
+        NSArray *indexPaths=@[_selectedIndexPath];
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
+        MO_SHOW_SUCC(@"操作成功!");
+    }
+}
+-(void)sendOrder:(UIAlertView *)alertView
+{
+    NSString* result = [self.dataCtrl sendOrder: (unsigned)alertView.tag];
+    [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
+}
+-(void)cancelOrder:(UIAlertView *)alertView
+{
+    NSString* result = [self.dataCtrl cancelOrder: (unsigned)alertView.tag];
+    [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-
--(void)backToMain
-{
-    //reload the table view
-
-    [self.tableView reloadData];
 }
 @end

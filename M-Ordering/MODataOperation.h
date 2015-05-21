@@ -12,18 +12,6 @@
 
 @interface MODataOperation : NSObject
 
-
-
-+(void)dumpAllMenuList:(NSArray*)array;
-+(void)dumpAllRestaurants:(NSMutableDictionary*)dic;
-
-+(void)dumpHttpRequest:(NSURLRequest*)request;
-+(void)dumpHttpResponse:(NSURLResponse*)response;
-+(void)dumpHttpCookies;
-
-
-
-
 +(BOOL)isLoginPage:(NSString*)htmlString;
 +(BOOL)isMenuListPage:(NSString*)htmlString;
 +(BOOL)isMyOrderHistoryPage:(NSString*)htmlString;
@@ -32,7 +20,6 @@
 +(BOOL)isSentOrderSuccessfully:(NSString*)htmlString;
 +(BOOL)isCancelOrderSuccessfully:(NSString*)htmlString;
 +(BOOL)isSendCommentSuccessfully:(NSString*)htmlString;
-
 
 +(BOOL)isLoginRequest:(NSString*)url;
 +(BOOL)isLogoutRequest:(NSString*)url;
@@ -46,26 +33,21 @@
 +(BOOL)isPasswordRequest:(NSString*)url;
 
 
-#pragma mark- http interface non-sync
-+(void)login:(NSString*)userName andPassword:(NSString*)passWord delegate:(id)delegate;
-+(void)logout:(id)delegate;
-+(void)order:(unsigned)index delegate:(id)delegate;
-+(void)cancel:(unsigned)index delegate:(id)delegate;
-//+(void)getMyHistory:(id)delegate;
-//+(void)getOtherOrders:(id)delegate;
-+(void)getComments:(unsigned)index delegate:(id)delegate;
-
 #pragma mark- http interface sync
-+(BOOL)login:(NSString*)userName andPassword:(NSString*)passWord;
++(NSString*)login:(NSString*)userName andPassword:(NSString*)passWord;
 +(BOOL)logout;
-+(BOOL)order:(unsigned)index;
-+(BOOL)cancel:(unsigned)index;
++(NSString*)order:(unsigned)index;
++(NSString*)cancel:(unsigned)index;
 +(BOOL)comment:(MOCommentEntry*)entry;
 +(BOOL)getMyHistory:(NSMutableArray*)array;
 +(BOOL)getOtherOrders:(NSMutableArray*)array;
 +(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
-
-
 +(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)array;
 
+#pragma mark- dump interface
++(void)dumpAllMenuList:(NSArray*)array;
++(void)dumpAllRestaurants:(NSMutableDictionary*)dic;
++(void)dumpHttpRequest:(NSURLRequest*)request;
++(void)dumpHttpResponse:(NSURLResponse*)response;
++(void)dumpHttpCookies;
 @end

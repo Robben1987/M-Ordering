@@ -15,6 +15,4 @@
 
 -(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl;
 
--(void)backToMain;
-
 @end

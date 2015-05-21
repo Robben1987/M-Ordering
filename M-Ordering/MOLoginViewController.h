@@ -13,6 +13,4 @@
 @interface MOLoginViewController : UIViewController 
 
 @property(nonatomic, retain)MODataController* dataCtrl;
-
--(void)backToMain;
 @end

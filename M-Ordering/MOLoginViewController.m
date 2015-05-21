@@ -12,8 +12,8 @@
 
 @interface MOLoginViewController () <UITextFieldDelegate>
 {
-    UITextField* txtUserName;
-    UITextField* txtPassword;
+    UITextField* _txtUserName;
+    UITextField* _txtPassword;
 }
 @end
 
@@ -57,37 +57,37 @@
     [self.view addSubview:topImgView];
 
     //2. txt UserName
-    txtUserName = [[UITextField alloc] initWithFrame:CGRectMake(30, 160, 260, 40)];
-    [txtUserName setBorderStyle:UITextBorderStyleRoundedRect];
-    [txtUserName setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [txtUserName setContentVerticalAlignment:(UIControlContentVerticalAlignmentCenter)];
-    [txtUserName setClearsOnBeginEditing:YES];
-    [txtUserName setClearButtonMode:UITextFieldViewModeWhileEditing];
-    [txtUserName setKeyboardType:UIKeyboardTypeDefault];
-    [txtUserName setReturnKeyType:UIReturnKeyDefault];
-    //[txtUserName becomeFirstResponder];
-    [txtUserName setPlaceholder:@"账号"];
-    [txtUserName setDelegate:self];
-    [txtUserName setBackgroundColor: [UIColor whiteColor]];
-    [txtUserName setTag:1];
-    [txtUserName setText:@"Robben"];
-    [self.view addSubview:txtUserName];
+    _txtUserName = [[UITextField alloc] initWithFrame:CGRectMake(30, 160, 260, 40)];
+    [_txtUserName setBorderStyle:UITextBorderStyleRoundedRect];
+    [_txtUserName setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+    [_txtUserName setContentVerticalAlignment:(UIControlContentVerticalAlignmentCenter)];
+    [_txtUserName setClearsOnBeginEditing:YES];
+    [_txtUserName setClearButtonMode:UITextFieldViewModeWhileEditing];
+    [_txtUserName setKeyboardType:UIKeyboardTypeDefault];
+    [_txtUserName setReturnKeyType:UIReturnKeyDefault];
+    //[_txtUserName becomeFirstResponder];
+    [_txtUserName setPlaceholder:@"账号"];
+    [_txtUserName setDelegate:self];
+    [_txtUserName setBackgroundColor: [UIColor whiteColor]];
+    [_txtUserName setTag:1];
+    [_txtUserName setText:@"Robben"];
+    [self.view addSubview:_txtUserName];
     
     //3. txt Password
-    txtPassword = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 260, 40)];
-    [txtPassword setBorderStyle:UITextBorderStyleRoundedRect];
-    [txtPassword setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-    [txtPassword setContentVerticalAlignment:(UIControlContentVerticalAlignmentCenter)];
-    [txtPassword setClearsOnBeginEditing:YES];
-    [txtPassword setClearButtonMode:UITextFieldViewModeWhileEditing];
-    [txtPassword setReturnKeyType:UIReturnKeyDone];
-    [txtPassword setPlaceholder:@"密码"];
-    [txtPassword setBackgroundColor: [UIColor whiteColor]];
-    [txtPassword setSecureTextEntry:YES];
-    [txtPassword setDelegate:self];
-    [txtPassword setTag:2];
-    [txtPassword setText:@"123456"];
-    [self.view addSubview:txtPassword];
+    _txtPassword = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 260, 40)];
+    [_txtPassword setBorderStyle:UITextBorderStyleRoundedRect];
+    [_txtPassword setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+    [_txtPassword setContentVerticalAlignment:(UIControlContentVerticalAlignmentCenter)];
+    [_txtPassword setClearsOnBeginEditing:YES];
+    [_txtPassword setClearButtonMode:UITextFieldViewModeWhileEditing];
+    [_txtPassword setReturnKeyType:UIReturnKeyDone];
+    [_txtPassword setPlaceholder:@"密码"];
+    [_txtPassword setBackgroundColor: [UIColor whiteColor]];
+    [_txtPassword setSecureTextEntry:YES];
+    [_txtPassword setDelegate:self];
+    [_txtPassword setTag:2];
+    [_txtPassword setText:@"123456"];
+    [self.view addSubview:_txtPassword];
     
     //4. btnLogin
     UIButton* btnLogin = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -96,7 +96,7 @@
     [btnLogin setBackgroundImage:[UIImage imageNamed:@"login_btn_blue_nor"] forState:UIControlStateNormal];
     [btnLogin setBackgroundImage:[UIImage imageNamed:@"login_btn_blue_press"] forState:UIControlStateSelected];
     //[btnLogin setBackgroundColor:[UIColor whiteColor]];
-    [btnLogin addTarget:self action:@selector(btnLogin:) forControlEvents:UIControlEventTouchUpInside];
+    [btnLogin addTarget:self action:@selector(touchLogin:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnLogin];
     
     //50 80 28 4 28 80 50
@@ -121,36 +121,45 @@
     
 }
 
--(void)btnLogin:(UIButton*)button
+#pragma mark - UIButton touch event
+-(void)touchLogin:(UIButton*)button
 {
-
-    if([txtUserName.text length] == 0)
+    if([_txtUserName.text length] == 0)
     {
         MO_SHOW_FAIL(@"请输入用户名");
         return;
     }
     
-    if([txtPassword.text length] == 0)
+    if([_txtPassword.text length] == 0)
     {
         MO_SHOW_FAIL(@"请输入密码");
         return;
     }
     
+    [NSThread detachNewThreadSelector:@selector(getLogin) toTarget:self withObject:nil];
     MO_SHOW_INFO(@"正在玩命加载中....");
-
-    [self.dataCtrl getLogin:[txtUserName text] andPassWord:[txtPassword text] viewController:self];
     
     return;
 }
--(void)backToMain
+
+-(void)showResult:(NSString*)result
 {
     MO_SHOW_HIDE;
-    MOMainController* rootViewCtrl = (MOMainController*)[self presentingViewController];
-    [rootViewCtrl loadViewControllers];
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    //MOMainController* rootViewCtrl = (MOMainController*)[[self.view superview] nextResponder];
-    //[self.view removeFromSuperview];
+    if(result)
+    {
+        MO_SHOW_FAIL(result);
+    }else
+    {
+        MO_SHOW_SUCC(@"恭喜您,登陆成功!");
+        MOMainController* rootViewCtrl = (MOMainController*)[self presentingViewController];
+        [rootViewCtrl loadViewControllers];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+-(void)getLogin
+{
+    NSString* result = [self.dataCtrl getLogin:[_txtUserName text] andPassWord:[_txtPassword text]];
+    [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -175,15 +184,5 @@
     [textField resignFirstResponder];
     return YES;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

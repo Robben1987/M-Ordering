@@ -30,7 +30,6 @@
     NSMutableArray* _otherOders;
     NSMutableArray* _myFavourites;
     
-    id _viewCtrl;
     unsigned _ordered;
 }
 @end
@@ -114,6 +113,17 @@
 {
     return _ordered;
 }
+-(MOMenuEntry*)getOrderedMenuEntry
+{
+    for(MOMenuEntry* entry in _menuArray)
+    {
+        if(entry.index == _ordered)
+        {
+            return entry;
+        }
+    }
+    return nil;
+}
 -(void)setOrdered:(unsigned)index
 {
     _ordered = index;
@@ -145,49 +155,33 @@
 
 
 #pragma mark- http interface
-
--(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(id)viewCtrl
+-(NSString*)getLogin:(NSString *)name andPassWord:(NSString *)password
 {
-    _userName = name;
-    _passWord = password;
-    _viewCtrl = viewCtrl;
-    NSLog(@"userName: %@\npassWord: %@", _userName, _passWord);
-    
-    [MODataOperation login:name andPassword:password delegate: self];
-    
-    return TRUE;
+    NSString* result = [MODataOperation login:name andPassword:password];
+    if(!result) 
+    {
+        _userName = name;
+        _passWord = password;
+        [self initData];
+    }
+    return result;
 }
-
 -(BOOL)logout
 {
-    [MODataOperation logout:self];
+    [MODataOperation logout];
     return TRUE;
 }
--(BOOL)sendOrder:(unsigned)index viewController:(id)viewCtrl
+-(NSString*)sendOrder:(unsigned)index
 {
-    _viewCtrl = viewCtrl;
-    [MODataOperation order: index delegate:self];
-    return TRUE;
-
-}
--(BOOL)sendOrder:(unsigned)index
-{
-    if(![MODataOperation order: index])
+    NSString* result = [MODataOperation order: index];
+    if(!result)
     {
-        return FALSE;
+        _ordered = index;
     }
     
-    _ordered = index;
-    return TRUE;
-
+    return result;
 }
--(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl
-{
-    _viewCtrl = viewCtrl;
-    [MODataOperation cancel: index delegate:self];
-    return TRUE;
-}
--(BOOL)cancelOrder:(unsigned)index
+/*-(BOOL)cancelOrder:(unsigned)index
 {
     if([MODataOperation cancel: index])
     {
@@ -196,8 +190,17 @@
     
     [self clearOrdered];
     return TRUE;
-}
+}*/
+-(NSString*)cancelOrder:(unsigned)index
+{
+    NSString* result = [MODataOperation cancel: index];
 
+    if(!result)
+    {
+        [self clearOrdered];
+    }
+    return result;
+}
 -(NSMutableArray*)getMyHistory
 {   
     return _myHistory;
@@ -234,150 +237,6 @@
     return TRUE;
 }
 
-
-
-
--(void)backToMain:(id)ctrl
-{
-    [ctrl backToMain];
-}
-
-#pragma mark- NSURLConnectionDataDelegate代理方法
-
-//当接收到服务器的响应（连通了服务器）时会调用
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    NSLog(@"接收到服务器的响应");
-    [MODataOperation dumpHttpResponse:response];
-    
-    NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse *)response;
-    assert([httpResponse isKindOfClass:[NSHTTPURLResponse class]]);
-    
-    if ((httpResponse.statusCode / 100) != 2)
-    {
-        MO_SHOW_HIDE;
-        MO_SHOW_FAIL(@"服务器响应失败...");
-    }
-    
-    if(!_responseData) _responseData = [NSMutableData data];
-    NSLog(@"NSURLResponse : %@", response);
-}
-
-//当接收到服务器的数据时会调用（可能会被调用多次，每次只传递部分数据）
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    NSLog(@"接收到服务器的数据...");
-    
-    
-    [_responseData appendData:data];
-    NSLog(@"%lu---%@--",_responseData.length,[NSThread currentThread]);
-}
-
-//当服务器的数据加载完毕时就会调用
--(void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSLog(@"服务器的数据加载完毕");
-    
-    NSString* body = [[NSString alloc] initWithData:_responseData encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
-    NSLog(@"body:\n%@", body);
-    
-    NSString* url = [[[connection originalRequest] URL] absoluteString];
-    if([MODataOperation isLoginRequest: url])
-    {
-        if([MODataOperation isLoginPage: body])
-        {
-            NSLog(@"login failed");
-            MO_SHOW_HIDE;
-            MO_SHOW_FAIL(@"账号或密码错误");
-        }else
-        {
-            [self initData];
-            MO_BACK_TO_MAIN_THREAD(_viewCtrl);
-        }
-    }else if([MODataOperation isOrderRequest: url])
-    {
-        if(![MODataOperation isSentOrderSuccessfully: body])
-        {
-            NSLog(@"order failed");//failed cause
-            MO_SHOW_HIDE;
-            MO_SHOW_FAIL(@"订餐失败");
-            [self clearOrdered];
-
-            MO_BACK_TO_MAIN_THREAD(_viewCtrl);//reload tableview
-        }else
-        {
-            MO_SHOW_HIDE;
-            MO_SHOW_SUCC(@"订餐成功");
-        }
-    }else if([MODataOperation isCancleOrderRequest: url])
-    {
-        if(![MODataOperation isCancelOrderSuccessfully: body])
-        {
-            NSLog(@"cancel order failed");//failed cause
-            MO_SHOW_HIDE;
-            MO_SHOW_FAIL(@"取消订餐失败");
-            MO_BACK_TO_MAIN_THREAD(_viewCtrl);
-        }else
-        {
-            [self clearOrdered];
-            MO_SHOW_HIDE;
-            MO_SHOW_SUCC(@"取消订餐成功");
-        }
-    }else if([MODataOperation isMyHistoryRequest: url])
-    {
-        
-    }
-    else if([MODataOperation isOtherOrdersRequest: url])
-    {
-        
-    }
-    else if([MODataOperation isGetCommentsRequest: url])
-    {
-        
-    }
-    else if([MODataOperation isSendCommentsRequest: url])
-    {
-        
-    }
-    else if([MODataOperation isLogoutRequest: url])
-    {
-        
-    }
-    else if([MODataOperation isPasswordRequest: url])
-    {
-        
-    }
-    else if([MODataOperation isMoneyRequest: url])
-    {
-    }
-
-    
-    //clear buffer
-    [_responseData setLength:0];
-}
-
-//请求错误（失败）的时候调用（请求超时\断网\没有网\，一般指客户端错误）
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    NSLog(@"请求错误...");
-    
-    NSString* url = [[[connection originalRequest] URL] absoluteString];
-    if([MODataOperation isOrderRequest: url])
-    {
-        [self clearOrdered];
-    }
-    
-    MO_SHOW_HIDE;
-    MO_SHOW_FAIL(@"请求错误...");
-    
-#if !(NETWORK_ACTIVE)
-    
-    [self initData];
-    MO_BACK_TO_MAIN_THREAD(_viewCtrl);
-    //[self performSelectorOnMainThread:@selector(backToMain:) withObject:_viewCtrl waitUntilDone:NO];
-#endif
-    NSLog(@"connection :%@, Error:%@", connection, error);
-}
 @end
 
 

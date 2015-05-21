@@ -27,26 +27,25 @@
 -(NSArray*)getMenuListByRestaurant:(NSString*)restaurant;
 -(NSArray*)getMenuQuickIndexsByRestaurant:(NSString*)restaurant;
 -(unsigned)getOrdered;
+-(MOMenuEntry*)getOrderedMenuEntry;
 -(void)setOrdered:(unsigned)index;
 -(BOOL)isOrdered;
+-(MOMenuEntry*)getMenuEntrybyName:(NSString*)name;
 
-#pragma non-sync
--(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password viewController:(UIViewController*)viewCtrl;
-//-(BOOL)getLogin:(NSString *)name andPassWord:(NSString *)password ;
+
+#pragma sync
+-(NSString*)getLogin:(NSString *)name andPassWord:(NSString *)password;
 -(BOOL)logout;
--(BOOL)sendOrder:(unsigned)index viewController:(id)viewCtrl;
--(BOOL)cancelOrder:(unsigned)index viewController:(id)viewCtrl;
--(BOOL)sendComment:(MOCommentEntry*)entry;
 -(NSMutableArray*)getMyHistory;
 -(BOOL)updateMyHistory;
 -(NSMutableArray*)getOtherOrders;
 -(BOOL)updateOtherOrders;
 -(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
+-(BOOL)sendComment:(MOCommentEntry*)entry;
+-(NSString*)sendOrder:(unsigned)index;
+-(NSString*)cancelOrder:(unsigned)index;
 
-#pragma sync
--(BOOL)sendOrder:(unsigned)index;
 
 
 
--(MOMenuEntry*)getMenuEntrybyName:(NSString*)name;
 @end

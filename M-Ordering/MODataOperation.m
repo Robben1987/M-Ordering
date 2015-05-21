@@ -283,33 +283,9 @@
 
 
 #pragma mark- http method
-+(void)login:(NSString*)userName andPassword:(NSString*)passWord delegate:(id)delegate
++(NSString*)login:(NSString*)userName andPassword:(NSString*)passWord
 {
-    // get the url
-    NSURL* url = [NSURL URLWithString:HTTP_URL_LOGIN];
-    
-    // get the url requrst
-    NSMutableURLRequest* httpReq = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5.0];
-    
-    // set http head
-    [httpReq setHTTPMethod:@"POST"];
-    [httpReq addValue:HTTP_URL_REFERER forHTTPHeaderField:@"Referer"];
-    
-    // set http body
-    NSString* body = [NSString stringWithFormat:@"username=%@&password=%@", userName, passWord];
-    [httpReq setHTTPBody:[body dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)]];
-    
-    // get the http connection
-    NSURLConnection* connection=[NSURLConnection connectionWithRequest:httpReq delegate:delegate];
-    
-    // send the http request
-    [connection start];
-    NSLog(@"connection sent");
-
-}
-+(BOOL)login:(NSString*)userName andPassword:(NSString*)passWord
-{
-    // get the url
+   // get the url
     NSURL* url = [NSURL URLWithString:HTTP_URL_LOGIN];
     
     // get the url requrst
@@ -333,9 +309,7 @@
     if(error)
     {
         NSLog(@"send http Request failed: %@", error);
-        MO_SHOW_HIDE;
-        MO_SHOW_FAIL(@"请求失败");
-        return FALSE;
+        return @"请求失败";
     }
     
     [MODataOperation dumpHttpResponse:response];
@@ -343,9 +317,7 @@
     if([(NSHTTPURLResponse *)response statusCode] / 100 != 2)
     {
         NSLog(@"server response error:%ld", [(NSHTTPURLResponse *)response statusCode]);
-        MO_SHOW_HIDE;
-        MO_SHOW_FAIL(@"服务器响应错误");
-        return FALSE;
+        return @"服务器响应错误";
     }
     
     NSString* html = [[NSString alloc] initWithData:recv encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
@@ -354,18 +326,12 @@
     if([MODataOperation isLoginPage: html])
     {
         NSLog(@"login failed");
-        MO_SHOW_HIDE;
-        MO_SHOW_FAIL(@"账号或密码错误");
-        return FALSE;
+        return @"账号或密码错误";
     }
     
     
     NSLog(@"login succ....");
-    return TRUE;
-}
-+(void)logout:(id)delegate
-{
-    [MODataOperation sendHttpRequestNonSync:HTTP_URL_LOGOUT delegate:delegate];
+    return nil;
 }
 +(BOOL)logout
 {
@@ -451,59 +417,40 @@
     
     return TRUE;
 }
-+(void)order:(unsigned)index delegate:(id)delegate
-{
-    NSString* url = [NSString stringWithFormat:HTTP_URL_ORDER];
-    [MODataOperation sendHttpRequestNonSync:[url stringByAppendingFormat: @"%d", index] delegate:delegate];
-}
-+(BOOL)order:(unsigned)index
++(NSString*)order:(unsigned)index
 {
     NSString* url = [NSString stringWithFormat:HTTP_URL_ORDER];
     NSString* html = [self sendHttpRequestSync: [url stringByAppendingFormat: @"%d", index]];
     if(!html)
     {
-        NSLog(@"order failed");
-        return FALSE;
+        return @"网络错误!";
     }
 
     if(![self isSentOrderSuccessfully: html])
     {
-        NSLog(@"order failed: %@", html);//failed cause
-        return FALSE;
+        return @"预定失败!";
     }
 
     NSLog(@"order succ");
-    return TRUE;
+    return nil;
 }
-
-+(void)cancel:(unsigned)index delegate:(id)delegate
-{
-    NSString* url = [NSString stringWithFormat:HTTP_URL_CANCEL];
-    [MODataOperation sendHttpRequestNonSync:[url stringByAppendingFormat: @"%d", index] delegate:delegate];
-}
-+(BOOL)cancel:(unsigned)index
++(NSString*)cancel:(unsigned)index
 {
     NSString* url = [NSString stringWithFormat:HTTP_URL_CANCEL];
     NSString* html = [self sendHttpRequestSync: [url stringByAppendingFormat: @"%d", index]];
     if(!html)
     {
-        NSLog(@"order cancel failed");
-        return FALSE;
+        return @"网络错误!";;
     }
 
     if(![self isCancelOrderSuccessfully: html])
     {
-        NSLog(@"order cancel failed: %@", html);//failed cause
-        return FALSE;
+        return @"取消失败!";;
     }
 
     NSLog(@"order cancel succ");
-    return TRUE;
+    return nil;
 }
-/*+(void)getMyHistory:(id)delegate
-{
-    [MODataOperation sendHttpRequestNonSync:HTTP_URL_ORDER_HISTORY delegate:delegate];
-}*/
 +(BOOL)getMyHistory:(NSMutableArray*)array
 {
 #if NETWORK_ACTIVE
@@ -527,10 +474,6 @@
     NSLog(@"get my history succ");
     return TRUE;
 }
-/*+(void)getOtherOrders:(id)delegate
-{
-    [MODataOperation sendHttpRequestNonSync:HTTP_URL_OTHER_ORDERS delegate:delegate];
-}*/
 +(BOOL)getOtherOrders:(NSMutableArray*)array
 {
 #if NETWORK_ACTIVE
@@ -603,11 +546,6 @@
     
     NSLog(@"comment succ");
     return TRUE;  
-}
-+(void)getComments:(unsigned)index delegate:(id)delegate
-{
-    NSString* url = HTTP_URL_COMMENTS;
-    [MODataOperation sendHttpRequestNonSync:[url stringByAppendingFormat: @"%d", index] delegate:delegate];
 }
 +(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index
 {
@@ -716,9 +654,7 @@
 }
 
 
-
-
-
+#pragma mark- dump method
 +(void)dumpAllMenuList:(NSArray*)array
 {
     for(MOMenuEntry* entry in array)
