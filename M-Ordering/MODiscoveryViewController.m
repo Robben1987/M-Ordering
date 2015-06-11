@@ -39,7 +39,7 @@
     // for customer
     UITableView* tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [tableView setDataSource:self];
-    [tableView setBackgroundColor:[UIColor grayColor]];
+    //[tableView setBackgroundColor:[UIColor grayColor]];
     [self setTableView:tableView];
 }
 

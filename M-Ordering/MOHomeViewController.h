@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MODataController.h"
 
-@interface MOHomeViewController : UIViewController
+@interface MOHomeViewController : UITableViewController
 
 @property(nonatomic, retain)MODataController* dataCtrl;
 

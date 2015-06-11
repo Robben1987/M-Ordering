@@ -9,25 +9,200 @@
 #import "MOHomeViewController.h"
 #import "MOMenuViewController.h"
 #import "MOMainController.h"
+#import "MOCommon.h"
 
 @interface MOHomeViewController ()
 {
+    NSMutableArray* _groups;
 }
 @end
 
 
 @implementation MOHomeViewController
 
-
 -(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
 {
     self = [super init];
     if (self)
     {
-        self.dataCtrl = dataCtrl;
+        [self setTitle:@"主页"];
+        [self setDataCtrl:dataCtrl];
+        [self.tableView setDataSource:self];
+        [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     }
     return self;
 }
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self initData];
+}
+
+-(void)initData
+{
+    
+    _groups = [[NSMutableArray alloc]init];
+    
+    //1. Top Img
+    UIImageView* topImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 150)];
+    [topImgView setImage:[UIImage imageNamed:@"top.jpg"]];
+    
+    NSArray* group1 = @[topImgView];
+    [_groups addObject:group1];
+    
+    //2. quick menu Buttons
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button1 setTitle:@"通讯录" forState:UIControlStateNormal];
+    [button1 setFrame:CGRectMake(5, 0, 150, 40)];
+    [button1 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button1 setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
+    [button1.layer setCornerRadius:10.0];
+    //[button1 setBackgroundImage:[UIImage imageNamed:@"frx"] forState:UIControlStateNormal];
+    
+    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button2 setTitle:@"会议室" forState:UIControlStateNormal];
+    [button2 setFrame:CGRectMake(165, 0, 150, 40)];
+    [button2.layer setCornerRadius:10.0];
+    [button2 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button2 setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
+    //[button2 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
+    
+    UIView* com1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    //[com1 setBackgroundColor:[UIColor grayColor]];
+    [com1 addSubview:button1];
+    [com1 addSubview:button2];
+    
+    UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button3 setTitle:@"按摩" forState:UIControlStateNormal];
+    //[button3 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
+    [button3 setFrame:CGRectMake(5, 0, 150, 40)];
+    [button3.layer setCornerRadius:10.0];
+    [button3 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    //[button3 setBackgroundColor: MO_COLOR_RGBA(136,171,218,1)];
+    [button3 setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
+    
+    UIButton *button4 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button4 setTitle:@"+" forState:UIControlStateNormal];
+    [button4.titleLabel setFont:[UIFont systemFontOfSize:30.0f]];
+    [button4 setFrame:CGRectMake(165, 0, 150, 40)];
+    //[button4 setBackgroundColor: MO_COLOR_RGBA(125,193,221,1)];
+    [button4 setBackgroundColor: [UIColor lightGrayColor]];
+    [button4.layer setCornerRadius:10.0];
+    [button4 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView* com2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    [com2 addSubview:button3];
+    [com2 addSubview:button4];
+
+    NSArray* group2 = @[com1, com2];
+    [_groups addObject:group2];
+    
+    //3. restruant
+    UIButton *button11 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button11 setTitle:@"好清乡" forState:UIControlStateNormal];
+    [button11 setFrame:CGRectMake(5, 0, 310, 40)];
+    [button11 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button11 setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
+    [button11.layer setCornerRadius:10.0];
+    //[button1 setBackgroundImage:[UIImage imageNamed:@"frx"] forState:UIControlStateNormal];
+    
+    UIButton *button21 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button21 setTitle:@"福荣祥" forState:UIControlStateNormal];
+    [button21 setFrame:CGRectMake(5, 0, 310, 40)];
+    [button21.layer setCornerRadius:10.0];
+    [button21 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button21 setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
+    //[button2 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
+    
+    UIButton *button31 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button31 setTitle:@"真功夫" forState:UIControlStateNormal];
+    //[button3 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
+    [button31 setFrame:CGRectMake(5, 0, 310, 40)];
+    [button31.layer setCornerRadius:10.0];
+    [button31 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    //[button3 setBackgroundColor: MO_COLOR_RGBA(136,171,218,1)];
+    [button31 setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
+    
+    UIButton *button41 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button41 setTitle:@"+" forState:UIControlStateNormal];
+    [button41.titleLabel setFont:[UIFont systemFontOfSize:30.0f]];
+    [button41 setFrame:CGRectMake(5, 0, 310, 40)];
+    //[button41 setBackgroundColor: MO_COLOR_RGBA(125,193,221,1)];
+    [button41 setBackgroundColor: [UIColor lightGrayColor]];
+    [button41.layer setCornerRadius:10.0];
+    [button41 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    
+    NSArray* group3 = @[button11, button21,button31,button41];
+    [_groups addObject:group3];
+    
+}
+#pragma mark tableView delegate
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _groups.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_groups[section] count];
+}
+
+#pragma mark返回每行的单元格
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"homeTableView";
+    UITableViewCell *cell=[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if(!cell)
+    {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    //[]
+    [cell.contentView addSubview:[_groups[indexPath.section] objectAtIndex:indexPath.row]];
+    if(indexPath.section == 2)
+    {
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    }
+    return cell;
+}
+#pragma mark 设置每行高度（每行高度可以不一样）
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIView* entry = [_groups[indexPath.section] objectAtIndex:0];
+    return (entry.frame.size.height+5);
+}
+#pragma mark 返回每组头标题名称
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if(section == 1)
+    {
+        return @"实用工具";
+    }else if(section == 2)
+    {
+        return @"餐馆点餐";
+    }
+    //return [NSString stringWithFormat:@"the %lu group header", section];
+    return nil;
+}
+
+#pragma mark 返回每组尾部说明
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    //return [NSString stringWithFormat:@"the %lu group footer", section];
+    return nil;
+}
+
+-(void)touchUpIndise:(UIButton*)button
+{
+    MOMenuViewController* menu = [[MOMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    [menu setTitle:[button titleForState:UIControlStateNormal]];
+    MOMainController* main = (MOMainController*)self.navigationController.tabBarController;
+    NSLog(@"ctrl:%@", main.dataCtrl);
+    [menu setDataCtrl: main.dataCtrl];
+    [self.navigationController pushViewController:menu animated:YES];
+}
+
+#if 0
 
 - (void)loadView
 {
@@ -78,32 +253,45 @@
     
     //2. Menu Buttons
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    //[button1 setTitle:@"好清乡" forState:UIControlStateNormal];
+    [button1 setTitle:@"好清乡" forState:UIControlStateNormal];
     //[button1 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
-    [button1 setFrame:CGRectMake(2, 203, 157, 120)];
+    [button1 setFrame:CGRectMake(5, 205, 157, 40)];
     [button1 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    //[button1 setBackgroundColor: [UIColor blueColor]];
-    [button1 setBackgroundImage:[UIImage imageNamed:@"frx"] forState:UIControlStateNormal];
+    [button1 setBackgroundColor: [UIColor blueColor]];//#4682B4  70 130 180
+    [button1 setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
+    [button1.layer setCornerRadius:10.0];
+    //[button1 setBackgroundImage:[UIImage imageNamed:@"frx"] forState:UIControlStateNormal];
     [button1 setTag:1];
     [self.view addSubview:button1];
     
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    //[button2 setTitle:@"福荣祥" forState:UIControlStateNormal];
+    [button2 setTitle:@"福荣祥" forState:UIControlStateNormal];
     //[button2 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
-    [button2 setFrame:CGRectMake(161, 203, 157, 120)];
+    [button2 setFrame:CGRectMake(165, 205, 157, 40)];
+    [button2.layer setCornerRadius:10.0];
     [button2 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     //[button2 setBackgroundColor: [UIColor greenColor]];
-    [button2 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
+    [button2 setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
+
+    //[button2 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
     [button2 setTag:2];
     [self.view addSubview:button2];
     
     UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    //[button3 setTitle:@"真功夫" forState:UIControlStateNormal];
+    [button3 setTitle:@"真功夫" forState:UIControlStateNormal];
     //[button3 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
     [button3 setFrame:CGRectMake(2, 323, 157, 120)];
-    [button3 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
+    [button3.layer setCornerRadius:10.0];
+    //[button3 setContentEdgeInsets:UIEdgeInsetsMake(13.5, 12.5, 13.5, 12.5)];
+    //[button3 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
     [button3 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    [button3 setBackgroundColor: [UIColor yellowColor]];
+    //[button3 setBackgroundColor: [UIColor yellowColor]];
+    //[button3 setBackgroundColor: MO_COLOR_RGBA(136,171,218,1)];
+    
+    //[button3 setBackgroundColor: MO_COLOR_RGBA(125,193,221,1)];
+    [button3 setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
+    
+
     [button3 setTag:3];
     [self.view addSubview:button3];
     
@@ -140,5 +328,5 @@
 {
     //[self.tabBarController.tabBar setHidden:YES];
 }
-
+#endif
 @end

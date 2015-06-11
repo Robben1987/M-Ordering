@@ -72,5 +72,13 @@
             MO_LOG(@"%@ EdgeInset:(%lf,%lf)(%lf,%lf)", str, inset.left, inset.right, inset.top, inset.bottom)
 
 
+#define MO_COLOR_RGBA(R/*红*/, G/*绿*/, B/*蓝*/, A/*透明*/) \
+        [UIColor colorWithRed:(R)/255.f green:(G)/255.f blue:(B)/255.f alpha:(A)]
+
+#define MO_COLOR_HEX(hex) \
+        [UIColor colorWithHexString:(hex)]
+
+
+
 
 #endif

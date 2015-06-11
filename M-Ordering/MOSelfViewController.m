@@ -11,6 +11,7 @@
 #import "MOToolGroup.h"
 #import "MORefreshViewController.h"
 #import "MOCommentViewController.h"
+#import "MOCommon.h"
 
 @interface MOSelfViewController ()
 {
@@ -44,7 +45,9 @@
     UITableView* tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [tableView setDataSource:self];
     //[tableView setBackgroundView:backgroundImg];
-    [tableView setBackgroundColor:[UIColor grayColor]];
+    //[tableView setBackgroundColor:[UIColor grayColor]];
+    //[tableView setBackgroundColor: MO_COLOR_RGBA(245,245,245,1)];
+
     [self setTableView:tableView];
     
     //[view release];
@@ -160,6 +163,18 @@
     
     return cell;
 }
+#pragma mark 返回每组头标题名称
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return nil;
+}
+
+#pragma mark 返回每组尾部说明
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return nil;
+}
+
 #pragma mark 点击行进入新页面
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
