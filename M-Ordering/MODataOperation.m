@@ -190,7 +190,7 @@
         MOOrderEntry* orderEntry = [[MOOrderEntry alloc] init];
         [orderEntry setPerson: [grandChildren[0] content]];
         [orderEntry setUrl: [[children[1] children][0] objectForKey:@"href"]];
-        [orderEntry setDate: [[children[0] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        [orderEntry setDate: [[[children[0] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByReplacingOccurrencesOfString:@"\r\n-" withString:@" "]];
         [orderEntry setMenuEntry: menuEntry];
         [orderEntry dumpEntry];
         

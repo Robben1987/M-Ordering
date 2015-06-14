@@ -189,6 +189,8 @@
     {
         [(UIButton*)cell.accessoryView setTitle:@"取消" forState:UIControlStateNormal];
     }
+    NSLog(@"textLabel: %@, detailTextLabel:%@", cell.textLabel, cell.detailTextLabel);
+
     return cell;
 }
 

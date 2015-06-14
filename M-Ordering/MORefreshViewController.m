@@ -97,27 +97,30 @@ const NSInteger MORefreshFooterHeight = 50;
     MOOrderEntry* entry = nil;
     NSMutableArray* array = nil;
     NSString* item = nil;
-    UIButton* order = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 50, 50)];
+    NSMutableString* detail = nil;
+
+    UIButton* order = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 60, 60)];
     [order setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     
     if(self.type == MO_REFRESH_OTHERS)
     {
         array = [self.dataCtrl getOtherOrders];
         entry = [array objectAtIndex: indexPath.row];
-        item  = [NSString stringWithFormat:@"%@点了%@的%@ %@",
-                 [entry person],
-                 [entry.menuEntry restaurant],
-                 [entry.menuEntry entryName],[entry date]];
-        [order setTitle:@"咱也来这个" forState:UIControlStateNormal];
+        
+        item  = [NSString stringWithFormat:@"%@ %@",[entry person],[entry.menuEntry entryName]];
+        detail = [NSMutableString stringWithFormat:@"%@ %@",[entry.menuEntry restaurant],[entry date]];
+
+        [order setTitle:@"点这个" forState:UIControlStateNormal];
         [order addTarget:self action:@selector(touchOrder:) forControlEvents:UIControlEventTouchUpInside];
     }else
     {
         array = [self.dataCtrl getMyHistory];
         entry = [array objectAtIndex: indexPath.row];
-        item  = [NSString stringWithFormat:@"%@点了%@的%@",
-                 [entry date],
+        item  = [NSString stringWithFormat:@"%@",[entry.menuEntry entryName]];
+        detail  = [NSMutableString stringWithFormat:@"%@ (%.2f 元) %@",
                  [entry.menuEntry restaurant],
-                 [entry.menuEntry entryName]];
+                 [entry.menuEntry price],
+                 [entry date]];
         [order setTitle: @"点评" forState:UIControlStateNormal];
         [order addTarget:self action:@selector(touchComment:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -127,12 +130,14 @@ const NSInteger MORefreshFooterHeight = 50;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    [cell setAccessoryView:order];    
+    [cell setAccessoryView:order];
+    
     [cell.textLabel setText: item];
+    [cell.detailTextLabel setText: detail];
     return cell;
 }
 
@@ -159,7 +164,8 @@ const NSInteger MORefreshFooterHeight = 50;
     [orderEntry.menuEntry setIndex:[menuEntry index]];
     
     MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithComment:orderEntry andDataCtrl:self.dataCtrl];
-    [self presentViewController:commentView animated:YES completion:nil];
+    [self.navigationController pushViewController:commentView animated:YES];
+    //[self presentViewController:commentView animated:YES completion:nil];
 }
 
 #pragma mark Alert delegate

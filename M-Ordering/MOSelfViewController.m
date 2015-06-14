@@ -27,6 +27,9 @@
     self = [super init];
     if(self)
     {
+        NSLog(@"self............");
+        self.title = @"我";
+        self.tabBarItem.title = @"我";
         self.dataCtrl = ctrl;
     }
     return self;
@@ -36,21 +39,11 @@
 {
     [super loadView];
     
-    self.title = @"我";
-    self.tabBarItem.title = @"我";
-    UIImageView* backgroundImg = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [backgroundImg setImage:[UIImage imageNamed:@"login_bg@2x.jpg"]];
-    
     // for customer
     UITableView* tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     [tableView setDataSource:self];
-    //[tableView setBackgroundView:backgroundImg];
-    //[tableView setBackgroundColor:[UIColor grayColor]];
-    //[tableView setBackgroundColor: MO_COLOR_RGBA(245,245,245,1)];
 
     [self setTableView:tableView];
-    
-    //[view release];
 }
 
 - (void)viewDidLoad
@@ -60,17 +53,9 @@
     
     [super viewDidLoad];
     
-    //MOMainController* main = (MOMainController*)self.tabBarController;
-    //[self addOtherViews:[main getUserName]];
-    
     [self initTablesData:@"Robben"];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 -(void)initTablesData:(NSString*)name
 {
     _groups = [[NSMutableArray alloc]init];
@@ -97,26 +82,15 @@
     //[self.view addSubview:button1];
     
 }
-
+#pragma mark tableView delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return [_groups count];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger entryNum = 0;
-    if(section == 0)
-    {
-        entryNum = 1;
-    }else if (section == 1)
-    {
-        entryNum = 3;
-    }else
-    {
-        entryNum = 1;
-    }
-    
-    return entryNum;
+
+    return [((MOToolGroup*)_groups[section]).entrys count];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -127,6 +101,7 @@
     
     return 44;
 }
+
 #pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -167,12 +142,17 @@
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return nil;
+    //return [NSString stringWithFormat:@"the %lu group header", section];
 }
 
 #pragma mark 返回每组尾部说明
 -(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return nil;
+}
+-(CGFloat)tableView:( UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 2.0f;
 }
 
 #pragma mark 点击行进入新页面
@@ -192,7 +172,7 @@
         if(indexPath.row == 1)
         {
             MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
-            [vc setTitle:@"我的订餐记录"];
+            [vc setTitle:@"订餐记录"];
             [self.navigationController pushViewController:vc animated:YES];
             
         }
@@ -219,6 +199,11 @@
     //    [alert show]; //显示窗口
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 @end
 
