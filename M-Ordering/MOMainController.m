@@ -24,7 +24,7 @@
 {
     //1. Home view
     MOHomeViewController* homeView = [[MOHomeViewController alloc] initWithDataCtrl:self.dataCtrl];
-    UITabBarItem* homeItem = [[UITabBarItem alloc] initWithTitle:@"主页" image:[UIImage imageNamed:@"1"] tag:0];
+    UITabBarItem* homeItem = [[UITabBarItem alloc] initWithTitle:@"主页" image:[UIImage imageNamed:@"home"] tag:0];
     //homeItem.badgeValue = @"New";
     homeView.tabBarItem = homeItem;
     UINavigationController* homeNav = [[UINavigationController alloc] initWithRootViewController:homeView];
@@ -32,20 +32,20 @@
     
     //2. Quick Order view
     MOQuickOrderTableViewController* quickView = [[MOQuickOrderTableViewController alloc] initWithDataCtrl:self.dataCtrl];
-    UITabBarItem* quickItem = [[UITabBarItem alloc] initWithTitle:@"快速订餐" image:[UIImage imageNamed:@"1"] tag:1];
+    UITabBarItem* quickItem = [[UITabBarItem alloc] initWithTitle:@"快速订餐" image:[UIImage imageNamed:@"magnifier"] tag:1];
     quickView.tabBarItem = quickItem;
     UINavigationController* quickNav = [[UINavigationController alloc] initWithRootViewController:quickView];
     
     //2. Discovery view
     MODiscoveryViewController* disView = [[MODiscoveryViewController alloc] initWithDataCtrl:self.dataCtrl];
-    UITabBarItem* disItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[UIImage imageNamed:@"1"] tag:1];
+    UITabBarItem* disItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[UIImage imageNamed:@"globe"] tag:1];
     disView.tabBarItem = disItem;
     //[disView setDataCtrl:self.dataCtrl];
     UINavigationController* disNav = [[UINavigationController alloc] initWithRootViewController:disView];
     
     //3. Self view
     MOSelfViewController* selfView = [[MOSelfViewController alloc] initWithDataCtrl:self.dataCtrl];
-    UITabBarItem* selfItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[UIImage imageNamed:@"1"] tag:2];
+    UITabBarItem* selfItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[UIImage imageNamed:@"man"] tag:2];
     selfView.tabBarItem = selfItem;
     //[selfView setDataCtrl:self.dataCtrl];
     UINavigationController* selfNav = [[UINavigationController alloc] initWithRootViewController:selfView];

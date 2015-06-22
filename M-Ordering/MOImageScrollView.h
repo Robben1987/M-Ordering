@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MOImageScrollView : UIView
+@interface MOImageScrollView : UIView <UIScrollViewDelegate>
+{
+}
+
+-(id)initWithFrame:(CGRect)frame pages:(NSArray*)pages;
 
 @end

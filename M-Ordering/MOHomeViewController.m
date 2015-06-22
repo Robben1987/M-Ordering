@@ -10,6 +10,8 @@
 #import "MOMenuViewController.h"
 #import "MOMainController.h"
 #import "MOCommon.h"
+#import "MOImageScrollView.h"
+
 
 @interface MOHomeViewController ()
 {
@@ -41,12 +43,13 @@
 
 -(void)initData
 {
-    
     _groups = [[NSMutableArray alloc]init];
     
     //1. Top Img
-    UIImageView* topImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 150)];
-    [topImgView setImage:[UIImage imageNamed:@"top.jpg"]];
+    //UIImageView* topImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 150)];
+    //[topImgView setImage:[UIImage imageNamed:@"top.jpg"]];
+    NSArray* pages = @[@"top.jpg", @"top.jpg"];
+    MOImageScrollView* topImgView = [[MOImageScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 150) pages:pages];
     
     NSArray* group1 = @[topImgView];
     [_groups addObject:group1];
