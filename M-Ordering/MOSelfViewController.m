@@ -21,7 +21,11 @@
 @end
 
 @implementation MOSelfViewController 
-
++(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    MOSelfViewController* viewCtrl = [[MOSelfViewController alloc] initWithDataCtrl: ctrl];
+    return viewCtrl;
+}
 -(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl
 {
     self = [super init];

@@ -22,6 +22,13 @@
 
 @implementation MOHomeViewController
 
++(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
+{
+    MOHomeViewController* viewCtrl = [[MOHomeViewController alloc] initWithDataCtrl:dataCtrl];
+
+    return viewCtrl;
+}
+
 -(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
 {
     self = [super init];
@@ -46,8 +53,6 @@
     _groups = [[NSMutableArray alloc]init];
     
     //1. Top Img
-    //UIImageView* topImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 150)];
-    //[topImgView setImage:[UIImage imageNamed:@"top.jpg"]];
     NSArray* pages = @[@"top.jpg", @"top.jpg"];
     MOImageScrollView* topImgView = [[MOImageScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 150) pages:pages];
     

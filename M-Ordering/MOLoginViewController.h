@@ -13,4 +13,9 @@
 @interface MOLoginViewController : UIViewController 
 
 @property(nonatomic, retain)MODataController* dataCtrl;
+
++(MOLoginViewController*)initWithDataCtrl:(MODataController*)ctrl;
+
+-(MOLoginViewController*)initWithDataCtrl:(MODataController*)ctrl;
+
 @end

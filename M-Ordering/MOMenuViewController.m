@@ -30,6 +30,12 @@
 
 @implementation MOMenuViewController
 
++(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl
+{
+    MOMenuViewController* viewCtrl = [[MOMenuViewController alloc] initWithDataCtrl: dataCtrl];
+    return viewCtrl;
+}
+
 -(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl
 {
     self = [super init];

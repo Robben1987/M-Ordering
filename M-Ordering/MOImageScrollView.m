@@ -21,6 +21,12 @@
 
 @implementation MOImageScrollView
 
++(id)initWithFrame:(CGRect)frame pages:(NSArray*)pages
+{
+    MOImageScrollView* scrollView = [[MOImageScrollView alloc] initWithFrame: frame pages: pages];
+    return scrollView;
+}
+
 -(id)initWithFrame:(CGRect)frame pages:(NSArray*)pages
 {
     self = [super initWithFrame:frame];
@@ -29,7 +35,7 @@
         _pages   = pages;
         _timer   = nil;
         _current = 0;
-        //[self setBackgroundColor:[UIColor yellowColor]];
+        
         //Initial ScrollView
         _scrollView = [[UIScrollView alloc] initWithFrame:self.frame];
         _scrollView.backgroundColor = [UIColor clearColor];
@@ -64,7 +70,7 @@
 {
     unsigned page = (unsigned)[_pageControl currentPage];
     page++;
-    page %= [_pages count];
+    page %= _pages.count;
     
     //滚动scrollview
     CGFloat x = page * _scrollView.frame.size.width;

@@ -12,6 +12,8 @@
 {
 }
 
++(id)initWithFrame:(CGRect)frame pages:(NSArray*)pages;
+
 -(id)initWithFrame:(CGRect)frame pages:(NSArray*)pages;
 
 @end

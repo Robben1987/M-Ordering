@@ -30,6 +30,12 @@
 
 @implementation MOShakeViewController
 
++(MOShakeViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    MOShakeViewController* viewCtrl = [[MOShakeViewController alloc] initWithDataCtrl: ctrl];
+    return viewCtrl;
+}
+
 -(MOShakeViewController*)initWithDataCtrl:(MODataController*)ctrl
 {
     self = [super init];

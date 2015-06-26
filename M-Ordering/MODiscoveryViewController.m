@@ -20,6 +20,11 @@
 
 @implementation MODiscoveryViewController
 
++(MODiscoveryViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    MODiscoveryViewController* viewCtrl = [[MODiscoveryViewController alloc] initWithDataCtrl: ctrl];
+    return viewCtrl;
+}
 -(MODiscoveryViewController*)initWithDataCtrl:(MODataController*)ctrl
 {
     self = [super init];

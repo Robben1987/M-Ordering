@@ -19,6 +19,22 @@
 
 @implementation MOLoginViewController
 
++(MOLoginViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    MOLoginViewController* viewCtrl = [[MOLoginViewController alloc] initWithDataCtrl: ctrl];
+    return viewCtrl;
+}
+
+-(MOLoginViewController*)initWithDataCtrl:(MODataController*)ctrl
+{
+    self = [super init];
+    if (self)
+    {
+        //
+    }
+    return self;
+}
+
 - (void)loadView
 {
     [super loadView];

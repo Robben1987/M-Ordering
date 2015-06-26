@@ -14,6 +14,8 @@
 
 @property(nonatomic, retain)MODataController* dataCtrl;
 
++(MOShakeViewController*)initWithDataCtrl:(MODataController*)ctrl;
+
 -(MOShakeViewController*)initWithDataCtrl:(MODataController*)ctrl;
 
 @end

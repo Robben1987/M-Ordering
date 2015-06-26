@@ -13,6 +13,7 @@
 
 @property(nonatomic, retain)MODataController* dataCtrl;
 
++(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl;
 
 -(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl;
 
