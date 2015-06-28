@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MOMenuEntry.h"
 
-@interface MOOrderEntry : NSObject
+@interface MOOrderEntry : NSObject <NSCoding>
 
 @property (nonatomic,assign) unsigned      orderId;
 @property (nonatomic,copy) NSString*       person;

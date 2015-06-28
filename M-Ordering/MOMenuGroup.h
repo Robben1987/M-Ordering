@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MOMenuGroup : NSObject
+@interface MOMenuGroup : NSObject <NSCoding>
 
 @property (nonatomic,copy) NSString*         groupName;
 @property (nonatomic,copy) NSString*         detail;

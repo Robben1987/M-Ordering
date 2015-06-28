@@ -19,18 +19,18 @@
 
 @interface MODataController ()
 {
-    NSString*     _userName;
-    NSString*     _passWord;
+    NSString*              _userName;
+    NSString*              _passWord;
     
-    NSMutableDictionary*  _restaurants;
-    NSMutableArray* _menuArray;
-    NSMutableData*  _responseData;
+    NSMutableDictionary*   _restaurants;
+    NSMutableArray*        _menuArray;
     
-    NSMutableArray* _myHistory;
-    NSMutableArray* _otherOders;
-    NSMutableArray* _myFavourites;
-    
-    unsigned _ordered;
+    NSMutableArray*        _myHistory;
+    NSMutableArray*        _otherOders;
+    NSMutableArray*        _myFavourites;
+    NSMutableData*         _responseData; //?
+
+    unsigned               _ordered;
 }
 @end
 
@@ -57,11 +57,22 @@
 #pragma mark static constructor
 +(MODataController *)init
 {
-    MODataController* dataCtrl = [[MODataController alloc] init];
+    MODataController* dataCtrl = nil;
+    if([MODataOperation isFileExist: MO_DATA_FILE])
+    {
+        MO_LOG(@"data file exist...");
+        dataCtrl = (MODataController*)[MODataOperation readFile:MO_DATA_FILE];
+    }else
+    {
+        MO_LOG(@"data file not exist...");
+        dataCtrl = [[MODataController alloc] init];
 
 #if !(NETWORK_ACTIVE)
-    [dataCtrl initData];
+        [dataCtrl initData];
+        //[MODataOperation writeFile: dataCtrl];
 #endif
+    }
+    
     return dataCtrl;
 }
 
@@ -206,7 +217,9 @@
     return _myHistory;
 }
 -(BOOL)updateMyHistory
-{   
+{
+    [_myHistory removeAllObjects];
+
     if(![MODataOperation getMyHistory: _myHistory])
     {
         return FALSE;
@@ -219,7 +232,9 @@
     return _otherOders;
 }
 -(BOOL)updateOtherOrders
-{   
+{
+    [_otherOders removeAllObjects];
+    
     if(![MODataOperation getOtherOrders: _otherOders])
     {
         return FALSE;
@@ -236,6 +251,34 @@
     [MODataOperation comment: content];
     return TRUE;
 }
+
+#pragma mark- NSCoding Protocoal
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_userName      forKey:@"userName"];
+    [aCoder encodeObject:_passWord      forKey:@"passWord"];
+    [aCoder encodeObject:_restaurants   forKey:@"restaurants"];
+    [aCoder encodeObject:_menuArray     forKey:@"menuArray"];
+    [aCoder encodeObject:_myHistory     forKey:@"myHistory"];
+    [aCoder encodeObject:_otherOders    forKey:@"otherOders"];
+    [aCoder encodeObject:_myFavourites  forKey:@"myFavourites"];
+}
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init])
+    {
+        _userName          = [aDecoder decodeObjectForKey:@"userName"];
+        _passWord          = [aDecoder decodeObjectForKey:@"passWord"];
+        _restaurants       = [aDecoder decodeObjectForKey:@"restaurants"];
+        _menuArray         = [aDecoder decodeObjectForKey:@"menuArray"];
+        _myHistory         = [aDecoder decodeObjectForKey:@"myHistory"];
+        _otherOders        = [aDecoder decodeObjectForKey:@"otherOders"];
+        _myFavourites      = [aDecoder decodeObjectForKey:@"myFavourites"];
+    }
+    
+    return self;
+}
+
 
 @end
 

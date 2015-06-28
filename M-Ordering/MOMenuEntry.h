@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MOMenuEntry : NSObject
+@interface MOMenuEntry : NSObject <NSCoding>
 
 @property (nonatomic,copy) NSString*   entryName;
 @property (nonatomic,assign) unsigned  index;

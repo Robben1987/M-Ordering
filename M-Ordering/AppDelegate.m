@@ -9,12 +9,13 @@
 #import "AppDelegate.h"
 #import "MOMainController.h"
 #import "MOLoginViewController.h"
-
+#import "MODataOperation.h"
 
 
 @interface AppDelegate ()
 {
     //MOLoginViewController* _loginCtrl;
+    MOMainController*        _tabBarCtrl;
 }
 @end
 
@@ -29,8 +30,8 @@
     
     
     //创建UITabBarController
-    MOMainController* tabBarCtrl = [[MOMainController alloc] init];
-    self.window.rootViewController = tabBarCtrl;
+    _tabBarCtrl = [[MOMainController alloc] init];
+    self.window.rootViewController = _tabBarCtrl;
     //NSLog(@"tabBarCtrl:%@", tabBarCtrl);
 
     [self.window makeKeyAndVisible];
@@ -45,6 +46,8 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    // save the user data
+    [MODataOperation writeFile: _tabBarCtrl.dataCtrl];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

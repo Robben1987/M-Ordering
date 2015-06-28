@@ -11,7 +11,7 @@
 #import "MOCommentEntry.h"
 #import "MOMenuEntry.h"
 
-@interface MODataController : NSObject
+@interface MODataController : NSObject <NSCoding>
 
 
 #pragma mark constructor

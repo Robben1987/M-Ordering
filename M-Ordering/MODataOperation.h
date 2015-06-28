@@ -44,6 +44,12 @@
 +(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
 +(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)array;
 
+#pragma mark- File Management
++(BOOL)isFileExist:(NSString*)fileName;
++(id)readFile:(NSString*)fileName;
++(BOOL)writeFile:(id)obj;
+
+
 #pragma mark- dump interface
 +(void)dumpAllMenuList:(NSArray*)array;
 +(void)dumpAllRestaurants:(NSMutableDictionary*)dic;

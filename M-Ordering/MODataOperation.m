@@ -653,6 +653,47 @@
     return htmlString;
 }
 
+#pragma mark- File Management
+
++(BOOL)isFileExist:(NSString*)fileName
+{
+    NSFileManager* fileMgr = [NSFileManager defaultManager];
+    
+    NSString* docPath =
+    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    
+    NSString* file = [docPath stringByAppendingPathComponent: fileName];
+    
+    MO_LOG(@"isFileExist:%@", file);
+
+    return [fileMgr fileExistsAtPath:file];
+}
+
++(id)readFile:(NSString*)fileName
+{
+    NSString *docPath =
+    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    
+    NSString* file=[docPath stringByAppendingPathComponent: fileName];
+    
+    MO_LOG(@"readFile:%@", file);
+    return [NSKeyedUnarchiver unarchiveObjectWithFile: file];
+}
+
++(BOOL)writeFile:(id)obj
+{
+    //NSData* data = [NSKeyedArchiver archivedDataWithRootObject: self];
+    
+    NSString* docPath =
+    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    
+    NSString* file = [docPath stringByAppendingPathComponent: MO_DATA_FILE];
+    
+    MO_LOG(@"writeFile:%@", file);
+
+    return [NSKeyedArchiver archiveRootObject:obj toFile:file];
+}
+
 
 #pragma mark- dump method
 +(void)dumpAllMenuList:(NSArray*)array

@@ -43,4 +43,26 @@
     return entry;
 }
 
+#pragma mark- NSCoding Protocoal
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.groupName  forKey:@"groupName"];
+    [aCoder encodeObject:self.detail     forKey:@"detail"];
+    [aCoder encodeObject:self.tel        forKey:@"tel"];
+    [aCoder encodeObject:self.href       forKey:@"href"];
+    [aCoder encodeObject:self.entrys     forKey:@"entrys"];
+}
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init])
+    {
+        self.groupName     = [aDecoder decodeObjectForKey:@"groupName"];
+        self.detail        = [aDecoder decodeObjectForKey:@"detail"];
+        self.tel           = [aDecoder decodeObjectForKey:@"tel"];
+        self.href          = [aDecoder decodeObjectForKey:@"href"];
+        self.entrys        = [aDecoder decodeObjectForKey:@"entrys"];
+    }
+    
+    return self;
+}
 @end
