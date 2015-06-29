@@ -150,7 +150,7 @@
     if (motion == UIEventSubtypeMotionShake)
     {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-        //[self showDetailView: [[self.dataCtrl getMenuList] objectAtIndex:[self getRandomIndex]]];
+        //[self showDetailView: [[self.dataCtrl menuArray] objectAtIndex:[self getRandomIndex]]];
         
         //左右摇摆时间是定义的时间的2倍
         [NSTimer scheduledTimerWithTimeInterval:_timeInter*2
@@ -187,7 +187,7 @@
         [theTimer invalidate];
         
         unsigned index = [self getRandomIndex];
-        MOMenuEntry* entry = [[self.dataCtrl getMenuList] objectAtIndex:index];
+        MOMenuEntry* entry = [[self.dataCtrl menuArray] objectAtIndex:index];
         NSString* info = [NSString stringWithFormat:@"%@(%@)", entry.entryName, entry.restaurant];
         UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"恭喜您,摇到了" message:info delegate:self cancelButtonTitle:@"再摇一次" otherButtonTitles:@"就点这个", nil];
         [alert setTag: index];
@@ -202,7 +202,7 @@
 #pragma mark get the random index
 -(unsigned)getRandomIndex
 {
-    return (unsigned)(arc4random() % [[self.dataCtrl getMenuList] count]);
+    return (unsigned)(arc4random() % [[self.dataCtrl menuArray] count]);
 }
 
 #pragma mark the alertView delegate

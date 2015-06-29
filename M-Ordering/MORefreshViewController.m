@@ -84,10 +84,10 @@ const NSInteger MORefreshFooterHeight = 50;
     NSMutableArray* array = nil;
     if(self.type == MO_REFRESH_OTHERS)
     {
-        array = [self.dataCtrl getOtherOrders];
+        array = [self.dataCtrl otherOders];
     }else
     {
-        array = [self.dataCtrl getMyHistory];
+        array = [self.dataCtrl myHistory];
     }
     return [array count];
 }
@@ -104,7 +104,7 @@ const NSInteger MORefreshFooterHeight = 50;
     
     if(self.type == MO_REFRESH_OTHERS)
     {
-        array = [self.dataCtrl getOtherOrders];
+        array = [self.dataCtrl otherOders];
         entry = [array objectAtIndex: indexPath.row];
         
         item  = [NSString stringWithFormat:@"%@ %@",[entry person],[entry.menuEntry entryName]];
@@ -114,7 +114,7 @@ const NSInteger MORefreshFooterHeight = 50;
         [order addTarget:self action:@selector(touchOrder:) forControlEvents:UIControlEventTouchUpInside];
     }else
     {
-        array = [self.dataCtrl getMyHistory];
+        array = [self.dataCtrl myHistory];
         entry = [array objectAtIndex: indexPath.row];
         item  = [NSString stringWithFormat:@"%@",[entry.menuEntry entryName]];
         detail  = [NSMutableString stringWithFormat:@"%@ (%.2f 元) %@",
@@ -150,7 +150,7 @@ const NSInteger MORefreshFooterHeight = 50;
         return;
     }
     
-    MOMenuEntry* entry = [[[self.dataCtrl getOtherOrders] objectAtIndex:button.tag] menuEntry];
+    MOMenuEntry* entry = [[[self.dataCtrl otherOders] objectAtIndex:button.tag] menuEntry];
     NSString* detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"您预订的是" message:detail delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert setAlertViewStyle:UIAlertViewStyleDefault];
@@ -159,7 +159,7 @@ const NSInteger MORefreshFooterHeight = 50;
 }
 -(void)touchComment:(UIButton*)button
 {
-    MOOrderEntry* orderEntry = [[self.dataCtrl getMyHistory] objectAtIndex:button.tag];
+    MOOrderEntry* orderEntry = [[self.dataCtrl myHistory] objectAtIndex:button.tag];
     MOMenuEntry* menuEntry = [self.dataCtrl getMenuEntrybyName: [orderEntry.menuEntry entryName]];
     [orderEntry.menuEntry setIndex:[menuEntry index]];
     

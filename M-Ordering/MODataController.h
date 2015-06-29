@@ -13,6 +13,12 @@
 
 @interface MODataController : NSObject <NSCoding>
 
+@property (nonatomic,strong) NSMutableDictionary* restaurants;
+@property (nonatomic,strong) NSMutableArray*      menuArray;
+@property (nonatomic,strong) NSMutableArray*      myHistory;
+@property (nonatomic,strong) NSMutableArray*      otherOders;
+@property (nonatomic,strong) NSMutableArray*      myFavourites;
+@property (nonatomic,assign) unsigned             ordered;
 
 #pragma mark constructor
 -(MODataController*)init;
@@ -20,25 +26,22 @@
 #pragma mark static constructor
 +(MODataController *)init;
 
+-(void)loadData();
 -(void)initData;
 -(NSArray*)getRestaurants;
--(NSArray*)getMenuList;
 -(NSArray*)getMenuQuickIndexs;
 -(NSArray*)getMenuListByRestaurant:(NSString*)restaurant;
 -(NSArray*)getMenuQuickIndexsByRestaurant:(NSString*)restaurant;
--(unsigned)getOrdered;
 -(MOMenuEntry*)getOrderedMenuEntry;
--(void)setOrdered:(unsigned)index;
--(BOOL)isOrdered;
 -(MOMenuEntry*)getMenuEntrybyName:(NSString*)name;
 
+-(BOOL)isOrdered;
+-(void)saveData;
 
-#pragma sync
+#pragma mark http interface-sync
 -(NSString*)getLogin:(NSString *)name andPassWord:(NSString *)password;
 -(BOOL)logout;
--(NSMutableArray*)getMyHistory;
 -(BOOL)updateMyHistory;
--(NSMutableArray*)getOtherOrders;
 -(BOOL)updateOtherOrders;
 -(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
 -(BOOL)sendComment:(MOCommentEntry*)entry;

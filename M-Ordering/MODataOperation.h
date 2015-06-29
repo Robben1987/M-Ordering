@@ -48,6 +48,7 @@
 +(BOOL)isFileExist:(NSString*)fileName;
 +(id)readFile:(NSString*)fileName;
 +(BOOL)writeFile:(id)obj;
++(BOOL)writeObj:(id)obj toFile:(NSString*)fileName;
 
 
 #pragma mark- dump interface

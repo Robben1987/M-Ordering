@@ -105,7 +105,7 @@
     NSUInteger count = 0;
     if([self.title isEqual:@"快速订餐"])
     {
-        count = [[self.dataCtrl getMenuList] count];
+        count = [[self.dataCtrl menuArray] count];
     }else
     {
         count = [[self.dataCtrl getMenuListByRestaurant: self.title] count];
@@ -185,7 +185,7 @@
                         entry.commentNumber];
     [cell.detailTextLabel setText:detail];
 //#if (NETWORK_ACTIVE)
-    if(entry.index != [self.dataCtrl getOrdered])
+    if(entry.index != [self.dataCtrl ordered])
 //#else
 //    if(entry.index != 76)
 //#endif

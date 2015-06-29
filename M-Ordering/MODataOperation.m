@@ -693,7 +693,19 @@
 
     return [NSKeyedArchiver archiveRootObject:obj toFile:file];
 }
++(BOOL)writeObj:(id)obj toFile:(NSString*)fileName
+{
+    //NSData* data = [NSKeyedArchiver archivedDataWithRootObject: self];
+    
+    NSString* docPath =
+    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    
+    NSString* file = [docPath stringByAppendingPathComponent: fileName];
+    
+    MO_LOG(@"writeFile:%@", file);
 
+    return [NSKeyedArchiver archiveRootObject:obj toFile:file];
+}
 
 #pragma mark- dump method
 +(void)dumpAllMenuList:(NSArray*)array
