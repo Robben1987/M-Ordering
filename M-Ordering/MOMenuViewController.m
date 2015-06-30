@@ -156,7 +156,7 @@
     {
         if([self.title isEqual:@"快速订餐"])
         {
-            entry = [[self.dataCtrl getMenuList] objectAtIndex:indexPath.row];
+            entry = [[self.dataCtrl menuArray] objectAtIndex:indexPath.row];
         }else
         {
             entry = [[self.dataCtrl getMenuListByRestaurant: self.title] objectAtIndex:indexPath.row];
@@ -353,7 +353,7 @@
     {
         if([self.title isEqual:@"快速订餐"])
         {
-            entry = [[self.dataCtrl getMenuList] objectAtIndex:button.tag];
+            entry = [[self.dataCtrl menuArray] objectAtIndex:button.tag];
         }else
         {
             entry = [[self.dataCtrl getMenuListByRestaurant: self.title] objectAtIndex:button.tag];

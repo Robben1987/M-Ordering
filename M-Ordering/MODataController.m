@@ -14,8 +14,6 @@
 #import "MOCommon.h"
 #import "MOLoginViewController.h"
 
-#define MO_BACK_TO_MAIN_THREAD(para)\
-[self performSelectorOnMainThread:@selector(backToMain:) withObject:para waitUntilDone:NO];
 
 #define MO_DATA_FILE(name) [NSString stringWithFormat:@"%@.data", name]
 
@@ -29,35 +27,13 @@
 
 @implementation MODataController
 
-
--(void)loadData()
+#pragma mark static constructor
++(MODataController *)init
 {
-#if !(NETWORK_ACTIVE)
-    _userName = @"李志兴";
-    _passWord = @"123456";
-#endif
-    
-    if([MODataOperation isFileExist: MO_DATA_FILE(_userName)])
-    {
-        MO_LOG(@"data file exist...");
-        MODataController* dataCtrl = (MODataController*)[MODataOperation readFile:file];
-
-        self.menuArray = [NSMutableArray arrayWithArray:dataCtrl.menuArray];
-        self.restaurants = [NSMutableArray arrayWithArray:dataCtrl.menuArray];
-        self.myHistory = [NSMutableArray arrayWithArray:dataCtrl.menuArray];
-        self.otherOders = [NSMutableArray arrayWithArray:dataCtrl.menuArray];
-        self.myFavourites = [NSMutableArray arrayWithArray:dataCtrl.menuArray];
-        
-    }else
-    {
-        self.menuArray = [[NSMutableArray alloc] init];
-        self.restaurants = [[NSMutableDictionary alloc] init];
-
-        [MODataOperation getRestaurants:self.restaurants andMenus:self.menuArray];
-    }
-
-    
+    MODataController* dataCtrl = [[MODataController alloc] init];
+    return dataCtrl;
 }
+
 #pragma mark constructor
 -(MODataController*)init
 {
@@ -69,13 +45,41 @@
     return self;
 }
 
-#pragma mark static constructor
-+(MODataController *)init
-{
-    MODataController* dataCtrl = [[MODataController alloc] init];
-    return dataCtrl;
-}
+#pragma mark data handle
 
+-(void)loadData
+{
+#if !(NETWORK_ACTIVE)
+    _userName = @"李志兴";
+    _password = @"123456";
+#endif
+    
+    NSString* file = MO_DATA_FILE(_userName);
+    if([MODataOperation isFileExist: file])
+    {
+        MO_LOG(@"data file exist...");
+        MODataController* dataCtrl = (MODataController*)[MODataOperation readFile:file];
+        
+        self.menuArray = [NSMutableArray arrayWithArray:dataCtrl.menuArray];
+        self.restaurants = [NSMutableDictionary dictionaryWithDictionary:dataCtrl.restaurants];
+        self.myHistory = [NSMutableArray arrayWithArray:dataCtrl.myHistory];
+        self.otherOders = [NSMutableArray arrayWithArray:dataCtrl.otherOders];
+        self.myFavourites = [NSMutableArray arrayWithArray:dataCtrl.myFavourites];
+        
+    }else
+    {
+        self.menuArray = [NSMutableArray array];
+        self.restaurants = [NSMutableDictionary dictionary];
+        
+        [MODataOperation getRestaurants:self.restaurants andMenus:self.menuArray];
+    }
+    
+    
+}
+-(void)saveData
+{
+    [MODataOperation writeObj:self toFile: MO_DATA_FILE(_userName)];
+}
 
 -(NSArray*)getRestaurants
 {
@@ -135,27 +139,27 @@
     [self.myFavourites addObject: entry];
 }
 
--(void)saveData
-{
-    [MODataOperation writeObj:self toFile: MO_DATA_FILE(_userName)];
-}
+
 
 #pragma mark- http interface
 -(NSString*)getLogin:(NSString *)name andPassWord:(NSString *)password
 {
     NSString* result = [MODataOperation login:name andPassword:password];
-    if(!result) 
+#if !(NETWORK_ACTIVE)
+    result = nil;
+#endif
+    if(!result)
     {
         _userName = name;
-        _passWord = password;
-        [self initData];
+        _password = password;
+        [self loadData];
     }
+
     return result;
 }
 -(BOOL)logout
 {
-    [MODataOperation logout];
-    return TRUE;
+    return [MODataOperation logout];
 }
 -(NSString*)sendOrder:(unsigned)index
 {
@@ -182,7 +186,7 @@
 {
     if(!self.myHistory)
     {
-        self.myHistory = [[NSMutableArray alloc] init];
+        self.myHistory = [NSMutableArray array];
     }else
     {
         [self.myHistory removeAllObjects];
@@ -200,7 +204,7 @@
 {
     if(!self.otherOders)
     {
-        self.otherOders = [[NSMutableArray alloc] init];
+        self.otherOders = [NSMutableArray array];
     }else
     {
         [self.otherOders removeAllObjects];
@@ -222,11 +226,13 @@
     return [MODataOperation comment: content];
 }
 
+
+
 #pragma mark- NSCoding Protocoal
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_userName          forKey:@"userName"];
-    [aCoder encodeObject:_passWord          forKey:@"passWord"];
+    [aCoder encodeObject:_password          forKey:@"passWord"];
     [aCoder encodeObject:self.restaurants   forKey:@"restaurants"];
     [aCoder encodeObject:self.menuArray     forKey:@"menuArray"];
     [aCoder encodeObject:self.myHistory     forKey:@"myHistory"];
@@ -238,7 +244,7 @@
     if (self = [super init])
     {
         _userName              = [aDecoder decodeObjectForKey:@"userName"];
-        _passWord              = [aDecoder decodeObjectForKey:@"passWord"];
+        _password              = [aDecoder decodeObjectForKey:@"passWord"];
         self.restaurants       = [aDecoder decodeObjectForKey:@"restaurants"];
         self.menuArray         = [aDecoder decodeObjectForKey:@"menuArray"];
         self.myHistory         = [aDecoder decodeObjectForKey:@"myHistory"];

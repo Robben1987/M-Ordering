@@ -78,7 +78,5 @@
 #define MO_COLOR_HEX(hex) \
         [UIColor colorWithHexString:(hex)]
 
-#define MO_DATA_FILE (@"user.data")
-
 
 #endif

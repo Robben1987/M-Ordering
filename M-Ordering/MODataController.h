@@ -26,8 +26,10 @@
 #pragma mark static constructor
 +(MODataController *)init;
 
--(void)loadData();
--(void)initData;
+#pragma mark data handle
+-(void)loadData;
+-(void)saveData;
+-(BOOL)isOrdered;
 -(NSArray*)getRestaurants;
 -(NSArray*)getMenuQuickIndexs;
 -(NSArray*)getMenuListByRestaurant:(NSString*)restaurant;
@@ -35,8 +37,6 @@
 -(MOMenuEntry*)getOrderedMenuEntry;
 -(MOMenuEntry*)getMenuEntrybyName:(NSString*)name;
 
--(BOOL)isOrdered;
--(void)saveData;
 
 #pragma mark http interface-sync
 -(NSString*)getLogin:(NSString *)name andPassWord:(NSString *)password;

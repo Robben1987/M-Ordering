@@ -21,8 +21,7 @@
 
 +(MOLoginViewController*)initWithDataCtrl:(MODataController*)ctrl
 {
-    MOLoginViewController* viewCtrl = [[MOLoginViewController alloc] initWithDataCtrl: ctrl];
-    return viewCtrl;
+    return [[MOLoginViewController alloc] initWithDataCtrl: ctrl];
 }
 
 -(MOLoginViewController*)initWithDataCtrl:(MODataController*)ctrl
@@ -30,18 +29,9 @@
     self = [super init];
     if (self)
     {
-        //
+        self.dataCtrl = ctrl;
     }
     return self;
-}
-
-- (void)loadView
-{
-    [super loadView];
-    
-    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-    self.view = view;
-    //[view release];
 }
 
 - (void)viewDidLoad
@@ -86,7 +76,7 @@
     [_txtUserName setDelegate:self];
     [_txtUserName setBackgroundColor: [UIColor whiteColor]];
     [_txtUserName setTag:1];
-    [_txtUserName setText:@"Robben"];
+    [_txtUserName setText:@"李志兴"];
     [self.view addSubview:_txtUserName];
     
     //3. txt Password
@@ -158,6 +148,7 @@
     return;
 }
 
+#pragma mark - http handle
 -(void)showResult:(NSString*)result
 {
     MO_SHOW_HIDE;
@@ -172,6 +163,7 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
+
 -(void)getLogin
 {
     NSString* result = [self.dataCtrl getLogin:[_txtUserName text] andPassWord:[_txtPassword text]];

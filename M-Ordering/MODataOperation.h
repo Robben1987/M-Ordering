@@ -12,6 +12,24 @@
 
 @interface MODataOperation : NSObject
 
+
+#pragma mark- file operation
++(BOOL)isFileExist:(NSString*)fileName;
++(id)readFile:(NSString*)fileName;
++(BOOL)writeObj:(id)obj toFile:(NSString*)fileName;
+
+
+#pragma mark- http operation
++(NSString*)login:(NSString*)userName andPassword:(NSString*)passWord;
++(BOOL)logout;
++(NSString*)order:(unsigned)index;
++(NSString*)cancel:(unsigned)index;
++(BOOL)comment:(MOCommentEntry*)entry;
++(BOOL)getMyHistory:(NSMutableArray*)array;
++(BOOL)getOtherOrders:(NSMutableArray*)array;
++(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
++(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)array;
+
 +(BOOL)isLoginPage:(NSString*)htmlString;
 +(BOOL)isMenuListPage:(NSString*)htmlString;
 +(BOOL)isMyOrderHistoryPage:(NSString*)htmlString;
@@ -33,25 +51,7 @@
 +(BOOL)isPasswordRequest:(NSString*)url;
 
 
-#pragma mark- http interface sync
-+(NSString*)login:(NSString*)userName andPassword:(NSString*)passWord;
-+(BOOL)logout;
-+(NSString*)order:(unsigned)index;
-+(NSString*)cancel:(unsigned)index;
-+(BOOL)comment:(MOCommentEntry*)entry;
-+(BOOL)getMyHistory:(NSMutableArray*)array;
-+(BOOL)getOtherOrders:(NSMutableArray*)array;
-+(BOOL)getComments:(NSMutableArray*)array byIndex:(unsigned)index;
-+(BOOL)getRestaurants:(NSMutableDictionary*)restaurants andMenus:(NSMutableArray*)array;
-
-#pragma mark- File Management
-+(BOOL)isFileExist:(NSString*)fileName;
-+(id)readFile:(NSString*)fileName;
-+(BOOL)writeFile:(id)obj;
-+(BOOL)writeObj:(id)obj toFile:(NSString*)fileName;
-
-
-#pragma mark- dump interface
+#pragma mark- dump operation
 +(void)dumpAllMenuList:(NSArray*)array;
 +(void)dumpAllRestaurants:(NSMutableDictionary*)dic;
 +(void)dumpHttpRequest:(NSURLRequest*)request;

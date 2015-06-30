@@ -680,19 +680,6 @@
     return [NSKeyedUnarchiver unarchiveObjectWithFile: file];
 }
 
-+(BOOL)writeFile:(id)obj
-{
-    //NSData* data = [NSKeyedArchiver archivedDataWithRootObject: self];
-    
-    NSString* docPath =
-    [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    
-    NSString* file = [docPath stringByAppendingPathComponent: MO_DATA_FILE];
-    
-    MO_LOG(@"writeFile:%@", file);
-
-    return [NSKeyedArchiver archiveRootObject:obj toFile:file];
-}
 +(BOOL)writeObj:(id)obj toFile:(NSString*)fileName
 {
     //NSData* data = [NSKeyedArchiver archivedDataWithRootObject: self];
