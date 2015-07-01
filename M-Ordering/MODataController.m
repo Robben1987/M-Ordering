@@ -18,9 +18,7 @@
 #define MO_DATA_FILE(name) [NSString stringWithFormat:@"%@.data", name]
 
 @interface MODataController ()
-{
-    NSString*              _userName;
-    NSString*              _password;    
+{   
 }
 @end
 
@@ -40,21 +38,33 @@
     if((self = [super init]))
     {
         self.ordered = MO_INVALID_UINT;
+        [self loadAccount];
     }
     
     return self;
 }
 
 #pragma mark data handle
-
+-(void)loadAccount
+{
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
+    self.userName = [userDefaults stringForKey:@"userName"];
+    self.password = [userDefaults stringForKey:@"password"];
+}
+-(void)saveAccount
+{
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
+	[userDefaults setObject:self.userName forKey:@"userName"];  
+	[userDefaults setObject:self.password forKey:@"password"];  
+}
 -(void)loadData
 {
 #if !(NETWORK_ACTIVE)
-    _userName = @"李志兴";
-    _password = @"123456";
+    self.userName = @"李志兴";
+    self.password = @"123456";
 #endif
     
-    NSString* file = MO_DATA_FILE(_userName);
+    NSString* file = MO_DATA_FILE(self.userName);
     if([MODataOperation isFileExist: file])
     {
         MO_LOG(@"data file exist...");
@@ -78,7 +88,8 @@
 }
 -(void)saveData
 {
-    [MODataOperation writeObj:self toFile: MO_DATA_FILE(_userName)];
+    [self saveAccount];
+    [MODataOperation writeObj:self toFile: MO_DATA_FILE(self.userName)];
 }
 
 -(NSArray*)getRestaurants
@@ -150,8 +161,8 @@
 #endif
     if(!result)
     {
-        _userName = name;
-        _password = password;
+        self.userName = name;
+        self.password = password;
         [self loadData];
     }
 
@@ -231,8 +242,8 @@
 #pragma mark- NSCoding Protocoal
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:_userName          forKey:@"userName"];
-    [aCoder encodeObject:_password          forKey:@"passWord"];
+    [aCoder encodeObject:self.userName          forKey:@"userName"];
+    [aCoder encodeObject:self.password          forKey:@"passWord"];
     [aCoder encodeObject:self.restaurants   forKey:@"restaurants"];
     [aCoder encodeObject:self.menuArray     forKey:@"menuArray"];
     [aCoder encodeObject:self.myHistory     forKey:@"myHistory"];
@@ -243,8 +254,8 @@
 {
     if (self = [super init])
     {
-        _userName              = [aDecoder decodeObjectForKey:@"userName"];
-        _password              = [aDecoder decodeObjectForKey:@"passWord"];
+        self.userName              = [aDecoder decodeObjectForKey:@"userName"];
+        self.password              = [aDecoder decodeObjectForKey:@"passWord"];
         self.restaurants       = [aDecoder decodeObjectForKey:@"restaurants"];
         self.menuArray         = [aDecoder decodeObjectForKey:@"menuArray"];
         self.myHistory         = [aDecoder decodeObjectForKey:@"myHistory"];

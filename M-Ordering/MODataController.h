@@ -20,6 +20,10 @@
 @property (nonatomic,strong) NSMutableArray*      myFavourites;
 @property (nonatomic,assign) unsigned             ordered;
 
+@property (nonatomic,copy) NSString*              userName;
+@property (nonatomic,copy) NSString*              password; 
+
+
 #pragma mark constructor
 -(MODataController*)init;
 
