@@ -53,6 +53,7 @@
 #define MO_SHOW_FAIL(msg) [MBProgressHUD showError:(msg)]
 #define MO_SHOW_HIDE      [MBProgressHUD hideHUD]
 
+#pragma mark - log
 //#define MO_LOG(format, args...) NSLog(@"[%s - %s : %d]"format@"\n", __FILE__, __FUNCTION__,__LINE__, ##args)
 #define MO_LOG(format, args...) NSLog(@"[%s : %d]"format@"\n", __FUNCTION__,__LINE__, ##args)
 
