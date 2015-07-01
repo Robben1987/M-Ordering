@@ -78,5 +78,4 @@
 #define MO_COLOR_HEX(hex) \
         [UIColor colorWithHexString:(hex)]
 
-
 #endif
