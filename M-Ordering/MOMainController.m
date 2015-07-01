@@ -30,8 +30,8 @@
     
     [self initDataCtrl];
     
-#if (NETWORK_ACTIVE)
-    //[self.dataCtrl loadData];
+#if !(NETWORK_ACTIVE)
+    [self.dataCtrl loadData];
     [self loadViewControllers];
 #else
     //load login view first
