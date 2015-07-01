@@ -47,7 +47,7 @@
 #define HTTP_URL_ORDER_RANDOM (@"http://10.2.2.188/Menu.asp?at=sj")
 #endif
 
-
+#pragma mark - msg show
 #define MO_SHOW_INFO(msg) [MBProgressHUD showMessage:(msg)]
 #define MO_SHOW_SUCC(msg) [MBProgressHUD showSuccess:(msg)]
 #define MO_SHOW_FAIL(msg) [MBProgressHUD showError:(msg)]
