@@ -60,50 +60,47 @@
     [_groups addObject:group1];
     
     //2. quick menu Buttons
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button1 setTitle:@"通讯录" forState:UIControlStateNormal];
-    [button1 setFrame:CGRectMake(5, 0, 150, 40)];
-    [button1 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    [button1 setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
-    [button1.layer setCornerRadius:10.0];
-    //[button1 setBackgroundImage:[UIImage imageNamed:@"frx"] forState:UIControlStateNormal];
+    UIButton* tel = [UIButton buttonWithType:UIButtonTypeCustom];
+    [tel setTitle:@"通讯录" forState:UIControlStateNormal];
+    [tel setFrame:CGRectMake(5, 0, 150, 40)];
+    [tel addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [tel setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
+    [tel.layer setCornerRadius:10.0];
     
-    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button2 setTitle:@"会议室" forState:UIControlStateNormal];
-    [button2 setFrame:CGRectMake(165, 0, 150, 40)];
-    [button2.layer setCornerRadius:10.0];
-    [button2 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    [button2 setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
+    UIButton* meet = [UIButton buttonWithType:UIButtonTypeCustom];
+    [meet setTitle:@"会议室" forState:UIControlStateNormal];
+    [meet setFrame:CGRectMake(165, 0, 150, 40)];
+    [meet.layer setCornerRadius:10.0];
+    [meet addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [meet setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
     //[button2 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
     
-    UIView* com1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-    //[com1 setBackgroundColor:[UIColor grayColor]];
-    [com1 addSubview:button1];
-    [com1 addSubview:button2];
+    UIView* util1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    [util1 addSubview:tel];
+    [util1 addSubview:meet];
     
-    UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button3 setTitle:@"按摩" forState:UIControlStateNormal];
-    //[button3 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
-    [button3 setFrame:CGRectMake(5, 0, 150, 40)];
-    [button3.layer setCornerRadius:10.0];
-    [button3 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    //[button3 setBackgroundColor: MO_COLOR_RGBA(136,171,218,1)];
-    [button3 setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
+    UIButton* massage = [UIButton buttonWithType:UIButtonTypeCustom];
+    [massage setTitle:@"按摩" forState:UIControlStateNormal];
+    [massage setFrame:CGRectMake(5, 0, 150, 40)];
+    [massage.layer setCornerRadius:10.0];
+    [massage addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    //[massage setBackgroundColor: MO_COLOR_RGBA(136,171,218,1)];
+    [massage setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
     
-    UIButton *button4 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button4 setTitle:@"+" forState:UIControlStateNormal];
-    [button4.titleLabel setFont:[UIFont systemFontOfSize:30.0f]];
-    [button4 setFrame:CGRectMake(165, 0, 150, 40)];
-    //[button4 setBackgroundColor: MO_COLOR_RGBA(125,193,221,1)];
-    [button4 setBackgroundColor: [UIColor lightGrayColor]];
-    [button4.layer setCornerRadius:10.0];
-    [button4 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton* plus = [UIButton buttonWithType:UIButtonTypeCustom];
+    [plus setTitle:@"+" forState:UIControlStateNormal];
+    [plus.titleLabel setFont:[UIFont systemFontOfSize:30.0f]];
+    [plus setFrame:CGRectMake(165, 0, 150, 40)];
+    //[plus setBackgroundColor: MO_COLOR_RGBA(125,193,221,1)];
+    [plus setBackgroundColor: [UIColor lightGrayColor]];
+    [plus.layer setCornerRadius:10.0];
+    [plus addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIView* com2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-    [com2 addSubview:button3];
-    [com2 addSubview:button4];
+    UIView* util2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    [util2 addSubview:massage];
+    [util2 addSubview:plus];
 
-    NSArray* group2 = @[com1, com2];
+    NSArray* group2 = @[util1, util2];
     [_groups addObject:group2];
     
     //3. restruant
