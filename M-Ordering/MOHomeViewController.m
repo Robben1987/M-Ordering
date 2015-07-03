@@ -104,41 +104,41 @@
     [_groups addObject:group2];
     
     //3. restruant
-    UIButton *button11 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button11 setTitle:@"好清乡" forState:UIControlStateNormal];
-    [button11 setFrame:CGRectMake(5, 0, 310, 40)];
-    [button11 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    [button11 setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
-    [button11.layer setCornerRadius:10.0];
+    UIButton* button11 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button1 setTitle:@"好清乡" forState:UIControlStateNormal];
+    [button1 setFrame:CGRectMake(5, 0, 310, 40)];
+    [button1 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button1 setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
+    [button1.layer setCornerRadius:10.0];
     //[button1 setBackgroundImage:[UIImage imageNamed:@"frx"] forState:UIControlStateNormal];
     
-    UIButton *button21 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button21 setTitle:@"福荣祥" forState:UIControlStateNormal];
-    [button21 setFrame:CGRectMake(5, 0, 310, 40)];
-    [button21.layer setCornerRadius:10.0];
-    [button21 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
-    [button21 setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
+    UIButton* button2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button2 setTitle:@"福荣祥" forState:UIControlStateNormal];
+    [button2 setFrame:CGRectMake(5, 0, 310, 40)];
+    [button2.layer setCornerRadius:10.0];
+    [button2 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button2 setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
     //[button2 setBackgroundImage:[UIImage imageNamed:@"zgf"] forState:UIControlStateNormal];
     
-    UIButton *button31 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button31 setTitle:@"真功夫" forState:UIControlStateNormal];
+    UIButton* button3 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button3 setTitle:@"真功夫" forState:UIControlStateNormal];
     //[button3 setTitle:[[main.dataCtrl getRestaurants] objectAtIndex:index++]forState:UIControlStateNormal];
-    [button31 setFrame:CGRectMake(5, 0, 310, 40)];
-    [button31.layer setCornerRadius:10.0];
-    [button31 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button3 setFrame:CGRectMake(5, 0, 310, 40)];
+    [button3.layer setCornerRadius:10.0];
+    [button3 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     //[button3 setBackgroundColor: MO_COLOR_RGBA(136,171,218,1)];
-    [button31 setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
+    [button3 setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
     
-    UIButton *button41 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button41 setTitle:@"+" forState:UIControlStateNormal];
-    [button41.titleLabel setFont:[UIFont systemFontOfSize:30.0f]];
-    [button41 setFrame:CGRectMake(5, 0, 310, 40)];
+    UIButton* button4 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button4 setTitle:@"+" forState:UIControlStateNormal];
+    [button4.titleLabel setFont:[UIFont systemFontOfSize:30.0f]];
+    [button4 setFrame:CGRectMake(5, 0, 310, 40)];
     //[button41 setBackgroundColor: MO_COLOR_RGBA(125,193,221,1)];
-    [button41 setBackgroundColor: [UIColor lightGrayColor]];
-    [button41.layer setCornerRadius:10.0];
-    [button41 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
+    [button4 setBackgroundColor: [UIColor lightGrayColor]];
+    [button4.layer setCornerRadius:10.0];
+    [button4 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray* group3 = @[button11, button21,button31,button41];
+    NSArray* group3 = @[button1, button2,button3,button4];
     [_groups addObject:group3];
     
 }
