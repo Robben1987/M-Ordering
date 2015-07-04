@@ -30,20 +30,13 @@
 
 @implementation MOMenuViewController
 
-+(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl
++(instancetype)initWithTitle:(NSString*)title style:(UITableViewStyle)style dataCtrl:(MODataController*)dataCtrl
 {
-    MOMenuViewController* viewCtrl = [[MOMenuViewController alloc] initWithDataCtrl: dataCtrl];
+    MOMenuViewController* viewCtrl = [[MOMenuViewController alloc] initWithStyle:style];
+    [viewCtrl setTitle:title];
+    [viewCtrl setDataCtrl:dataCtrl];
+    
     return viewCtrl;
-}
-
--(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl
-{
-    self = [super init];
-    if (self)
-    {
-        self.dataCtrl = dataCtrl;
-    }
-    return self;
 }
 
 - (void)loadView

@@ -14,8 +14,6 @@
 @property(nonatomic, retain)MODataController* dataCtrl;
 
 
-+(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl;
-
--(MOMenuViewController*)initWithDataCtrl:(MODataController*)dataCtrl;
++(instancetype)initWithTitle:(NSString*)title style:(UITableViewStyle)style dataCtrl:(MODataController*)dataCtrl;
 
 @end

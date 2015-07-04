@@ -30,12 +30,12 @@
     
     [self initDataCtrl];
     
-#if (NETWORK_ACTIVE)
+#if !(NETWORK_ACTIVE)
     [self.dataCtrl loadData];
     [self loadViewControllers];
 #else
     //load login view first
-    [self performSelectorOnMainThread:@selector(loadLoginView)withObject:nil waitUntilDone:NO];
+    //[self performSelectorOnMainThread:@selector(loadLoginView)withObject:nil waitUntilDone:NO];
 
 #endif
 }
@@ -70,7 +70,8 @@
     UINavigationController* homeNav = [[UINavigationController alloc] initWithRootViewController:homeView];
     
     //2. Quick Order view
-    MOQuickOrderTableViewController* quickView = [[MOQuickOrderTableViewController alloc] initWithDataCtrl:self.dataCtrl];
+    //MOQuickOrderTableViewController* quickView = [[MOQuickOrderTableViewController alloc] initWithDataCtrl:self.dataCtrl];
+    MOQuickOrderTableViewController* quickView = [MOQuickOrderTableViewController initWithTitle:@"快速订餐" style:UITableViewStylePlain dataCtrl:self.dataCtrl];
     UITabBarItem* quickItem = [[UITabBarItem alloc] initWithTitle:@"快速订餐" image:[UIImage imageNamed:@"magnifier"] tag:1];
     quickView.tabBarItem = quickItem;
     UINavigationController* quickNav = [[UINavigationController alloc] initWithRootViewController:quickView];

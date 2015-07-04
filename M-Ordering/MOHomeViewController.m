@@ -104,7 +104,7 @@
     [_groups addObject:group2];
     
     //3. restruant
-    UIButton* button11 = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton* button1 = [UIButton buttonWithType:UIButtonTypeCustom];
     [button1 setTitle:@"好清乡" forState:UIControlStateNormal];
     [button1 setFrame:CGRectMake(5, 0, 310, 40)];
     [button1 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
@@ -138,8 +138,9 @@
     [button4.layer setCornerRadius:10.0];
     [button4 addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray* group3 = @[button1, button2,button3,button4];
-    [_groups addObject:group3];
+    //NSArray* group3 = @[button1, button2,button3,button4];
+    NSArray* group4 = [NSArray arrayWithArray:[self.dataCtrl getRestaurants]];
+    [_groups addObject:group4];
     
 }
 #pragma mark tableView delegate
@@ -162,19 +163,28 @@
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
-    //[]
-    [cell.contentView addSubview:[_groups[indexPath.section] objectAtIndex:indexPath.row]];
-    if(indexPath.section == 2)
+    
+    if(indexPath.section != 2)
+    {
+        [cell.contentView addSubview:[_groups[indexPath.section] objectAtIndex:indexPath.row]];
+    }else
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+        [cell.textLabel setText: [_groups[indexPath.section] objectAtIndex:indexPath.row]];
     }
     return cell;
 }
 #pragma mark 设置每行高度（每行高度可以不一样）
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIView* entry = [_groups[indexPath.section] objectAtIndex:0];
-    return (entry.frame.size.height+5);
+    if(indexPath.section != 2)
+    {
+        UIView* entry = [_groups[indexPath.section] objectAtIndex:0];
+        return (entry.frame.size.height+5);
+    }else
+    {
+        return 50;
+    }
 }
 #pragma mark 返回每组头标题名称
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -197,6 +207,18 @@
     return nil;
 }
 
+#pragma mark 点击行进入新页面
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 2)
+    {
+        NSString* title = [[self.dataCtrl getRestaurants] objectAtIndex:indexPath.row];
+        MOMenuViewController* menu = [MOMenuViewController initWithTitle:title
+                                                                style:UITableViewStylePlain
+                                                             dataCtrl:self.dataCtrl];
+        [self.navigationController pushViewController:menu animated:YES];
+    }
+}
 -(void)touchUpIndise:(UIButton*)button
 {
     MOMenuViewController* menu = [[MOMenuViewController alloc] initWithStyle:UITableViewStylePlain];
