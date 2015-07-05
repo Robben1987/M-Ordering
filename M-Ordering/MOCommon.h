@@ -53,12 +53,10 @@
 #define MO_SHOW_FAIL(msg) [MBProgressHUD showError:(msg)]
 #define MO_SHOW_HIDE      [MBProgressHUD hideHUD]
 
-#pragma mark - log
+#pragma mark - Log
 //#define MO_LOG(format, args...) NSLog(@"[%s - %s : %d]"format@"\n", __FILE__, __FUNCTION__,__LINE__, ##args)
 #define MO_LOG(format, args...) NSLog(@"[%s : %d]"format@"\n", __FUNCTION__,__LINE__, ##args)
 
-
-#define MO_INVALID_UINT (0xFFFFFFFF)
 
 #define MO_SHOW_POINT(str, point)\
             MO_LOG(@"%@ point:(%lf,%lf)", str, point.x, point.y)
@@ -72,11 +70,19 @@
 #define MO_SHOW_EDGEINSET(str, inset)\
             MO_LOG(@"%@ EdgeInset:(%lf,%lf)(%lf,%lf)", str, inset.left, inset.right, inset.top, inset.bottom)
 
-
+#pragma mark - Color
 #define MO_COLOR_RGBA(R/*红*/, G/*绿*/, B/*蓝*/, A/*透明*/) \
         [UIColor colorWithRed:(R)/255.f green:(G)/255.f blue:(B)/255.f alpha:(A)]
 
 #define MO_COLOR_HEX(hex) \
         [UIColor colorWithHexString:(hex)]
+
+#pragma mark - Base Macro
+#define MO_INVALID_UINT (0xFFFFFFFF)
+
+#pragma mark - TableView
+#define MO_TABLEVIEW_CELL_HEIGHT (44)
+
+
 
 #endif

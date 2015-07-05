@@ -163,7 +163,7 @@
 {
     if(indexPath.section == 2)
     {
-        NSString* title = [[self.dataCtrl getRestaurants] objectAtIndex:indexPath.row];
+        NSString* title = [_groups[indexPath.section] objectAtIndex:indexPath.row];
         MOMenuViewController* menu = [MOMenuViewController initWithTitle:title
                                                                 style:UITableViewStylePlain
                                                              dataCtrl:self.dataCtrl];
@@ -178,7 +178,7 @@
         return (entry.frame.size.height+5);
     }else
     {
-        return 44;
+        return MO_TABLEVIEW_CELL_HEIGHT;
     }
 }
 
