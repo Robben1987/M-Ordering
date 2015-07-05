@@ -20,51 +20,32 @@
 
 @end
 
-@implementation MOSelfViewController 
-+(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl
-{
-    MOSelfViewController* viewCtrl = [[MOSelfViewController alloc] initWithDataCtrl: ctrl];
-    return viewCtrl;
-}
--(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl
-{
-    self = [super init];
-    if(self)
-    {
-        NSLog(@"self............");
-        self.title = @"我";
-        self.tabBarItem.title = @"我";
-        self.dataCtrl = ctrl;
-    }
-    return self;
-}
+@implementation MOSelfViewController
 
-- (void)loadView
++(instancetype)initWithTitle:(NSString*)title style:(UITableViewStyle)style dataCtrl:(MODataController*)dataCtrl
 {
-    [super loadView];
+    MOSelfViewController* viewCtrl = [[MOSelfViewController alloc] initWithStyle:style];
+    [viewCtrl setTitle:title];
+    [viewCtrl setDataCtrl:dataCtrl];
     
-    // for customer
-    UITableView* tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    [tableView setDataSource:self];
-
-    [self setTableView:tableView];
+    return viewCtrl;
 }
 
 - (void)viewDidLoad
 {
-    static int num = 0;
-    NSLog(@"self:%d", ++num);
+    //static int num = 0;
+    //NSLog(@"self:%d", ++num);
     
     [super viewDidLoad];
     
-    [self initTablesData:@"Robben"];
+    [self initTablesData];
 }
 
--(void)initTablesData:(NSString*)name
+-(void)initTablesData
 {
-    _groups = [[NSMutableArray alloc]init];
+    _groups = [NSMutableArray array];
     
-    MOToolGroup* group1 = [MOToolGroup initWithName:@"A" andDetail:@"With names beginning with A" andEntrys:[NSMutableArray arrayWithObjects: name, nil]];
+    MOToolGroup* group1 = [MOToolGroup initWithName:@"A" andDetail:@"With names beginning with A" andEntrys:[NSMutableArray arrayWithObjects: [self.dataCtrl userName], nil]];
     [_groups addObject:group1];
     
     
@@ -75,17 +56,7 @@
     [_groups addObject:group3];
     
 }
-- (void)addOtherViews:(NSString*)name
-{
-    //2. Menu Buttons
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button1 setTitle:name forState:UIControlStateNormal];
-    [button1 setFrame:CGRectMake(80, 200, 160, 50)];
-    [button1 setBackgroundColor: [UIColor blueColor]];
-    [button1 setTag:1];
-    //[self.view addSubview:button1];
-    
-}
+
 #pragma mark tableView delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -106,6 +77,9 @@
     return 44;
 }
 
+
+
+
 #pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -123,19 +97,17 @@
         [cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
         [cell.textLabel setText:entry];
         [cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
-        //[cell.textLabel setFrame:<#(CGRect)#>];
         
-        NSLog(@"section %ld: %@", indexPath.section, cell);
     }else if(indexPath.section == 1)
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         cell.textLabel.text = entry;
-        NSLog(@"section %ld: %@", indexPath.section, cell);
+        //NSLog(@"section %ld: %@", indexPath.section, cell);
     }else
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         cell.textLabel.text = entry;
-        NSLog(@"section %ld: %@", indexPath.section, cell);
+        //NSLog(@"section %ld: %@", indexPath.section, cell);
 
     }
 
@@ -156,7 +128,7 @@
 }
 -(CGFloat)tableView:( UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 2.0f;
+    return 0.2f;
 }
 
 #pragma mark 点击行进入新页面

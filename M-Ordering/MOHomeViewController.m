@@ -27,29 +27,19 @@
 
 @implementation MOHomeViewController
 
-+(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
++(instancetype)initWithTitle:(NSString*)title style:(UITableViewStyle)style dataCtrl:(MODataController*)dataCtrl
 {
-    MOHomeViewController* viewCtrl = [[MOHomeViewController alloc] initWithDataCtrl:dataCtrl];
-
+    MOHomeViewController* viewCtrl = [[MOHomeViewController alloc] initWithStyle:style];
+    [viewCtrl setDataCtrl:dataCtrl];
+    [viewCtrl setTitle:title];
+    
+    //[self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     return viewCtrl;
 }
 
--(MOHomeViewController*)initWithDataCtrl:(MODataController*)dataCtrl
-{
-    self = [super init];
-    if (self)
-    {
-        [self setTitle:@"主页"];
-        [self setDataCtrl:dataCtrl];
-        [self.tableView setDataSource:self];
-        [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    }
-    return self;
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [self initData];
 }
 
@@ -67,14 +57,14 @@
     //2. quick menu Buttons
     UIButton* tel = [UIButton buttonWithType:UIButtonTypeCustom];
     [tel setTitle:@"通讯录" forState:UIControlStateNormal];
-    [tel setFrame:CGRectMake(5, 0, 150, 40)];
+    [tel setFrame:CGRectMake(5, 2, 150, 40)];
     [tel addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     [tel setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
     [tel.layer setCornerRadius:10.0];
     
     UIButton* meet = [UIButton buttonWithType:UIButtonTypeCustom];
     [meet setTitle:@"会议室" forState:UIControlStateNormal];
-    [meet setFrame:CGRectMake(165, 0, 150, 40)];
+    [meet setFrame:CGRectMake(165, 2, 150, 40)];
     [meet.layer setCornerRadius:10.0];
     [meet addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     [meet setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
@@ -85,13 +75,13 @@
     
     UIButton* massage = [UIButton buttonWithType:UIButtonTypeCustom];
     [massage setTitle:@"按摩" forState:UIControlStateNormal];
-    [massage setFrame:CGRectMake(5, 0, 150, 40)];
+    [massage setFrame:CGRectMake(5, 2, 150, 40)];
     [massage.layer setCornerRadius:10.0];
     [massage addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     [massage setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
     
     UIButton* plus = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [plus setFrame:CGRectMake(165, 0, 150, 40)];
+    [plus setFrame:CGRectMake(165, 2, 150, 40)];
     [plus setBackgroundColor: [UIColor lightGrayColor]];
     [plus.layer setCornerRadius:10.0];
     //[plus addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
@@ -132,6 +122,8 @@
     if(indexPath.section != 2)
     {
         [cell.contentView addSubview:[_groups[indexPath.section] objectAtIndex:indexPath.row]];
+        //[cell.layer setBorderColor:[UIColor whiteColor].CGColor];
+        //cell.layer.borderWidth = 0;
     }else
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -156,7 +148,19 @@
 {
     return nil;
 }
-
+-(CGFloat)tableView:( UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    CGFloat height = 0.f;
+    if(section == 0)
+    {
+        height = 0.2f;
+    }else
+    {
+        height = 10.0f;
+    }
+    
+    return height;
+}
 
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -172,16 +176,15 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section != 2)
+    if(indexPath.section == 0)
     {
         UIView* entry = [_groups[indexPath.section] objectAtIndex:0];
-        return (entry.frame.size.height+5);
+        return (entry.frame.size.height);
     }else
     {
         return MO_TABLEVIEW_CELL_HEIGHT;
     }
 }
-
 
 -(void)touchUpIndise:(UIButton*)button
 {
@@ -196,16 +199,4 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    //[self.tabBarController.tabBar setHidden:NO];
-}
-- (void)viewDidAppear:(BOOL)animated
-{
-    //[self addOtherViews];
-}
--(void)viewWillDisappear:(BOOL)animated
-{
-    //[self.tabBarController.tabBar setHidden:YES];
-}
 @end

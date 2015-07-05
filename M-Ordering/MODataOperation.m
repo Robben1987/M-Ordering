@@ -316,7 +316,7 @@
     
     if([(NSHTTPURLResponse *)response statusCode] / 100 != 2)
     {
-        NSLog(@"server response error:%ld", [(NSHTTPURLResponse *)response statusCode]);
+        NSLog(@"server response error:%u", (unsigned)[(NSHTTPURLResponse *)response statusCode]);
         return @"服务器响应错误";
     }
     
@@ -358,7 +358,7 @@
     
     if([(NSHTTPURLResponse *)response statusCode] / 100 != 2)
     {
-        NSLog(@"server response error:%ld", [(NSHTTPURLResponse *)response statusCode]);
+        NSLog(@"server response error:%u", (unsigned)[(NSHTTPURLResponse *)response statusCode]);
         return FALSE;
     }
     
@@ -531,7 +531,7 @@
     
     if([(NSHTTPURLResponse *)response statusCode] / 100 != 2)
     {
-        NSLog(@"server response error:%ld", [(NSHTTPURLResponse *)response statusCode]);
+        NSLog(@"server response error:%u", (unsigned)[(NSHTTPURLResponse *)response statusCode]);
         return FALSE;
     }
     
@@ -597,7 +597,7 @@
     
     if([(NSHTTPURLResponse *)response statusCode] / 100 != 2)
     {
-        NSLog(@"server response error:%ld", [(NSHTTPURLResponse *)response statusCode]);
+        NSLog(@"server response error:%u", (unsigned)[(NSHTTPURLResponse *)response statusCode]);
         return nil;
     }
     
@@ -719,7 +719,7 @@
 +(void)dumpHttpResponse:(NSURLResponse*)response
 {
     NSLog(@"dump the http response:");
-    NSLog(@"response status code:%ld",[(NSHTTPURLResponse *)response statusCode]);
+    NSLog(@"response status code:%u",(unsigned)[(NSHTTPURLResponse *)response statusCode]);
     NSLog(@"response expect length:%lld", [(NSHTTPURLResponse *)response expectedContentLength]);
     NSLog(@"response all headfield:%@",[(NSHTTPURLResponse *)response allHeaderFields]);
 }

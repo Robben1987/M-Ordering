@@ -14,8 +14,6 @@
 
 @property(nonatomic, retain)MODataController* dataCtrl;
 
-+(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl;
-
--(MOSelfViewController*)initWithDataCtrl:(MODataController*)ctrl;
++(instancetype)initWithTitle:(NSString*)title style:(UITableViewStyle)style dataCtrl:(MODataController*)dataCtrl;
 
 @end

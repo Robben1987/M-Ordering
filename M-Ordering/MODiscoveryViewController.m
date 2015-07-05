@@ -20,32 +20,13 @@
 
 @implementation MODiscoveryViewController
 
-+(MODiscoveryViewController*)initWithDataCtrl:(MODataController*)ctrl
++(instancetype)initWithTitle:(NSString*)title style:(UITableViewStyle)style dataCtrl:(MODataController*)dataCtrl
 {
-    MODiscoveryViewController* viewCtrl = [[MODiscoveryViewController alloc] initWithDataCtrl: ctrl];
+    MODiscoveryViewController* viewCtrl = [[MODiscoveryViewController alloc] initWithStyle:style];
+    [viewCtrl setDataCtrl:dataCtrl];
+    [viewCtrl setTitle:title];
+    
     return viewCtrl;
-}
--(MODiscoveryViewController*)initWithDataCtrl:(MODataController*)ctrl
-{
-    self = [super init];
-    if(self)
-    {
-        self.dataCtrl = ctrl;
-    }
-    return self;
-}
-- (void)loadView
-{
-    [super loadView];
-    
-    self.title = @"发现";
-    self.tabBarItem.title = @"发现";
-    
-    // for customer
-    UITableView* tableView=[[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    [tableView setDataSource:self];
-    //[tableView setBackgroundColor:[UIColor grayColor]];
-    [self setTableView:tableView];
 }
 
 - (void)viewDidLoad
@@ -140,20 +121,6 @@
     {
         
     }
-
-    
-    /*
-    UIViewController* vc = [[UIViewController alloc] init];
-    [vc.view setBackgroundColor:[UIColor yellowColor]];
-    [self.navigationController pushViewController:vc animated:YES];
-    */
-    
-//    //创建弹出窗口
-//    UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"System Info" message:[contact getName] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-//    alert.alertViewStyle=UIAlertViewStylePlainTextInput; //设置窗口内容样式
-//    UITextField *textField= [alert textFieldAtIndex:0]; //取得文本框
-//    textField.text=contact.phoneNumber; //设置文本框内容
-//    [alert show]; //显示窗口
 }
 
 

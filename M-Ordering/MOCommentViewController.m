@@ -305,7 +305,7 @@
 }
 -(void)textViewDidChange:(UITextView *)textView
 {
-    NSLog(@"已输入:%lu", textView.text.length);
+    //NSLog(@"已输入:%lu", textView.text.length);
     
     UITextRange* selectedRange = [textView markedTextRange];
     if (selectedRange)
@@ -319,7 +319,7 @@
         MO_SHOW_FAIL(([NSString stringWithFormat:@"最多只能输入%u个字!", MAX_LIMIT_NUMS]));
     }
     
-    [_commentLabel setText:[NSString stringWithFormat:@"%lu/%u", MAX(0,(MAX_LIMIT_NUMS - [textView.text length])),MAX_LIMIT_NUMS]];
+    [_commentLabel setText:[NSString stringWithFormat:@"%u/%u", (unsigned)MAX(0,(MAX_LIMIT_NUMS - [textView.text length])),MAX_LIMIT_NUMS]];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

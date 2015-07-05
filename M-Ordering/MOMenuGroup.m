@@ -30,7 +30,7 @@
           self.detail,
           self.tel);
     if(self.entrys)
-        NSLog(@"entrys num: %lu", self.entrys.count);
+        NSLog(@"entrys num: %u", (unsigned)self.entrys.count);
     return;
 }
 

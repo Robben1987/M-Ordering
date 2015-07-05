@@ -64,26 +64,25 @@
 - (void)loadViewControllers
 {
     //1. Home view
-    MOHomeViewController* homeView = [[MOHomeViewController alloc] initWithDataCtrl:self.dataCtrl];
+    MOHomeViewController* homeView = [MOHomeViewController initWithTitle:@"主页" style:UITableViewStyleGrouped dataCtrl:self.dataCtrl];
     UITabBarItem* homeItem = [[UITabBarItem alloc] initWithTitle:@"主页" image:[UIImage imageNamed:@"home"] tag:0];
     homeView.tabBarItem = homeItem;
     UINavigationController* homeNav = [[UINavigationController alloc] initWithRootViewController:homeView];
     
     //2. Quick Order view
-    //MOQuickOrderTableViewController* quickView = [[MOQuickOrderTableViewController alloc] initWithDataCtrl:self.dataCtrl];
     MOQuickOrderTableViewController* quickView = [MOQuickOrderTableViewController initWithTitle:@"快速订餐" style:UITableViewStylePlain dataCtrl:self.dataCtrl];
     UITabBarItem* quickItem = [[UITabBarItem alloc] initWithTitle:@"快速订餐" image:[UIImage imageNamed:@"magnifier"] tag:1];
     quickView.tabBarItem = quickItem;
     UINavigationController* quickNav = [[UINavigationController alloc] initWithRootViewController:quickView];
     
     //2. Discovery view
-    MODiscoveryViewController* disView = [[MODiscoveryViewController alloc] initWithDataCtrl:self.dataCtrl];
+    MODiscoveryViewController* disView = [MODiscoveryViewController initWithTitle:@"发现" style:UITableViewStyleGrouped dataCtrl:self.dataCtrl];
     UITabBarItem* disItem = [[UITabBarItem alloc] initWithTitle:@"发现" image:[UIImage imageNamed:@"globe"] tag:1];
     disView.tabBarItem = disItem;
     UINavigationController* disNav = [[UINavigationController alloc] initWithRootViewController:disView];
     
     //3. Self view
-    MOSelfViewController* selfView = [[MOSelfViewController alloc] initWithDataCtrl:self.dataCtrl];
+    MOSelfViewController* selfView = [MOSelfViewController initWithTitle:@"我" style:UITableViewStyleGrouped dataCtrl:self.dataCtrl];
     UITabBarItem* selfItem = [[UITabBarItem alloc] initWithTitle:@"我" image:[UIImage imageNamed:@"man"] tag:2];
     selfView.tabBarItem = selfItem;
     UINavigationController* selfNav = [[UINavigationController alloc] initWithRootViewController:selfView];
