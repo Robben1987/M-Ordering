@@ -94,7 +94,8 @@
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         [cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
-        [cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
+        [cell.imageView setImage:[self.dataCtrl.account image]];
+        //[cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
         [cell.textLabel setText:entry];
         [cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
         

@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 #import "MOCommentEntry.h"
 #import "MOMenuEntry.h"
+#import "MOAccount.h"
+
 
 @interface MODataController : NSObject <NSCoding>
 
@@ -20,8 +22,10 @@
 @property (nonatomic,strong) NSMutableArray*      myFavourites;
 @property (nonatomic,assign) unsigned             ordered;
 
-@property (nonatomic,copy) NSString*              userName;
-@property (nonatomic,copy) NSString*              password; 
+@property (nonatomic,strong) MOAccount*           account;
+
+//@property (nonatomic,copy) NSString*              userName;
+//@property (nonatomic,copy) NSString*              password; 
 
 
 #pragma mark constructor
@@ -34,6 +38,9 @@
 -(void)loadData;
 -(void)saveData;
 -(BOOL)isOrdered;
+-(NSString*)userName;
+-(NSString*)password;
+
 -(NSArray*)getRestaurants;
 -(NSArray*)getMenuQuickIndexs;
 -(NSArray*)getMenuListByRestaurant:(NSString*)restaurant;

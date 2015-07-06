@@ -48,14 +48,14 @@
 -(void)loadAccount
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
-    self.userName = [userDefaults stringForKey:@"userName"];
-    self.password = [userDefaults stringForKey:@"password"];
+    self.account = [userDefaults stringForKey:@"account"];
+    //self.password = [userDefaults stringForKey:@"password"];
 }
 -(void)saveAccount
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
-	[userDefaults setObject:self.userName forKey:@"userName"];  
-	[userDefaults setObject:self.password forKey:@"password"];  
+	[userDefaults setObject:self.account forKey:@"account"];  
+	//[userDefaults setObject:self.password forKey:@"password"];  
 }
 -(void)loadData
 {
@@ -64,7 +64,7 @@
     self.password = @"123456";
 #endif
     
-    NSString* file = MO_DATA_FILE(self.userName);
+    NSString* file = MO_DATA_FILE(self.account.userName);
     if([MODataOperation isFileExist: file])
     {
         MO_LOG(@"data file exist...");
@@ -89,9 +89,21 @@
 -(void)saveData
 {
     [self saveAccount];
-    [MODataOperation writeObj:self toFile: MO_DATA_FILE(self.userName)];
+    [MODataOperation writeObj:self toFile: MO_DATA_FILE(self.account.userName)];
 }
 
+-(NSString*)userName
+{
+    if(!self.account) return nil;
+
+    return self.account.userName;
+}
+-(NSString*)password
+{
+    if(!self.account) return nil;
+
+    return self.account.password;
+}
 -(NSArray*)getRestaurants
 {
     return [self.restaurants allKeys];
@@ -161,8 +173,7 @@
 #endif
     if(!result)
     {
-        self.userName = name;
-        self.password = password;
+        if(!self.account) self.account = [MOAccount initWithName:name andPassword:password];
         [self loadData];
     }
 
@@ -242,25 +253,28 @@
 #pragma mark- NSCoding Protocoal
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.userName          forKey:@"userName"];
-    [aCoder encodeObject:self.password          forKey:@"passWord"];
+    //[aCoder encodeObject:self.userName          forKey:@"userName"];
+    //[aCoder encodeObject:self.password          forKey:@"passWord"];
     [aCoder encodeObject:self.restaurants   forKey:@"restaurants"];
     [aCoder encodeObject:self.menuArray     forKey:@"menuArray"];
     [aCoder encodeObject:self.myHistory     forKey:@"myHistory"];
     [aCoder encodeObject:self.otherOders    forKey:@"otherOders"];
     [aCoder encodeObject:self.myFavourites  forKey:@"myFavourites"];
+    //[aCoder encodeObject:self.account       forKey:@"account"];
+
 }
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init])
     {
-        self.userName              = [aDecoder decodeObjectForKey:@"userName"];
-        self.password              = [aDecoder decodeObjectForKey:@"passWord"];
+        //self.userName              = [aDecoder decodeObjectForKey:@"userName"];
+        //self.password              = [aDecoder decodeObjectForKey:@"passWord"];
         self.restaurants       = [aDecoder decodeObjectForKey:@"restaurants"];
         self.menuArray         = [aDecoder decodeObjectForKey:@"menuArray"];
         self.myHistory         = [aDecoder decodeObjectForKey:@"myHistory"];
         self.otherOders        = [aDecoder decodeObjectForKey:@"otherOders"];
         self.myFavourites      = [aDecoder decodeObjectForKey:@"myFavourites"];
+        //self.account           = [aDecoder decodeObjectForKey:@"account"];
     }
     
     return self;
