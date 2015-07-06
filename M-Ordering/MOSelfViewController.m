@@ -45,7 +45,9 @@
 {
     _groups = [NSMutableArray array];
     
-    MOToolGroup* group1 = [MOToolGroup initWithName:@"A" andDetail:@"With names beginning with A" andEntrys:[NSMutableArray arrayWithObjects: [self.dataCtrl userName], nil]];
+    NSString* name = [self.dataCtrl userName];
+    if(!name) name = @"未登录";
+    MOToolGroup* group1 = [MOToolGroup initWithName:@"A" andDetail:@"With names beginning with A" andEntrys:[NSMutableArray arrayWithObjects: name, nil]];
     [_groups addObject:group1];
     
     
@@ -94,8 +96,8 @@
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         [cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
-        [cell.imageView setImage:[self.dataCtrl.account image]];
-        //[cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
+        //[cell.imageView setImage:[self.dataCtrl.account image]];
+        [cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
         [cell.textLabel setText:entry];
         [cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
         

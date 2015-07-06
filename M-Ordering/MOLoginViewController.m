@@ -77,7 +77,7 @@
     [_txtUserName setBackgroundColor: [UIColor whiteColor]];
     [_txtUserName setTag:1];
     //NSString* name = ((self.dataCtrl.userName) ? self.dataCtrl.userName: @"李志兴");
-    [_txtUserName setText:self.dataCtrl.userName];
+    [_txtUserName setText:[self.dataCtrl userName]];
     [self.view addSubview:_txtUserName];
     
     //3. txt Password
@@ -94,7 +94,7 @@
     [_txtPassword setDelegate:self];
     [_txtPassword setTag:2];
     //NSString* password = ((self.dataCtrl.password) ? self.dataCtrl.password: @"123456");
-    [_txtPassword setText:self.dataCtrl.password];
+    [_txtPassword setText:[self.dataCtrl password]];
     [self.view addSubview:_txtPassword];
     
     //4. btnLogin

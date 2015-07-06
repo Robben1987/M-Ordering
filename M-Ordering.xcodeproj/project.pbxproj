@@ -28,6 +28,7 @@
 		0E50BE621AB711250055B711 /* MOHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E50BE611AB711250055B711 /* MOHomeViewController.m */; };
 		0E50BE651AB7123B0055B711 /* MOSelfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E50BE641AB7123B0055B711 /* MOSelfViewController.m */; };
 		0E50BE681AB712740055B711 /* MODiscoveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E50BE671AB712740055B711 /* MODiscoveryViewController.m */; };
+		0E759A3C1B4AB28F0039789F /* MOAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E759A3B1B4AB28F0039789F /* MOAccount.m */; };
 		0E8421931AB9B7400021AE9C /* MOMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8421921AB9B7400021AE9C /* MOMenuViewController.m */; };
 		0E8ABB641B37AB9200033FEE /* MOImageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8ABB631B37AB9200033FEE /* MOImageScrollView.m */; };
 		0E8B38EE1ABE4FD00018AF81 /* MOToolGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E8B38ED1ABE4FD00018AF81 /* MOToolGroup.m */; };
@@ -110,6 +111,8 @@
 		0E50BE641AB7123B0055B711 /* MOSelfViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSelfViewController.m; sourceTree = "<group>"; };
 		0E50BE661AB712740055B711 /* MODiscoveryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODiscoveryViewController.h; sourceTree = "<group>"; };
 		0E50BE671AB712740055B711 /* MODiscoveryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODiscoveryViewController.m; sourceTree = "<group>"; };
+		0E759A3A1B4AB28F0039789F /* MOAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAccount.h; sourceTree = "<group>"; };
+		0E759A3B1B4AB28F0039789F /* MOAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAccount.m; sourceTree = "<group>"; };
 		0E8421911AB9B7400021AE9C /* MOMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMenuViewController.h; sourceTree = "<group>"; };
 		0E8421921AB9B7400021AE9C /* MOMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMenuViewController.m; sourceTree = "<group>"; };
 		0E8ABB621B37AB9200033FEE /* MOImageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOImageScrollView.h; sourceTree = "<group>"; };
@@ -225,6 +228,8 @@
 		0E50BE311AB707BD0055B711 /* M-Ordering */ = {
 			isa = PBXGroup;
 			children = (
+				0E759A3A1B4AB28F0039789F /* MOAccount.h */,
+				0E759A3B1B4AB28F0039789F /* MOAccount.m */,
 				0ECF34221B00DD7000AC94FF /* MOOrderEntry.h */,
 				0ECF34231B00DD7000AC94FF /* MOOrderEntry.m */,
 				0E9FADA71ACAD6F2007530E4 /* data */,
@@ -589,6 +594,7 @@
 				0EFA08381AC9809700CC11E2 /* TFHpple.m in Sources */,
 				0E95FB701AFE127900A657C3 /* MOShakeViewController.m in Sources */,
 				0EE100251ABAFF6300F18651 /* MOMenuGroup.m in Sources */,
+				0E759A3C1B4AB28F0039789F /* MOAccount.m in Sources */,
 				0EA9022D1AC8414B00BB9026 /* MODataController.m in Sources */,
 				0E90ECAC1AFDB264008DE99C /* MORefreshViewController.m in Sources */,
 				0E8B38F71ABE5AA20018AF81 /* MOQuickOrderTableViewController.m in Sources */,

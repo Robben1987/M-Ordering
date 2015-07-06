@@ -48,20 +48,21 @@
 -(void)loadAccount
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
-    self.account = [userDefaults stringForKey:@"account"];
-    //self.password = [userDefaults stringForKey:@"password"];
+    self.account = [MOAccount initWithName:[userDefaults stringForKey:@"userName"]
+                               andPassword:[userDefaults stringForKey:@"password"]];
 }
 -(void)saveAccount
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];  
-	[userDefaults setObject:self.account forKey:@"account"];  
-	//[userDefaults setObject:self.password forKey:@"password"];  
+	[userDefaults setObject:self.account.userName forKey:@"userName"];
+	[userDefaults setObject:self.account.password forKey:@"password"];
 }
 -(void)loadData
 {
 #if !(NETWORK_ACTIVE)
-    self.userName = @"李志兴";
-    self.password = @"123456";
+    //self.userName = @"李志兴";
+    //self.password = @"123456";
+    self.account = [MOAccount initWithName:@"李志兴" andPassword:@"123456"];
 #endif
     
     NSString* file = MO_DATA_FILE(self.account.userName);
@@ -173,7 +174,9 @@
 #endif
     if(!result)
     {
-        if(!self.account) self.account = [MOAccount initWithName:name andPassword:password];
+        [self.account setUserName:name];
+        [self.account setPassword:password];
+
         [self loadData];
     }
 

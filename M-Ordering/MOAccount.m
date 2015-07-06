@@ -1,5 +1,5 @@
 //
-//  MOMenuEntry.m
+//  MOAccount.m
 //  M-Ordering
 //
 //  Created by Li Robben on 15-3-19.
@@ -15,6 +15,10 @@
 +(instancetype)initWithName:(NSString *)name andPassword:(NSString *)password
 {   
     return [[MOAccount alloc] initWithName:name andPassword:password];
+}
++(instancetype)account
+{
+    return [[MOAccount alloc] initWithName:nil andPassword:nil];
 }
 
 #pragma mark constructor

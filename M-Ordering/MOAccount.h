@@ -1,5 +1,5 @@
 //
-//  MOMenuEntry.h
+//  MOAccount.h
 //  M-Ordering
 //
 //  Created by Li Robben on 15-3-19.
@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface MOAccount : NSObject <NSCoding>
 
@@ -17,6 +18,7 @@
 
 #pragma mark - static constructor
 +(instancetype)initWithName:(NSString *)name andPassword:(NSString *)password;
++(instancetype)account;
 
 -(void)dumpAccount;
 

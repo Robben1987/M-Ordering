@@ -35,7 +35,7 @@
     [self loadViewControllers];
 #else
     //load login view first
-    //[self performSelectorOnMainThread:@selector(loadLoginView)withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(loadLoginView)withObject:nil waitUntilDone:NO];
 
 #endif
 }
