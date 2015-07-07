@@ -36,11 +36,6 @@
     [self initTables];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 -(void)initTables
 {
@@ -59,27 +54,16 @@
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return [_groups count];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger entryNum = 0;
-    if(section == 0)
-    {
-        entryNum = 1;
-    }else if (section == 1)
-    {
-        entryNum = 2;
-    }else
-    {
-        entryNum = 1;
-    }
-    
-    return entryNum;
+    return [((MOToolGroup*)_groups[section]).entrys count];
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    return MO_TABLEVIEW_CELL_HEIGHT;
 }
 #pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -89,7 +73,11 @@
     MOToolGroup* group = _groups[indexPath.section];
     NSString* entry = group.entrys[indexPath.row];
     
-    UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+    UITableViewCell* cell=[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if(!cell)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+    }
     
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     //[cell.textLabel setText:entry ];
@@ -123,6 +111,10 @@
     }
 }
 
-
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 @end
