@@ -10,6 +10,7 @@
 #import "MOToolGroup.h"
 #import "MORefreshViewController.h"
 #import "MOShakeViewController.h"
+#import "MOCommon.h"
 
 @interface MODiscoveryViewController ()
 {
