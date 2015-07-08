@@ -13,6 +13,11 @@
 
 @property (nonatomic,copy) NSString*     userName;
 @property (nonatomic,copy) NSString*     password;
+@property (nonatomic,copy) NSString*     phone;
+@property (nonatomic,copy) NSString*     skype;
+@property (nonatomic,copy) NSString*     email;
+@property (nonatomic,copy) NSString*     section;
+
 @property (nonatomic,retain) UIImage*    image;
 
 

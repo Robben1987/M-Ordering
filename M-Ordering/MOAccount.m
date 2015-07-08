@@ -34,7 +34,13 @@
 }
 -(void)dumpAccount
 {
-    NSLog(@"userName: %@, password:%@", self.userName, self.password);
+    NSLog(@"userName: %@, password:%@, phone:%@, skype:%@, email:%@, section:%@", 
+          self.userName, 
+          self.password,
+          phone,
+          skype,
+          email,
+          section);
 }
 
 
@@ -44,6 +50,11 @@
 {
     [aCoder encodeObject:self.userName   forKey:@"userName"];
     [aCoder encodeObject:self.password   forKey:@"password"];
+    [aCoder encodeObject:self.phone      forKey:@"phone"];
+    [aCoder encodeObject:self.skype      forKey:@"skype"];
+    [aCoder encodeObject:self.email      forKey:@"email"];
+    [aCoder encodeObject:self.section    forKey:@"section"];
+
     [aCoder encodeObject:self.image      forKey:@"image"];
 
 }
@@ -53,6 +64,11 @@
     {
         self.userName      = [aDecoder decodeObjectForKey:@"userName"];
         self.password      = [aDecoder decodeObjectForKey:@"password"];
+        self.phone         = [aDecoder decodeObjectForKey:@"phone"];
+        self.skype         = [aDecoder decodeObjectForKey:@"skype"];
+        self.email         = [aDecoder decodeObjectForKey:@"email"];
+        self.section       = [aDecoder decodeObjectForKey:@"section"];
+        
         self.image         = [aDecoder decodeObjectForKey:@"image"];
     }
     
