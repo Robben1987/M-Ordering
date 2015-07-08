@@ -20,6 +20,8 @@ typedef enum
 
 @property(nonatomic, retain)MODataController* dataCtrl;
 
-+(instancetype)initWithTitle:(NSString*)title type:(MOViewType)type dataCtrl:(MODataController*)dataCtrl;
++(instancetype)initWithTitle:(NSString*)title
+                        type:(MOTableViewType)type
+                    dataCtrl:(MODataController*)dataCtrl;
 
 @end

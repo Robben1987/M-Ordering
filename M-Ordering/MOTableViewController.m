@@ -43,14 +43,17 @@
     _groups = [NSMutableArray array];
     MOAccount* account = [self.dataCtrl account];
     
-    NSMutableArray* group1 = [NSMutableArray arrayWithObjects: @"image", account.image, nil];
-    NSMutableArray* group2 = [NSMutableArray arrayWithObjects: account.userName, 
-                                                               account.phone,
-                                                               account.skype,
-                                                               account.email,
-                                                               account.section,
-                                                               nil];
-
+    NSDictionary* dic1 = [NSDictionary dictionaryWithObject:account.image forKey:@"头像"];
+    [_groups addObject:dic1];
+    
+    NSArray* group = [NSArray arrayWithObjects:
+                      [NSDictionary dictionaryWithObject:account.userName forKey:@"用户名"],
+                      [NSDictionary dictionaryWithObject:account.phone forKey:@"电话"],
+                      [NSDictionary dictionaryWithObject:account.skype forKey:@"skype"],
+                      [NSDictionary dictionaryWithObject:account.email forKey:@"email"],
+                      [NSDictionary dictionaryWithObject:account.section forKey:@"部门"],
+                      nil];
+    [_groups addObject:group];
 }
 
 #pragma mark tableView delegate
@@ -61,13 +64,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
-    return [((MOToolGroup*)_groups[section]).entrys count];
+    return [_groups[section] count];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0)
     {
-        return 100;
+        return 64;
     }
     
     return MO_TABLEVIEW_CELL_HEIGHT;
@@ -77,40 +80,31 @@
 #pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellIdentifier = @"cellIdentifier";
-    
-    MOToolGroup* group = _groups[indexPath.section];
-    NSString* entry = group.entrys[indexPath.row];
+    static NSString* cellIdentifier = @"MOTableCellIdentifier";
     
     UITableViewCell* cell=[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if(!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     
     if(indexPath.section == 0)
     {
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        [cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
+        NSDictionary* entry = [_groups objectAtIndex:indexPath.section];
+        //[cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
         //[cell.imageView setImage:[self.dataCtrl.account image]];
-        [cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
-        [cell.textLabel setText:entry];
-        [cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
+        //[cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
+        [cell.textLabel setText: [entry.allKeys objectAtIndex:0]];
+        //[cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
         
-    }else if(indexPath.section == 1)
-    {
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        cell.textLabel.text = entry;
-        //NSLog(@"section %ld: %@", indexPath.section, cell);
     }else
     {
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        cell.textLabel.text = entry;
-        //NSLog(@"section %ld: %@", indexPath.section, cell);
+        NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 
+        [cell.textLabel setText: [entry.allKeys objectAtIndex:0]];
     }
 
-    
     return cell;
 }
 #pragma mark 返回每组头标题名称
@@ -146,17 +140,13 @@
     {
         if(indexPath.row == 1)
         {
-            MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
+            /*MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
             [vc setTitle:@"订餐记录"];
-            [self.navigationController pushViewController:vc animated:YES];
+            [self.navigationController pushViewController:vc animated:YES];*/
             
         }
     }else
     {
-        MOCommentViewController* vc = [[MOCommentViewController alloc] init];
-        [vc setTitle:@"评论"];
-        [self.navigationController pushViewController:vc animated:YES];
-        //[self presentModalViewController:vc animated:YES];
     }
 }
 

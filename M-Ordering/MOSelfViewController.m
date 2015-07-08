@@ -12,6 +12,8 @@
 #import "MORefreshViewController.h"
 #import "MOCommentViewController.h"
 #import "MOCommon.h"
+#import "MOTableViewController.h"
+
 
 @interface MOSelfViewController ()
 {
@@ -144,8 +146,9 @@
     {
         if(indexPath.row == 0)
         {
-            UIViewController* vc = [[UIViewController alloc] init];
-            [vc.view setBackgroundColor:[UIColor yellowColor]];
+            //UIViewController* vc = [[UIViewController alloc] init];
+            //[vc.view setBackgroundColor:[UIColor yellowColor]];
+            MOTableViewController* vc = [MOTableViewController initWithTitle:@"self" type:MOSelfInfoTableView dataCtrl:self.dataCtrl];
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else if(indexPath.section == 1)

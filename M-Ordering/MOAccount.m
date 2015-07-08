@@ -37,10 +37,10 @@
     NSLog(@"userName: %@, password:%@, phone:%@, skype:%@, email:%@, section:%@", 
           self.userName, 
           self.password,
-          phone,
-          skype,
-          email,
-          section);
+          self.phone,
+          self.skype,
+          self.email,
+          self.section);
 }
 
 
