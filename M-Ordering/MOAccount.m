@@ -8,7 +8,18 @@
 
 #import "MOAccount.h"
 
+#define MO_ACCOUNT_USERNAME     @"用户名"
+#define MO_ACCOUNT_PHONE        @"电话"
+#define MO_ACCOUNT_SKYPE        @"skype"
+#define MO_ACCOUNT_EMAIL        @"email"
+#define MO_ACCOUNT_SECTION      @"部门"
+
+#define MO_ACCOUNT_IMAGE        @"头像"
+
+
 @implementation MOAccount
+
+static NSArray* mapping = nil;
 
 
 #pragma mark static constructor
@@ -32,21 +43,31 @@
     
     return self;
 }
--(void)dumpAccount
+
++(NSString*)valueAtIndex:(NSUInteger)index
 {
-    NSLog(@"userName: %@, password:%@, phone:%@, skype:%@, email:%@, section:%@", 
-          self.userName, 
-          self.password,
-          self.phone,
-          self.skype,
-          self.email,
-          self.section);
+    if(!mapping) mapping = @[MO_ACCOUNT_USERNAME,
+                             MO_ACCOUNT_PHONE,
+                             MO_ACCOUNT_SKYPE,
+                             MO_ACCOUNT_EMAIL,
+                             MO_ACCOUNT_SECTION];
+    
+    return [mapping objectAtIndex:index];
+}
++(NSUInteger)indexOfValue:(NSString*)value;
+{
+    if(!mapping) mapping = @[MO_ACCOUNT_USERNAME,
+                             MO_ACCOUNT_PHONE,
+                             MO_ACCOUNT_SKYPE,
+                             MO_ACCOUNT_EMAIL,
+                             MO_ACCOUNT_SECTION];
+    
+    return [mapping indexOfObject:value];
 }
 
-
--(void)toArray:(NSArray*)array
+-(void)toArray:(NSMutableArray*)array
 {    
-    NSDictionary* dic1 = [NSDictionary dictionaryWithObject:account.image forKey:@"头像"];
+    NSDictionary* dic1 = [NSDictionary dictionaryWithObject:self.image forKey:@"头像"];
     [array addObject:dic1];
     
     NSArray* group = [NSArray arrayWithObjects:
@@ -60,14 +81,29 @@
 }
 -(void)updateInfo:(NSDictionary*)dic
 {
-    NSString* key = [entry.allKeys objectAtIndex:0];
-    if([key isEqualToString: @"头像"])
-    {
-
-    }else if([key isEqualToString: @"头像"])
-    {
+    NSString* key = [dic.allKeys objectAtIndex:0];
     
+    switch ([MOAccount indexOfValue: key])
+    {
+        case MOAccountUserName:
+            [self setUserName:[dic valueForKey:key]];
+            break;
+        case MOAccountPhone:
+            [self setPhone:[dic valueForKey:key]];
+            break;
+        case MOAccountSkype:
+            [self setSkype:[dic valueForKey:key]];
+            break;
+        case MOAccountEmail:
+            [self setEmail:[dic valueForKey:key]];
+            break;
+        case MOAccountSection:
+            [self setSection:[dic valueForKey:key]];
+            break;
+        default:
+            break;
     }
+    
 }
 
 #pragma mark- NSCoding Protocoal
@@ -98,5 +134,16 @@
     }
     
     return self;
+}
+
+-(void)dumpAccount
+{
+    NSLog(@"userName: %@, password:%@, phone:%@, skype:%@, email:%@, section:%@",
+          self.userName,
+          self.password,
+          self.phone,
+          self.skype,
+          self.email,
+          self.section);
 }
 @end

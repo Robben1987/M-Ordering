@@ -44,18 +44,7 @@
 {
     _groups = [NSMutableArray array];
     MOAccount* account = [self.dataCtrl account];
-    
-    NSDictionary* dic1 = [NSDictionary dictionaryWithObject:account.image forKey:@"头像"];
-    [_groups addObject:dic1];
-    
-    NSArray* group = [NSArray arrayWithObjects:
-                      [NSMutableDictionary dictionaryWithObject:account.userName forKey:@"用户名"],
-                      [NSMutableDictionary dictionaryWithObject:account.phone forKey:@"电话"],
-                      [NSMutableDictionary dictionaryWithObject:account.skype forKey:@"skype"],
-                      [NSMutableDictionary dictionaryWithObject:account.email forKey:@"email"],
-                      [NSMutableDictionary dictionaryWithObject:account.section forKey:@"部门"],
-                      nil];
-    [_groups addObject:group];
+    [account toArray:_groups];
 }
 
 #pragma mark tableView delegate
@@ -156,14 +145,14 @@
 {
     if (buttonIndex==1) 
     {
-		NSMutableDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		NSMutableDictionary* entry = [[_groups objectAtIndex:_selectedIndexPath.section] objectAtIndex:_selectedIndexPath.row];
 		NSString* key = [entry.allKeys objectAtIndex:0];
 
 		UITextField *textField= [alertView textFieldAtIndex:0];
-		[entry setValue:textField.text forKey:key]
+        [entry setValue:textField.text forKey:key];
         
         NSArray* indexPaths = @[_selectedIndexPath];
-        [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
 - (void)didReceiveMemoryWarning
