@@ -13,7 +13,9 @@
 
 @interface MOTableViewController ()
 {
-    NSMutableArray* _groups;
+    NSMutableArray*     _groups;
+    NSIndexPath*        _selectedIndexPath;
+
 }
 
 @end
@@ -47,11 +49,11 @@
     [_groups addObject:dic1];
     
     NSArray* group = [NSArray arrayWithObjects:
-                      [NSDictionary dictionaryWithObject:account.userName forKey:@"用户名"],
-                      [NSDictionary dictionaryWithObject:account.phone forKey:@"电话"],
-                      [NSDictionary dictionaryWithObject:account.skype forKey:@"skype"],
-                      [NSDictionary dictionaryWithObject:account.email forKey:@"email"],
-                      [NSDictionary dictionaryWithObject:account.section forKey:@"部门"],
+                      [NSMutableDictionary dictionaryWithObject:account.userName forKey:@"用户名"],
+                      [NSMutableDictionary dictionaryWithObject:account.phone forKey:@"电话"],
+                      [NSMutableDictionary dictionaryWithObject:account.skype forKey:@"skype"],
+                      [NSMutableDictionary dictionaryWithObject:account.email forKey:@"email"],
+                      [NSMutableDictionary dictionaryWithObject:account.section forKey:@"部门"],
                       nil];
     [_groups addObject:group];
 }
@@ -101,8 +103,9 @@
     }else
     {
         NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-
-        [cell.textLabel setText: [entry.allKeys objectAtIndex:0]];
+        NSString* key = [entry.allKeys objectAtIndex:0];
+        [cell.textLabel setText: key];
+        [cell.detailTextLabel setText: [entry valueForKey:key]];
     }
 
     return cell;
@@ -127,6 +130,7 @@
 #pragma mark 点击行进入新页面
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    _selectedIndexPath=indexPath;
     
     if(indexPath.section == 0)
     {
@@ -136,20 +140,32 @@
             [vc.view setBackgroundColor:[UIColor yellowColor]];
             [self.navigationController pushViewController:vc animated:YES];
         }
-    }else if(indexPath.section == 1)
-    {
-        if(indexPath.row == 1)
-        {
-            /*MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
-            [vc setTitle:@"订餐记录"];
-            [self.navigationController pushViewController:vc animated:YES];*/
-            
-        }
     }else
     {
+		NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		NSString* key = [entry.allKeys objectAtIndex:0];
+
+        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:key message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+	    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+	    UITextField* textField = [alert textFieldAtIndex:0];
+	    [textField setText:[entry valueForKey:key]];
+	    [alert show]; 
     }
 }
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) 
+    {
+		NSMutableDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+		NSString* key = [entry.allKeys objectAtIndex:0];
 
+		UITextField *textField= [alertView textFieldAtIndex:0];
+		[entry setValue:textField.text forKey:key]
+        
+        NSArray* indexPaths = @[_selectedIndexPath];
+        [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

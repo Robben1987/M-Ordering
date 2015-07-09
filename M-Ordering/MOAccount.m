@@ -44,6 +44,31 @@
 }
 
 
+-(void)toArray:(NSArray*)array
+{    
+    NSDictionary* dic1 = [NSDictionary dictionaryWithObject:account.image forKey:@"头像"];
+    [array addObject:dic1];
+    
+    NSArray* group = [NSArray arrayWithObjects:
+                      [NSMutableDictionary dictionaryWithObject:self.userName forKey:@"用户名"],
+                      [NSMutableDictionary dictionaryWithObject:self.phone forKey:@"电话"],
+                      [NSMutableDictionary dictionaryWithObject:self.skype forKey:@"skype"],
+                      [NSMutableDictionary dictionaryWithObject:self.email forKey:@"email"],
+                      [NSMutableDictionary dictionaryWithObject:self.section forKey:@"部门"],
+                      nil];
+    [array addObject:group];
+}
+-(void)updateInfo:(NSDictionary*)dic
+{
+    NSString* key = [entry.allKeys objectAtIndex:0];
+    if([key isEqualToString: @"头像"])
+    {
+
+    }else if([key isEqualToString: @"头像"])
+    {
+    
+    }
+}
 
 #pragma mark- NSCoding Protocoal
 - (void)encodeWithCoder:(NSCoder *)aCoder
