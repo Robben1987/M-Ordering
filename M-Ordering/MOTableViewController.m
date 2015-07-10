@@ -150,6 +150,7 @@
 
 		UITextField *textField= [alertView textFieldAtIndex:0];
         [entry setValue:textField.text forKey:key];
+        [self.dataCtrl.account updateInfo: entry];
         
         NSArray* indexPaths = @[_selectedIndexPath];
         [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];

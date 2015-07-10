@@ -35,6 +35,9 @@ typedef enum
 +(instancetype)initWithName:(NSString *)name andPassword:(NSString *)password;
 +(instancetype)account;
 
++(MOAccount*)loadAccount:(NSUserDefaults*)userDefaults;
+-(void)saveAccount:(NSUserDefaults*)userDefaults;
+
 
 -(void)toArray:(NSMutableArray*)array;
 -(void)updateInfo:(NSDictionary*)dic;

@@ -105,6 +105,26 @@ static NSArray* mapping = nil;
     }
     
 }
+-(void)saveAccount:(NSUserDefaults*)userDefaults
+{
+    [userDefaults setObject:self.userName forKey:@"userName"];
+    [userDefaults setObject:self.password forKey:@"password"];
+    [userDefaults setObject:self.phone    forKey:@"phone"];
+    [userDefaults setObject:self.skype    forKey:@"skype"];
+    [userDefaults setObject:self.email    forKey:@"email"];
+    [userDefaults setObject:self.section  forKey:@"section"];
+}
++(MOAccount*)loadAccount:(NSUserDefaults*)userDefaults
+{
+     MOAccount* account = [MOAccount initWithName:[userDefaults stringForKey:@"userName"] andPassword:[userDefaults stringForKey:@"password"]];
+    [account setPhone:[userDefaults stringForKey:@"phone"]];
+    [account setSkype:[userDefaults stringForKey:@"skype"]];
+    [account setEmail:[userDefaults stringForKey:@"email"]];
+    [account setSection:[userDefaults stringForKey:@"section"]];
+    [account setImage:[UIImage alloc]];
+    
+    return account;
+}
 
 #pragma mark- NSCoding Protocoal
 - (void)encodeWithCoder:(NSCoder *)aCoder
