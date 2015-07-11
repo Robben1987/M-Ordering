@@ -17,6 +17,8 @@
 		0E3275941B36710D00969159 /* man.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E3275901B36710D00969159 /* man.png */; };
 		0E3275951B36710D00969159 /* man@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E3275911B36710D00969159 /* man@2x.png */; };
 		0E3275991B36BE9300969159 /* balloon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E3275981B36BE9300969159 /* balloon@2x.png */; };
+		0E42FDAE1B512B580004EB38 /* UIImagePickerController+MO.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E42FDAD1B512B580004EB38 /* UIImagePickerController+MO.m */; };
+		0E42FDB11B5154360004EB38 /* VPImageCropperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E42FDB01B5154360004EB38 /* VPImageCropperViewController.m */; };
 		0E48E7631AFA5B96008DB307 /* arrow_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E48E7611AFA5B96008DB307 /* arrow_up.png */; };
 		0E48E7641AFA5B96008DB307 /* shadow_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E48E7621AFA5B96008DB307 /* shadow_up.png */; };
 		0E4C94BD1AB85AC90036152F /* MOOthersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E4C94BC1AB85AC90036152F /* MOOthersViewController.m */; };
@@ -91,6 +93,10 @@
 		0E3275901B36710D00969159 /* man.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = man.png; sourceTree = "<group>"; };
 		0E3275911B36710D00969159 /* man@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "man@2x.png"; sourceTree = "<group>"; };
 		0E3275981B36BE9300969159 /* balloon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "balloon@2x.png"; sourceTree = "<group>"; };
+		0E42FDAC1B512B580004EB38 /* UIImagePickerController+MO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImagePickerController+MO.h"; path = "M-Ordering/UIImagePickerController+MO.h"; sourceTree = "<group>"; };
+		0E42FDAD1B512B580004EB38 /* UIImagePickerController+MO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImagePickerController+MO.m"; path = "M-Ordering/UIImagePickerController+MO.m"; sourceTree = "<group>"; };
+		0E42FDAF1B5154360004EB38 /* VPImageCropperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VPImageCropperViewController.h; path = "M-Ordering/ImageCropper/VPImageCropperViewController.h"; sourceTree = "<group>"; };
+		0E42FDB01B5154360004EB38 /* VPImageCropperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VPImageCropperViewController.m; path = "M-Ordering/ImageCropper/VPImageCropperViewController.m"; sourceTree = "<group>"; };
 		0E48E7611AFA5B96008DB307 /* arrow_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_up.png; sourceTree = "<group>"; };
 		0E48E7621AFA5B96008DB307 /* shadow_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow_up.png; sourceTree = "<group>"; };
 		0E4C94BB1AB85AC90036152F /* MOOthersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOOthersViewController.h; sourceTree = "<group>"; };
@@ -198,6 +204,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E42FDB21B5154400004EB38 /* imageCropper */ = {
+			isa = PBXGroup;
+			children = (
+				0E42FDAC1B512B580004EB38 /* UIImagePickerController+MO.h */,
+				0E42FDAD1B512B580004EB38 /* UIImagePickerController+MO.m */,
+				0E42FDAF1B5154360004EB38 /* VPImageCropperViewController.h */,
+				0E42FDB01B5154360004EB38 /* VPImageCropperViewController.m */,
+			);
+			name = imageCropper;
+			sourceTree = "<group>";
+		};
 		0E4C94C11AB873430036152F /* HomeView */ = {
 			isa = PBXGroup;
 			children = (
@@ -209,10 +226,11 @@
 			isa = PBXGroup;
 			children = (
 				0EA6FAFB1AFF719500049027 /* AudioToolbox.framework */,
+				0EA902271AC8372600BB9026 /* libxml2.2.dylib */,
+				0E42FDB21B5154400004EB38 /* imageCropper */,
 				0EF307D41B07531700774FDF /* starView */,
 				0EC2292E1AE37BED00D2623B /* MBProgressHUD */,
 				0EFA08311AC9809700CC11E2 /* hpple */,
-				0EA902271AC8372600BB9026 /* libxml2.2.dylib */,
 				0E50BE311AB707BD0055B711 /* M-Ordering */,
 				0E50BE4E1AB707BD0055B711 /* M-OrderingTests */,
 				0E50BE301AB707BD0055B711 /* Products */,
@@ -577,6 +595,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E05C2AD1AF90A9000C78B49 /* MORefreshView.m in Sources */,
+				0E42FDAE1B512B580004EB38 /* UIImagePickerController+MO.m in Sources */,
+				0E42FDB11B5154360004EB38 /* VPImageCropperViewController.m in Sources */,
 				0E50BE651AB7123B0055B711 /* MOSelfViewController.m in Sources */,
 				0ECF34241B00DD7000AC94FF /* MOOrderEntry.m in Sources */,
 				0EC229391AE37BED00D2623B /* MBProgressHUD+MJ.m in Sources */,

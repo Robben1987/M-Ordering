@@ -9,13 +9,20 @@
 #import "MOTableViewController.h"
 #import "MOCommon.h"
 #import "MOAccount.h"
+#import "UIImagePickerController+MO.h"
+#import "VPImageCropperViewController.h"
 
-#define MO_TABLEVIEW_IMAGE_CELL_HEIGHT (70)
+#define MO_TABLEVIEW_IMAGE_CELL_HEIGHT (70.0f)
+#define MO_PORTRAIT_IMAGE_LEN (60.0f)
+#define MO_PORTRAIT_PADDING (30.0f)
 
-@interface MOTableViewController ()
+
+@interface MOTableViewController () <UIActionSheetDelegate, UIImagePickerControllerDelegate, VPImageCropperDelegate>
 {
     NSMutableArray*     _groups;
     NSIndexPath*        _selectedIndexPath;
+    
+    UIImageView*        _portraitImageView;
 
 }
 
@@ -43,9 +50,41 @@
 
 -(void)initTablesData
 {
+    //1. table data
     _groups = [NSMutableArray array];
-    
     [self.dataCtrl.account toArray:_groups];
+    
+    //2. portraitImageView
+    //[self portraitImageView];
+}
+
+#pragma mark portraitImageView getter
+- (UIImageView *)portraitImageView:(UIImage *)image;
+{
+    if (!_portraitImageView)
+    {
+        CGFloat w = MO_PORTRAIT_IMAGE_LEN, h = MO_PORTRAIT_IMAGE_LEN;
+        CGFloat x = (self.view.frame.size.width - (MO_PORTRAIT_PADDING + w));
+        CGFloat y = (MO_TABLEVIEW_IMAGE_CELL_HEIGHT - h)/2;
+        _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+        [_portraitImageView setImage:image];
+        [_portraitImageView.layer setCornerRadius:(_portraitImageView.frame.size.height/2)];
+        [_portraitImageView.layer setMasksToBounds:YES];
+        [_portraitImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [_portraitImageView setClipsToBounds:YES];
+        _portraitImageView.layer.shadowColor = [UIColor blackColor].CGColor;
+        _portraitImageView.layer.shadowOffset = CGSizeMake(4, 4);
+        _portraitImageView.layer.shadowOpacity = 0.5;
+        _portraitImageView.layer.shadowRadius = 2.0;
+        //_portraitImageView.layer.borderColor = [[UIColor blueColor] CGColor];
+        //_portraitImageView.layer.borderWidth = 0.0f;
+        _portraitImageView.userInteractionEnabled = YES;
+        _portraitImageView.backgroundColor = [UIColor whiteColor];
+        
+        //UITapGestureRecognizer *portraitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editPortrait)];
+        //[_portraitImageView addGestureRecognizer:portraitTap];
+    }
+    return _portraitImageView;
 }
 
 #pragma mark tableView delegate
@@ -85,13 +124,8 @@
     {
         NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
         NSString* key = [entry.allKeys objectAtIndex:0];
-        //[cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
-        //[cell.imageView setImage:[self.dataCtrl.account image]];
-        //[cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
         [cell.textLabel setText: key];
-        UIImageView* view = [[UIImageView alloc] initWithImage:[entry objectForKey:key]];
-        [view setFrame:CGRectMake(250, 5, MO_TABLEVIEW_IMAGE_CELL_HEIGHT, MO_TABLEVIEW_IMAGE_CELL_HEIGHT-10)];
-        [cell.contentView addSubview:view];
+        [cell.contentView addSubview:[self portraitImageView: [entry objectForKey:key]]];
     }else
     {
         NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
@@ -102,18 +136,7 @@
 
     return cell;
 }
-#pragma mark 返回每组头标题名称
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return nil;
-    //return [NSString stringWithFormat:@"the %lu group header", section];
-}
 
-#pragma mark 返回每组尾部说明
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return nil;
-}
 -(CGFloat)tableView:( UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.2f;
@@ -128,25 +151,33 @@
     {
         if(indexPath.row == 0)
         {
-            UIViewController* vc = [[UIViewController alloc] init];
-            [vc.view setBackgroundColor:[UIColor yellowColor]];
-            [self.navigationController pushViewController:vc animated:YES];
+            UIActionSheet* Sheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                               delegate:self
+                                                      cancelButtonTitle:@"取消"
+                                                 destructiveButtonTitle:nil
+                                                      otherButtonTitles:@"拍照", @"从相册中选取", nil];
+            [Sheet showInView:self.view];
         }
     }else
     {
 		NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
 		NSString* key = [entry.allKeys objectAtIndex:0];
 
-        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:key message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:key
+                                                       message:nil
+                                                      delegate:self
+                                             cancelButtonTitle:@"Cancel"
+                                             otherButtonTitles:@"OK", nil];
 	    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
 	    UITextField* textField = [alert textFieldAtIndex:0];
 	    [textField setText:[entry valueForKey:key]];
 	    [alert show]; 
     }
 }
+
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex==1) 
+    if (buttonIndex == 1)
     {
 		NSMutableDictionary* entry = [[_groups objectAtIndex:_selectedIndexPath.section] objectAtIndex:_selectedIndexPath.row];
 		NSString* key = [entry.allKeys objectAtIndex:0];
@@ -159,6 +190,73 @@
         [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
+
+#pragma mark UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        if([UIImagePickerController isCameraAvailable] && [UIImagePickerController doesCameraSupportTakingPhotos])
+        {
+            UIImagePickerController* picker = [UIImagePickerController initWithSourceType:UIImagePickerControllerSourceTypeCamera andDelegate:self];
+            if([UIImagePickerController isFrontCameraAvailable])
+                [picker setCameraDevice:UIImagePickerControllerCameraDeviceFront];
+            
+            [self presentViewController:picker animated:YES completion:^(void){
+                                 NSLog(@"Picker View Controller is presented");}];
+        }
+        
+    } else if (buttonIndex == 1)
+    {
+        if ([UIImagePickerController isPhotoLibraryAvailable])
+        {
+            UIImagePickerController* picker = [UIImagePickerController initWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary andDelegate:self];
+            
+            [self presentViewController:picker animated:YES completion:^(void){
+                                 NSLog(@"Picker View Controller is presented");}];
+        }
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^() {
+        UIImage* original = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        //_portraitImageView.image = original;
+        original = [UIImagePickerController imageScalingToMaxSize:original];
+
+        CGRect frame = CGRectMake(0, 100.0f, self.view.frame.size.width, self.view.frame.size.width);
+        VPImageCropperViewController* cropper = [[VPImageCropperViewController alloc]
+                                                 initWithImage:original cropFrame:frame
+                                                 limitScaleRatio:3.0];
+        cropper.delegate = self;
+        [self presentViewController:cropper animated:YES completion:^{
+            // TO DO
+        }];
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^(){}];
+}
+
+#pragma mark VPImageCropperDelegate
+-(void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage
+{
+    _portraitImageView.image = editedImage;
+    [cropperViewController dismissViewControllerAnimated:YES completion:^{
+        // TO DO
+    }];
+}
+
+-(void)imageCropperDidCancel:(VPImageCropperViewController *)cropperViewController
+{
+    [cropperViewController dismissViewControllerAnimated:YES completion:^{
+    }];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
