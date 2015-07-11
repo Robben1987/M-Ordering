@@ -8,18 +8,18 @@
 
 #import "MOAccount.h"
 
+#define MO_ACCOUNT_IMAGE        @"头像"
+
 #define MO_ACCOUNT_USERNAME     @"用户名"
 #define MO_ACCOUNT_PHONE        @"电话"
 #define MO_ACCOUNT_SKYPE        @"skype"
 #define MO_ACCOUNT_EMAIL        @"email"
+
 #define MO_ACCOUNT_SECTION      @"部门"
 
-#define MO_ACCOUNT_IMAGE        @"头像"
 
 
 @implementation MOAccount
-
-static NSArray* mapping = nil;
 
 
 #pragma mark static constructor
@@ -44,67 +44,21 @@ static NSArray* mapping = nil;
     return self;
 }
 
-+(NSString*)valueAtIndex:(NSUInteger)index
++(MOAccount*)loadAccount:(NSUserDefaults*)userDefaults
 {
-    if(!mapping) mapping = @[MO_ACCOUNT_USERNAME,
-                             MO_ACCOUNT_PHONE,
-                             MO_ACCOUNT_SKYPE,
-                             MO_ACCOUNT_EMAIL,
-                             MO_ACCOUNT_SECTION];
+    MOAccount* account =
+    [MOAccount initWithName:[userDefaults stringForKey:@"userName"]
+                andPassword:[userDefaults stringForKey:@"password"]];
+    [account setPhone:[userDefaults       stringForKey:@"phone"]];
+    [account setSkype:[userDefaults       stringForKey:@"skype"]];
+    [account setEmail:[userDefaults       stringForKey:@"email"]];
+    [account setSection:[userDefaults     stringForKey:@"section"]];
+    NSData* image = [userDefaults         objectForKey:@"image"];
+    [account setImage:[UIImage imageWithData:image]];
     
-    return [mapping objectAtIndex:index];
-}
-+(NSUInteger)indexOfValue:(NSString*)value;
-{
-    if(!mapping) mapping = @[MO_ACCOUNT_USERNAME,
-                             MO_ACCOUNT_PHONE,
-                             MO_ACCOUNT_SKYPE,
-                             MO_ACCOUNT_EMAIL,
-                             MO_ACCOUNT_SECTION];
-    
-    return [mapping indexOfObject:value];
+    return account;
 }
 
--(void)toArray:(NSMutableArray*)array
-{    
-    NSDictionary* dic1 = [NSDictionary dictionaryWithObject:self.image forKey:@"头像"];
-    [array addObject:dic1];
-    
-    NSArray* group = [NSArray arrayWithObjects:
-                      [NSMutableDictionary dictionaryWithObject:self.userName forKey:@"用户名"],
-                      [NSMutableDictionary dictionaryWithObject:self.phone forKey:@"电话"],
-                      [NSMutableDictionary dictionaryWithObject:self.skype forKey:@"skype"],
-                      [NSMutableDictionary dictionaryWithObject:self.email forKey:@"email"],
-                      [NSMutableDictionary dictionaryWithObject:self.section forKey:@"部门"],
-                      nil];
-    [array addObject:group];
-}
--(void)updateInfo:(NSDictionary*)dic
-{
-    NSString* key = [dic.allKeys objectAtIndex:0];
-    
-    switch ([MOAccount indexOfValue: key])
-    {
-        case MOAccountUserName:
-            [self setUserName:[dic valueForKey:key]];
-            break;
-        case MOAccountPhone:
-            [self setPhone:[dic valueForKey:key]];
-            break;
-        case MOAccountSkype:
-            [self setSkype:[dic valueForKey:key]];
-            break;
-        case MOAccountEmail:
-            [self setEmail:[dic valueForKey:key]];
-            break;
-        case MOAccountSection:
-            [self setSection:[dic valueForKey:key]];
-            break;
-        default:
-            break;
-    }
-    
-}
 -(void)saveAccount:(NSUserDefaults*)userDefaults
 {
     [userDefaults setObject:self.userName forKey:@"userName"];
@@ -113,17 +67,54 @@ static NSArray* mapping = nil;
     [userDefaults setObject:self.skype    forKey:@"skype"];
     [userDefaults setObject:self.email    forKey:@"email"];
     [userDefaults setObject:self.section  forKey:@"section"];
+    NSData* image = UIImagePNGRepresentation(self.image);
+    [userDefaults setObject:image         forKey:@"image"];
+
 }
-+(MOAccount*)loadAccount:(NSUserDefaults*)userDefaults
-{
-     MOAccount* account = [MOAccount initWithName:[userDefaults stringForKey:@"userName"] andPassword:[userDefaults stringForKey:@"password"]];
-    [account setPhone:[userDefaults stringForKey:@"phone"]];
-    [account setSkype:[userDefaults stringForKey:@"skype"]];
-    [account setEmail:[userDefaults stringForKey:@"email"]];
-    [account setSection:[userDefaults stringForKey:@"section"]];
-    [account setImage:[UIImage alloc]];
+
+-(void)toArray:(NSMutableArray*)array
+{    
+    NSArray* group1 = [NSArray arrayWithObjects:
+                       [NSMutableDictionary dictionaryWithObject:self.image forKey:MO_ACCOUNT_IMAGE],
+                       nil];
+    [array addObject:group1];
     
-    return account;
+    NSArray* group2 = [NSArray arrayWithObjects:
+                      [NSMutableDictionary dictionaryWithObject:self.userName forKey:MO_ACCOUNT_USERNAME],
+                      [NSMutableDictionary dictionaryWithObject:self.phone forKey:MO_ACCOUNT_PHONE],
+                      [NSMutableDictionary dictionaryWithObject:self.skype forKey:MO_ACCOUNT_SKYPE],
+                      [NSMutableDictionary dictionaryWithObject:self.email forKey:MO_ACCOUNT_EMAIL],
+                      nil];
+
+    [array addObject:group2];
+    
+    NSArray* group3 = [NSArray arrayWithObjects:
+                      [NSMutableDictionary dictionaryWithObject:self.section forKey:MO_ACCOUNT_SECTION],
+                       nil];
+    [array addObject:group3];
+}
+-(void)updateInfo:(NSDictionary*)dic
+{
+    NSString* key = [dic.allKeys objectAtIndex:0];
+    NSString* value = [dic valueForKey:key];
+    
+    if([key isEqualToString:MO_ACCOUNT_USERNAME])
+    {
+        [self setUserName:value];
+    }else if([key isEqualToString:MO_ACCOUNT_PHONE])
+    {
+        [self setPhone:value];
+    }else if([key isEqualToString:MO_ACCOUNT_SKYPE])
+    {
+        [self setSkype:value];
+    }else if([key isEqualToString:MO_ACCOUNT_EMAIL])
+    {
+        [self setEmail:value];
+    }else if([key isEqualToString:MO_ACCOUNT_SECTION])
+    {
+        [self setSection:value];
+    }
+    return;
 }
 
 #pragma mark- NSCoding Protocoal

@@ -62,13 +62,12 @@
     //self.userName = @"李志兴";
     //self.password = @"123456";
     /*self.account = [MOAccount initWithName:@"李志兴" andPassword:@"123456"];
-    self.account.image = [UIImage alloc];
+    self.account.image = [UIImage imageNamed:@"Robben.jpg"];
     self.account.phone = @"123456";
     self.account.skype = @"Robben";
     self.account.email = @"mavenir.com";
     self.account.section = @"R&D";
-*/
-    
+    */
 #endif
     
     NSString* file = MO_DATA_FILE(self.account.userName);

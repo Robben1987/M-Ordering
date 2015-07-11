@@ -10,6 +10,7 @@
 #import "MOCommon.h"
 #import "MOAccount.h"
 
+#define MO_TABLEVIEW_IMAGE_CELL_HEIGHT (70)
 
 @interface MOTableViewController ()
 {
@@ -43,8 +44,8 @@
 -(void)initTablesData
 {
     _groups = [NSMutableArray array];
-    MOAccount* account = [self.dataCtrl account];
-    [account toArray:_groups];
+    
+    [self.dataCtrl.account toArray:_groups];
 }
 
 #pragma mark tableView delegate
@@ -61,7 +62,7 @@
 {
     if(indexPath.section == 0)
     {
-        return 64;
+        return MO_TABLEVIEW_IMAGE_CELL_HEIGHT;
     }
     
     return MO_TABLEVIEW_CELL_HEIGHT;
@@ -82,13 +83,15 @@
     
     if(indexPath.section == 0)
     {
-        NSDictionary* entry = [_groups objectAtIndex:indexPath.section];
+        NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        NSString* key = [entry.allKeys objectAtIndex:0];
         //[cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
         //[cell.imageView setImage:[self.dataCtrl.account image]];
         //[cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
-        [cell.textLabel setText: [entry.allKeys objectAtIndex:0]];
-        //[cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
-        
+        [cell.textLabel setText: key];
+        UIImageView* view = [[UIImageView alloc] initWithImage:[entry objectForKey:key]];
+        [view setFrame:CGRectMake(250, 5, MO_TABLEVIEW_IMAGE_CELL_HEIGHT, MO_TABLEVIEW_IMAGE_CELL_HEIGHT-10)];
+        [cell.contentView addSubview:view];
     }else
     {
         NSDictionary* entry = [[_groups objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
