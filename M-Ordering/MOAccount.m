@@ -54,7 +54,7 @@
     [account setEmail:[userDefaults       stringForKey:@"email"]];
     [account setSection:[userDefaults     stringForKey:@"section"]];
     NSData* image = [userDefaults         objectForKey:@"image"];
-    [account setImage:[UIImage imageWithData:image]];
+    [account setPortraitImage:[UIImage imageWithData:image]];
     
     return account;
 }
@@ -67,7 +67,7 @@
     [userDefaults setObject:self.skype    forKey:@"skype"];
     [userDefaults setObject:self.email    forKey:@"email"];
     [userDefaults setObject:self.section  forKey:@"section"];
-    NSData* image = UIImagePNGRepresentation(self.image);
+    NSData* image = UIImagePNGRepresentation(self.portraitImage);
     [userDefaults setObject:image         forKey:@"image"];
 
 }
@@ -75,7 +75,8 @@
 -(void)toArray:(NSMutableArray*)array
 {    
     NSArray* group1 = [NSArray arrayWithObjects:
-                       [NSMutableDictionary dictionaryWithObject:self.image forKey:MO_ACCOUNT_IMAGE],
+                       [NSMutableDictionary dictionaryWithObject:self.portraitImage
+                                                          forKey:MO_ACCOUNT_IMAGE],
                        nil];
     [array addObject:group1];
     
@@ -93,12 +94,16 @@
                        nil];
     [array addObject:group3];
 }
+
 -(void)updateInfo:(NSDictionary*)dic
 {
     NSString* key = [dic.allKeys objectAtIndex:0];
-    NSString* value = [dic valueForKey:key];
+    id value = [dic valueForKey:key];
     
-    if([key isEqualToString:MO_ACCOUNT_USERNAME])
+    if([key isEqualToString:MO_ACCOUNT_IMAGE])
+    {
+        [self setPortraitImage:value];
+    }else if([key isEqualToString:MO_ACCOUNT_USERNAME])
     {
         [self setUserName:value];
     }else if([key isEqualToString:MO_ACCOUNT_PHONE])
@@ -120,28 +125,28 @@
 #pragma mark- NSCoding Protocoal
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.userName   forKey:@"userName"];
-    [aCoder encodeObject:self.password   forKey:@"password"];
-    [aCoder encodeObject:self.phone      forKey:@"phone"];
-    [aCoder encodeObject:self.skype      forKey:@"skype"];
-    [aCoder encodeObject:self.email      forKey:@"email"];
-    [aCoder encodeObject:self.section    forKey:@"section"];
+    [aCoder encodeObject:self.userName        forKey:@"userName"];
+    [aCoder encodeObject:self.password        forKey:@"password"];
+    [aCoder encodeObject:self.phone           forKey:@"phone"];
+    [aCoder encodeObject:self.skype           forKey:@"skype"];
+    [aCoder encodeObject:self.email           forKey:@"email"];
+    [aCoder encodeObject:self.section         forKey:@"section"];
 
-    [aCoder encodeObject:self.image      forKey:@"image"];
+    [aCoder encodeObject:self.portraitImage   forKey:@"portraitImage"];
 
 }
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init])
     {
-        self.userName      = [aDecoder decodeObjectForKey:@"userName"];
-        self.password      = [aDecoder decodeObjectForKey:@"password"];
-        self.phone         = [aDecoder decodeObjectForKey:@"phone"];
-        self.skype         = [aDecoder decodeObjectForKey:@"skype"];
-        self.email         = [aDecoder decodeObjectForKey:@"email"];
-        self.section       = [aDecoder decodeObjectForKey:@"section"];
+        self.userName          = [aDecoder decodeObjectForKey:@"userName"];
+        self.password          = [aDecoder decodeObjectForKey:@"password"];
+        self.phone             = [aDecoder decodeObjectForKey:@"phone"];
+        self.skype             = [aDecoder decodeObjectForKey:@"skype"];
+        self.email             = [aDecoder decodeObjectForKey:@"email"];
+        self.section           = [aDecoder decodeObjectForKey:@"section"];
         
-        self.image         = [aDecoder decodeObjectForKey:@"image"];
+        self.portraitImage    = [aDecoder decodeObjectForKey:@"portraitImage"];
     }
     
     return self;

@@ -39,7 +39,7 @@ typedef enum
 @property (nonatomic,copy) NSString*     skype;
 @property (nonatomic,copy) NSString*     email;
 @property (nonatomic,copy) NSString*     section;
-@property (nonatomic,retain) UIImage*    image;
+@property (nonatomic,retain) UIImage*    portraitImage;
 
 
 

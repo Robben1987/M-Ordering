@@ -14,10 +14,14 @@
 #import "MOCommon.h"
 #import "MOTableViewController.h"
 
+#define MO_TABLEVIEW_IMAGE_CELL_HEIGHT (100.0f)
+#define MO_PORTRAIT_IMAGE_LEN (90.0f)
+#define MO_PORTRAIT_PADDING (10.0f)
+
 
 @interface MOSelfViewController ()
 {
-    NSMutableArray* _groups;
+    NSMutableArray*     _groups;
 }
 
 @end
@@ -75,7 +79,7 @@
 {
     if(indexPath.section == 0)
     {
-        return 100;
+        return MO_TABLEVIEW_IMAGE_CELL_HEIGHT;
     }
     
     return MO_TABLEVIEW_CELL_HEIGHT;
@@ -85,7 +89,7 @@
 #pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellIdentifier = @"cellIdentifier";
+    static NSString* cellIdentifier = @"MOSelfcellIdentifier";
     
     MOToolGroup* group = _groups[indexPath.section];
     NSString* entry = group.entrys[indexPath.row];
@@ -94,30 +98,31 @@
     if(!cell)
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     
     if(indexPath.section == 0)
     {
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        [cell.imageView setFrame:CGRectMake(20, 10, 60, 60)];
-        //[cell.imageView setImage:[self.dataCtrl.account image]];
-        [cell.imageView setImage:[UIImage imageNamed:@"Robben.jpg"]];
-        [cell.textLabel setText:entry];
-        [cell.textLabel setFrame:CGRectMake(100, 20, 50, 30)];
+        CGFloat w = MO_PORTRAIT_IMAGE_LEN, h = MO_PORTRAIT_IMAGE_LEN;
+        CGFloat y = (MO_TABLEVIEW_IMAGE_CELL_HEIGHT - h)/2;
+        CGFloat x = (MO_PORTRAIT_PADDING);
+        CGRect imageFrame = CGRectMake(x, y, w, h);
         
-    }else if(indexPath.section == 1)
-    {
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        cell.textLabel.text = entry;
-        //NSLog(@"section %ld: %@", indexPath.section, cell);
+        y = (MO_PORTRAIT_IMAGE_LEN/2 - MO_PORTRAIT_PADDING);
+        x = (MO_PORTRAIT_PADDING*2 + MO_PORTRAIT_IMAGE_LEN);
+        CGRect labelFrame = CGRectMake(x, y, 80, 30);
+
+        [cell.contentView addSubview:[self getCircleImageView:imageFrame
+                                                        image:[self.dataCtrl.account portraitImage]]];
+        UILabel* textLabel = [[UILabel alloc] initWithFrame:labelFrame];
+        [textLabel setText:entry];
+        [textLabel setFont:[UIFont systemFontOfSize:18]];
+        [cell.contentView addSubview:textLabel];
+        
     }else
     {
-        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         cell.textLabel.text = entry;
-        //NSLog(@"section %ld: %@", indexPath.section, cell);
-
     }
-
     
     return cell;
 }
@@ -167,6 +172,30 @@
         [self.navigationController pushViewController:vc animated:YES];
         //[self presentModalViewController:vc animated:YES];
     }
+}
+
+#pragma mark get ImageView
+-(UIImageView*)getCircleImageView:(CGRect)frame image:(UIImage*)image
+{
+    UIImageView* imageView = [[UIImageView alloc] initWithFrame:frame];
+    [imageView setImage:image];
+    [imageView.layer setCornerRadius:(imageView.frame.size.height/2)];
+    [imageView.layer setMasksToBounds:YES];
+    [imageView setContentMode:UIViewContentModeScaleAspectFill];
+    [imageView setClipsToBounds:YES];
+    imageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    imageView.layer.shadowOffset = CGSizeMake(4, 4);
+    imageView.layer.shadowOpacity = 0.5;
+    imageView.layer.shadowRadius = 2.0;
+    imageView.layer.borderColor = [[UIColor clearColor] CGColor];
+    imageView.layer.borderWidth = 1.0f;
+    imageView.userInteractionEnabled = YES;
+    imageView.backgroundColor = [UIColor whiteColor];
+    
+    //UITapGestureRecognizer *portraitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editPortrait)];
+    //[imageView addGestureRecognizer:portraitTap];
+
+    return imageView;
 }
 
 - (void)didReceiveMemoryWarning

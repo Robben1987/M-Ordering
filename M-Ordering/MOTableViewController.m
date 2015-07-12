@@ -50,16 +50,25 @@
 
 -(void)initTablesData
 {
-    //1. table data
+    //table data
     _groups = [NSMutableArray array];
     [self.dataCtrl.account toArray:_groups];
+}
+
+-(void)updateData:(id)data atRowIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableDictionary* entry = [[_groups objectAtIndex:_selectedIndexPath.section] objectAtIndex:_selectedIndexPath.row];
+    NSString* key = [entry.allKeys objectAtIndex:0];
     
-    //2. portraitImageView
-    //[self portraitImageView];
+    [entry setValue:data forKey:key];
+    [self.dataCtrl.account updateInfo: entry];
+    
+    NSArray* indexPaths = @[_selectedIndexPath];
+    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
 }
 
 #pragma mark portraitImageView getter
-- (UIImageView *)portraitImageView:(UIImage *)image;
+-(UIImageView *)portraitImageView:(UIImage *)image;
 {
     if (!_portraitImageView)
     {
@@ -67,7 +76,6 @@
         CGFloat x = (self.view.frame.size.width - (MO_PORTRAIT_PADDING + w));
         CGFloat y = (MO_TABLEVIEW_IMAGE_CELL_HEIGHT - h)/2;
         _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, w, h)];
-        [_portraitImageView setImage:image];
         [_portraitImageView.layer setCornerRadius:(_portraitImageView.frame.size.height/2)];
         [_portraitImageView.layer setMasksToBounds:YES];
         [_portraitImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -84,6 +92,9 @@
         //UITapGestureRecognizer *portraitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editPortrait)];
         //[_portraitImageView addGestureRecognizer:portraitTap];
     }
+    
+    [_portraitImageView setImage:image];
+
     return _portraitImageView;
 }
 
@@ -111,7 +122,7 @@
 #pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellIdentifier = @"MOTableCellIdentifier";
+    static NSString* cellIdentifier = @"MOTableViewCellIdentifier";
     
     UITableViewCell* cell=[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if(!cell)
@@ -145,7 +156,7 @@
 #pragma mark 点击行进入新页面
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    _selectedIndexPath=indexPath;
+    _selectedIndexPath = indexPath;
     
     if(indexPath.section == 0)
     {
@@ -166,8 +177,8 @@
         UIAlertView* alert = [[UIAlertView alloc]initWithTitle:key
                                                        message:nil
                                                       delegate:self
-                                             cancelButtonTitle:@"Cancel"
-                                             otherButtonTitles:@"OK", nil];
+                                             cancelButtonTitle:@"取消"
+                                             otherButtonTitles:@"确定", nil];
 	    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
 	    UITextField* textField = [alert textFieldAtIndex:0];
 	    [textField setText:[entry valueForKey:key]];
@@ -179,24 +190,19 @@
 {
     if (buttonIndex == 1)
     {
-		NSMutableDictionary* entry = [[_groups objectAtIndex:_selectedIndexPath.section] objectAtIndex:_selectedIndexPath.row];
-		NSString* key = [entry.allKeys objectAtIndex:0];
+        UITextField *textField= [alertView textFieldAtIndex:0];
 
-		UITextField *textField= [alertView textFieldAtIndex:0];
-        [entry setValue:textField.text forKey:key];
-        [self.dataCtrl.account updateInfo: entry];
-        
-        NSArray* indexPaths = @[_selectedIndexPath];
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
+        [self updateData:textField.text atRowIndexPath:_selectedIndexPath];
     }
 }
 
 #pragma mark UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 0)
+    if(buttonIndex == 0)
     {
-        if([UIImagePickerController isCameraAvailable] && [UIImagePickerController doesCameraSupportTakingPhotos])
+        if([UIImagePickerController isCameraAvailable]
+           && [UIImagePickerController doesCameraSupportTakingPhotos])
         {
             UIImagePickerController* picker = [UIImagePickerController initWithSourceType:UIImagePickerControllerSourceTypeCamera andDelegate:self];
             if([UIImagePickerController isFrontCameraAvailable])
@@ -206,7 +212,7 @@
                                  NSLog(@"Picker View Controller is presented");}];
         }
         
-    } else if (buttonIndex == 1)
+    }else if(buttonIndex == 1)
     {
         if ([UIImagePickerController isPhotoLibraryAvailable])
         {
@@ -221,19 +227,16 @@
 #pragma mark - UIImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [picker dismissViewControllerAnimated:YES completion:^() {
-        UIImage* original = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-        //_portraitImageView.image = original;
-        original = [UIImagePickerController imageScalingToMaxSize:original];
-
-        CGRect frame = CGRectMake(0, 100.0f, self.view.frame.size.width, self.view.frame.size.width);
-        VPImageCropperViewController* cropper = [[VPImageCropperViewController alloc]
-                                                 initWithImage:original cropFrame:frame
-                                                 limitScaleRatio:3.0];
-        cropper.delegate = self;
-        [self presentViewController:cropper animated:YES completion:^{
-            // TO DO
-        }];
+    UIImage* original = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    original = [UIImagePickerController imageScalingToMaxSize:original];
+    
+    CGRect frame = CGRectMake(0, 100.0f, self.view.frame.size.width, self.view.frame.size.width);
+    VPImageCropperViewController* cropper = [[VPImageCropperViewController alloc]
+                                             initWithImage:original cropFrame:frame
+                                             limitScaleRatio:3.0];
+    cropper.delegate = self;
+    [picker presentViewController:cropper animated:YES completion:^{
+        // TO DO
     }];
 }
 
@@ -243,12 +246,12 @@
 }
 
 #pragma mark VPImageCropperDelegate
--(void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage
+-(void)imageCropper:(VPImageCropperViewController *)cropper didFinished:(UIImage *)editedImage
 {
-    _portraitImageView.image = editedImage;
-    [cropperViewController dismissViewControllerAnimated:YES completion:^{
-        // TO DO
-    }];
+    [self updateData:editedImage atRowIndexPath:_selectedIndexPath];
+
+    [cropper dismissViewControllerAnimated:NO completion: nil];
+    [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 -(void)imageCropperDidCancel:(VPImageCropperViewController *)cropperViewController
