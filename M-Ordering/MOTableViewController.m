@@ -22,8 +22,6 @@
     NSMutableArray*     _groups;
     NSIndexPath*        _selectedIndexPath;
     
-    UIImageView*        _portraitImageView;
-
 }
 
 @end
@@ -70,32 +68,29 @@
 #pragma mark portraitImageView getter
 -(UIImageView *)portraitImageView:(UIImage *)image;
 {
-    if (!_portraitImageView)
-    {
-        CGFloat w = MO_PORTRAIT_IMAGE_LEN, h = MO_PORTRAIT_IMAGE_LEN;
-        CGFloat x = (self.view.frame.size.width - (MO_PORTRAIT_PADDING + w));
-        CGFloat y = (MO_TABLEVIEW_IMAGE_CELL_HEIGHT - h)/2;
-        _portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, w, h)];
-        [_portraitImageView.layer setCornerRadius:(_portraitImageView.frame.size.height/2)];
-        [_portraitImageView.layer setMasksToBounds:YES];
-        [_portraitImageView setContentMode:UIViewContentModeScaleAspectFill];
-        [_portraitImageView setClipsToBounds:YES];
-        _portraitImageView.layer.shadowColor = [UIColor blackColor].CGColor;
-        _portraitImageView.layer.shadowOffset = CGSizeMake(4, 4);
-        _portraitImageView.layer.shadowOpacity = 0.5;
-        _portraitImageView.layer.shadowRadius = 2.0;
-        //_portraitImageView.layer.borderColor = [[UIColor blueColor] CGColor];
-        //_portraitImageView.layer.borderWidth = 0.0f;
-        _portraitImageView.userInteractionEnabled = YES;
-        _portraitImageView.backgroundColor = [UIColor whiteColor];
-        
-        //UITapGestureRecognizer *portraitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editPortrait)];
-        //[_portraitImageView addGestureRecognizer:portraitTap];
-    }
+    CGFloat w = MO_PORTRAIT_IMAGE_LEN, h = MO_PORTRAIT_IMAGE_LEN;
+    CGFloat x = (self.view.frame.size.width - (MO_PORTRAIT_PADDING + w));
+    CGFloat y = (MO_TABLEVIEW_IMAGE_CELL_HEIGHT - h)/2;
+    UIImageView* portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+    [portraitImageView.layer setCornerRadius:(portraitImageView.frame.size.height/2)];
+    [portraitImageView.layer setMasksToBounds:YES];
+    [portraitImageView setContentMode:UIViewContentModeScaleAspectFill];
+    [portraitImageView setClipsToBounds:YES];
+    portraitImageView.layer.shadowColor = [UIColor blackColor].CGColor;
+    portraitImageView.layer.shadowOffset = CGSizeMake(4, 4);
+    portraitImageView.layer.shadowOpacity = 0.5;
+    portraitImageView.layer.shadowRadius = 2.0;
+    //portraitImageView.layer.borderColor = [[UIColor blueColor] CGColor];
+    //portraitImageView.layer.borderWidth = 0.0f;
+    portraitImageView.userInteractionEnabled = YES;
+    portraitImageView.backgroundColor = [UIColor whiteColor];
     
-    [_portraitImageView setImage:image];
-
-    return _portraitImageView;
+    //UITapGestureRecognizer *portraitTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(editPortrait)];
+    //[portraitImageView addGestureRecognizer:portraitTap];
+    
+    [portraitImageView setImage:image];
+    
+    return portraitImageView;
 }
 
 #pragma mark tableView delegate

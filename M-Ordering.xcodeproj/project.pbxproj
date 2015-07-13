@@ -38,6 +38,7 @@
 		0E90ECA91AFDB239008DE99C /* MORefreshTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90ECA81AFDB239008DE99C /* MORefreshTableView.m */; };
 		0E90ECAC1AFDB264008DE99C /* MORefreshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E90ECAB1AFDB264008DE99C /* MORefreshViewController.m */; };
 		0E95FB701AFE127900A657C3 /* MOShakeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E95FB6F1AFE127900A657C3 /* MOShakeViewController.m */; };
+		0E9EC0061B527E4100D5FDFE /* launch@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0E9EC0051B527E4100D5FDFE /* launch@2x.jpg */; };
 		0E9FADAA1ACAD750007530E4 /* MODataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E9FADA91ACAD750007530E4 /* MODataOperation.m */; };
 		0EA6FAFC1AFF719500049027 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA6FAFB1AFF719500049027 /* AudioToolbox.framework */; };
 		0EA902281AC8372600BB9026 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA902271AC8372600BB9026 /* libxml2.2.dylib */; };
@@ -135,6 +136,7 @@
 		0E95FB6E1AFE127900A657C3 /* MOShakeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOShakeViewController.h; sourceTree = "<group>"; };
 		0E95FB6F1AFE127900A657C3 /* MOShakeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOShakeViewController.m; sourceTree = "<group>"; };
 		0E9B00341AE6865900E23271 /* MOCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOCommon.h; sourceTree = "<group>"; };
+		0E9EC0051B527E4100D5FDFE /* launch@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "launch@2x.jpg"; sourceTree = "<group>"; };
 		0E9FADA81ACAD750007530E4 /* MODataOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODataOperation.h; sourceTree = "<group>"; };
 		0E9FADA91ACAD750007530E4 /* MODataOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODataOperation.m; sourceTree = "<group>"; };
 		0EA6FAFB1AFF719500049027 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -332,6 +334,7 @@
 		0E50BE691AB726720055B711 /* Img */ = {
 			isa = PBXGroup;
 			children = (
+				0E9EC0051B527E4100D5FDFE /* launch@2x.jpg */,
 				0EB60E121B36F0490045D273 /* refresh */,
 				0EF307D81B07558600774FDF /* starView */,
 				0E95FB6D1AFE0CCF00A657C3 /* shake */,
@@ -577,6 +580,7 @@
 				0E48E7631AFA5B96008DB307 /* arrow_up.png in Resources */,
 				0E50BE431AB707BD0055B711 /* Images.xcassets in Resources */,
 				0E3275941B36710D00969159 /* man.png in Resources */,
+				0E9EC0061B527E4100D5FDFE /* launch@2x.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
