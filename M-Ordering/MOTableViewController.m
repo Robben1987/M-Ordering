@@ -246,7 +246,7 @@
     [self updateData:editedImage atRowIndexPath:_selectedIndexPath];
 
     [cropper dismissViewControllerAnimated:NO completion: nil];
-    [self.presentedViewController dismissViewControllerAnimated:NO completion:nil];
+    [self.presentedViewController dismissViewControllerAnimated:NO completion:self.callBack];
 }
 
 -(void)imageCropperDidCancel:(VPImageCropperViewController *)cropperViewController

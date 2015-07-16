@@ -22,6 +22,8 @@
 @interface MOSelfViewController ()
 {
     NSMutableArray*     _groups;
+    NSIndexPath*        _selectedIndexPath;
+
 }
 
 @end
@@ -146,14 +148,19 @@
 #pragma mark 点击行进入新页面
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    _selectedIndexPath = indexPath;
     if(indexPath.section == 0)
     {
         if(indexPath.row == 0)
         {
-            //UIViewController* vc = [[UIViewController alloc] init];
-            //[vc.view setBackgroundColor:[UIColor yellowColor]];
             MOTableViewController* vc = [MOTableViewController initWithTitle:@"self" type:MOSelfInfoTableView dataCtrl:self.dataCtrl];
+            
+            __weak UITableView* table = self.tableView;
+            [vc setCallBack:^(void)
+            {
+                NSArray* indexPaths = @[_selectedIndexPath];
+                [table reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
+            }];
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else if(indexPath.section == 1)

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MODataController.h"
 
+typedef void(^MOUpdateBlock)(void);
+
 typedef enum
 {
     MOSelfInfoTableView,
@@ -19,6 +21,9 @@ typedef enum
 @interface MOTableViewController : UITableViewController
 
 @property(nonatomic, retain)MODataController* dataCtrl;
+
+@property (nonatomic, copy)MOUpdateBlock callBack;
+
 
 +(instancetype)initWithTitle:(NSString*)title
                         type:(MOTableViewType)type
