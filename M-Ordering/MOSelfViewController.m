@@ -128,18 +128,6 @@
     
     return cell;
 }
-#pragma mark 返回每组头标题名称
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return nil;
-    //return [NSString stringWithFormat:@"the %lu group header", section];
-}
-
-#pragma mark 返回每组尾部说明
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return nil;
-}
 -(CGFloat)tableView:( UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.2f;

@@ -83,6 +83,8 @@
 #pragma mark - TableView
 #define MO_TABLEVIEW_CELL_HEIGHT (44)
 
+#pragma mark - View
+#define MO_UIVIEW_WIDTH (0)
 
 
 #endif

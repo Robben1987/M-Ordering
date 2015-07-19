@@ -77,69 +77,17 @@
 {
     _ballLayer=[CALayer layer];
     _ballLayer.bounds = CGRectMake(0, 0, 106, 365);
-    _ballLayer.position = CGPointMake(160, 480);
+    _ballLayer.position = CGPointMake(self.view.frame.size.width/2, 480);
     _ballLayer.contents = (id)[UIImage imageNamed:@"balloon"].CGImage;
     _ballLayer.anchorPoint = CGPointMake(0.5, 1.0);
     [self.view.layer addSublayer:_ballLayer];
 }
 
-#if 0
--(void)initView
-{
-    [self.view setBackgroundColor:[UIColor blackColor]];
-    _isMove = FALSE;
-    
-    CGRect upRect = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height * 0.5);
-    CGRect downRect = CGRectMake(0, upRect.size.height, self.view.frame.size.width, self.view.frame.size.height);
-    
-    MO_SHOW_RECT(@"upRect", upRect);
-    MO_SHOW_RECT(@"downRect", downRect);
-
-    _imgUp = [[UIImageView alloc] initWithFrame: upRect];
-    [_imgUp setImage: [UIImage imageNamed:@"shake_up01"]];
-    [self.view addSubview:_imgUp];
-    
-    _imgDown = [[UIImageView alloc] initWithFrame: downRect];
-    [_imgDown setImage: [UIImage imageNamed:@"shake_down01"]];
-    [self.view addSubview:_imgDown];
-    
-    _indicatorView = [[UIActivityIndicatorView alloc]
-                      initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [_indicatorView setHidesWhenStopped:YES];
-    [_indicatorView setCenter:self.view.center];
-    [self.view addSubview:_indicatorView];
-    
-    
-}
-
--(void)moveImageView
-{
-    _isMove = TRUE;
-    [UIView animateWithDuration:MO_SHAKE_ANIMATE_DURATION animations:^{
-            [_imgUp setFrame: CGRectMake((_imgUp.frame.origin.x), (_imgUp.frame.origin.y - MO_SHAKE_SUBVIEW_OFFSET), _imgUp.frame.size.width, _imgUp.frame.size.height)];
-            [_imgDown setFrame:CGRectMake((_imgDown.frame.origin.x), (_imgDown.frame.origin.y + MO_SHAKE_SUBVIEW_OFFSET), _imgDown.frame.size.width, _imgDown.frame.size.height)];
-        }];
-}
--(void)backImageView
-{
-    _isMove = FALSE;
-    [UIView animateWithDuration:MO_SHAKE_ANIMATE_DURATION animations:^{
-        [_imgUp setFrame: CGRectMake((_imgUp.frame.origin.x), (_imgUp.frame.origin.y + MO_SHAKE_SUBVIEW_OFFSET), _imgUp.frame.size.width, _imgUp.frame.size.height)];
-        [_imgDown setFrame:CGRectMake((_imgDown.frame.origin.x), (_imgDown.frame.origin.y - MO_SHAKE_SUBVIEW_OFFSET), _imgDown.frame.size.width, _imgDown.frame.size.height)];
-     }];
-}
-#endif
-
 #pragma mark - UIResponder
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-    
     if (motion == UIEventSubtypeMotionShake)
     {
-        if(!_isMove)
-        {
-            //
-        }
     }
 }
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
@@ -162,9 +110,6 @@
 }
 - (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-    if(_isMove)
-    {
-    }
 }
 
 

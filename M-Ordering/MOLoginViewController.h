@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MOLoginDelegate.h"
 #import "MODataController.h"
 
 @interface MOLoginViewController : UIViewController 

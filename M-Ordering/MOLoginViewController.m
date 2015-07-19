@@ -10,6 +10,16 @@
 #import "MOMainController.h"
 #import "MOCommon.h"
 
+#define MO_LOGO_WIDTH  (180)
+#define MO_LOGO_HEIGHT (60)
+
+#define MO_TEXTVIEW_HEIGHT (40)
+#define MO_BUTTON_HEIGHT (44)
+#define MO_LABEL_HEIGHT (20)
+#define MO_LABEL_WIDTH (4)
+
+
+
 @interface MOLoginViewController () <UITextFieldDelegate>
 {
     UITextField* _txtUserName;
@@ -56,14 +66,21 @@
     //[backgroundImg setAlpha:1.0];
     [self.view addSubview:backgroundImg];
     
-    // 67.5 185 67.5
+    CGFloat x = (self.view.frame.size.width - MO_LOGO_WIDTH) / 2;
+    CGFloat y = self.view.frame.size.height / 8;
+
     //1. Top Img
-    UIImageView* topImgView = [[UIImageView alloc] initWithFrame:CGRectMake(67.5, 60, 185, 60)];
+    UIImageView* topImgView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, MO_LOGO_WIDTH, MO_LOGO_HEIGHT)];
     [topImgView setImage:[UIImage imageNamed:@"logo001.jpg"]];
     [self.view addSubview:topImgView];
 
     //2. txt UserName
-    _txtUserName = [[UITextField alloc] initWithFrame:CGRectMake(30, 160, 260, 40)];
+    x = self.view.frame.size.width / 8;
+    y = self.view.frame.size.height / 3;
+    CGFloat w = self.view.frame.size.width - x * 2;
+    CGFloat h = MO_TEXTVIEW_HEIGHT;
+    
+    _txtUserName = [[UITextField alloc] initWithFrame:CGRectMake(x, y, w, h)];
     [_txtUserName setBorderStyle:UITextBorderStyleRoundedRect];
     [_txtUserName setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     [_txtUserName setContentVerticalAlignment:(UIControlContentVerticalAlignmentCenter)];
@@ -76,12 +93,12 @@
     [_txtUserName setDelegate:self];
     [_txtUserName setBackgroundColor: [UIColor whiteColor]];
     [_txtUserName setTag:1];
-    //NSString* name = ((self.dataCtrl.userName) ? self.dataCtrl.userName: @"李志兴");
     [_txtUserName setText:[self.dataCtrl userName]];
     [self.view addSubview:_txtUserName];
     
     //3. txt Password
-    _txtPassword = [[UITextField alloc] initWithFrame:CGRectMake(30, 200, 260, 40)];
+    y += h;
+    _txtPassword = [[UITextField alloc] initWithFrame:CGRectMake(x, y, w, h)];
     [_txtPassword setBorderStyle:UITextBorderStyleRoundedRect];
     [_txtPassword setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     [_txtPassword setContentVerticalAlignment:(UIControlContentVerticalAlignmentCenter)];
@@ -93,14 +110,14 @@
     [_txtPassword setSecureTextEntry:YES];
     [_txtPassword setDelegate:self];
     [_txtPassword setTag:2];
-    //NSString* password = ((self.dataCtrl.password) ? self.dataCtrl.password: @"123456");
     [_txtPassword setText:[self.dataCtrl password]];
     [self.view addSubview:_txtPassword];
     
     //4. btnLogin
+    y = self.view.frame.size.height * 0.55f;
+    h = MO_BUTTON_HEIGHT;
     UIButton* btnLogin = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //[btnLogin setTitle:@"登陆" forState:UIControlStateNormal];
-    [btnLogin setFrame:CGRectMake(30, 255, 260, 44)];
+    [btnLogin setFrame:CGRectMake(x, y, w, h)];
     [btnLogin setBackgroundImage:[UIImage imageNamed:@"login_btn_blue_nor"] forState:UIControlStateNormal];
     [btnLogin setBackgroundImage:[UIImage imageNamed:@"login_btn_blue_press"] forState:UIControlStateSelected];
     //[btnLogin setBackgroundColor:[UIColor whiteColor]];
@@ -109,19 +126,26 @@
     
     //50 80 28 4 28 80 50
     //5. labels
-    UILabel* label1 = [[UILabel alloc] initWithFrame:CGRectMake(50, 500, 80, 20)];
+    x = self.view.frame.size.width * 0.2f;
+    y = self.view.frame.size.height * 0.9f;
+    w = self.view.frame.size.width * 0.2f;
+    h = MO_LABEL_HEIGHT;
+    
+    UILabel* label1 = [[UILabel alloc] initWithFrame:CGRectMake(x, y, w, h)];
     [label1 setText:@"忘记密码"];
     [label1 setTextAlignment:NSTextAlignmentRight];
     [label1 setFont: [UIFont systemFontOfSize:14]];
     [self.view addSubview:label1];
     
-    UILabel* label2 = [[UILabel alloc] initWithFrame:CGRectMake(190, 500, 80, 20)];
+    x = self.view.frame.size.width * 0.6f;
+    UILabel* label2 = [[UILabel alloc] initWithFrame:CGRectMake(x, y, w, h)];
     [label2 setText:@"马上注册"];
     [label2 setTextAlignment:NSTextAlignmentLeft];
     [label2 setFont: [UIFont systemFontOfSize:14]];
     [self.view addSubview:label2];
     
-    UILabel* label3 = [[UILabel alloc] initWithFrame:CGRectMake(158, 500, 4, 20)];
+    x = (self.view.frame.size.width - MO_LABEL_WIDTH) * 0.5f;
+    UILabel* label3 = [[UILabel alloc] initWithFrame:CGRectMake(x, y, MO_LABEL_WIDTH, MO_LABEL_HEIGHT)];
     [label3 setText:@"|"];
     [label3 setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:label3];

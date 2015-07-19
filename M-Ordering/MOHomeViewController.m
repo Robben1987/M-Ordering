@@ -18,6 +18,11 @@
 //MO_COLOR_RGBA(125,193,221,1)
 //MO_COLOR_RGBA(136,171,218,1)
 
+#define MO_HOME_AD_IMAGE_HEIGHT (150)
+#define MO_MENU_X_PADDING (5)
+#define MO_MENU_Y_PADDING (2)
+
+
 @interface MOHomeViewController ()
 {
     NSMutableArray*     _groups;
@@ -49,44 +54,50 @@
     
     //1. Top Img
     NSArray* pages = @[@"top.jpg", @"top.jpg"];
-    MOImageScrollView* topImgView = [[MOImageScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 150) pages:pages];
+    MOImageScrollView* topImgView = [[MOImageScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, MO_HOME_AD_IMAGE_HEIGHT) pages:pages];
     
     NSArray* group1 = @[topImgView];
     [_groups addObject:group1];
     
     //2. quick menu Buttons
+    CGFloat w = (self.view.frame.size.width - MO_MENU_X_PADDING * 4)/2;
+    CGFloat h = (MO_TABLEVIEW_CELL_HEIGHT - MO_MENU_Y_PADDING * 2);
+
+    CGRect firRect = CGRectMake(MO_MENU_X_PADDING, MO_MENU_Y_PADDING, w, h);
+    CGRect secRect = CGRectMake((self.view.frame.size.width/2 + MO_MENU_X_PADDING), MO_MENU_Y_PADDING, w, h);
+
     UIButton* tel = [UIButton buttonWithType:UIButtonTypeCustom];
     [tel setTitle:@"通讯录" forState:UIControlStateNormal];
-    [tel setFrame:CGRectMake(5, 2, 150, 40)];
+    [tel setFrame:firRect];
     [tel addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     [tel setBackgroundColor: MO_COLOR_RGBA(126,206,244,1)];
     [tel.layer setCornerRadius:10.0];
     
     UIButton* meet = [UIButton buttonWithType:UIButtonTypeCustom];
     [meet setTitle:@"会议室" forState:UIControlStateNormal];
-    [meet setFrame:CGRectMake(165, 2, 150, 40)];
+    [meet setFrame:secRect];
     [meet.layer setCornerRadius:10.0];
     [meet addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     [meet setBackgroundColor: MO_COLOR_RGBA(132,204,201,1)];
     
-    UIView* util1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    UIView* util1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, h)];
     [util1 addSubview:tel];
     [util1 addSubview:meet];
     
     UIButton* massage = [UIButton buttonWithType:UIButtonTypeCustom];
     [massage setTitle:@"按摩" forState:UIControlStateNormal];
-    [massage setFrame:CGRectMake(5, 2, 150, 40)];
+    [massage setFrame:firRect];
     [massage.layer setCornerRadius:10.0];
     [massage addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     [massage setBackgroundColor: MO_COLOR_RGBA(182,184,222,1)];
     
     UIButton* plus = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [plus setFrame:CGRectMake(165, 2, 150, 40)];
+    [plus setFrame:secRect];
     [plus setBackgroundColor: [UIColor lightGrayColor]];
     [plus.layer setCornerRadius:10.0];
     //[plus addTarget:self action:@selector(touchUpIndise:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIView* util2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    UIView* util2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, h)];
     [util2 addSubview:massage];
     [util2 addSubview:plus];
 
@@ -122,8 +133,6 @@
     if(indexPath.section != 2)
     {
         [cell.contentView addSubview:[_groups[indexPath.section] objectAtIndex:indexPath.row]];
-        //[cell.layer setBorderColor:[UIColor whiteColor].CGColor];
-        //cell.layer.borderWidth = 0;
     }else
     {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -144,10 +153,6 @@
     return nil;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return nil;
-}
 -(CGFloat)tableView:( UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat height = 0.f;
@@ -190,6 +195,7 @@
 {
     UIViewController* vc = [[UIViewController alloc] init];
     [vc.view setBackgroundColor:[UIColor yellowColor]];
+    [vc setTitle:@"Todo"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

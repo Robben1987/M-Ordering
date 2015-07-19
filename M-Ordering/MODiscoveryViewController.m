@@ -81,8 +81,7 @@
     }
     
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-    //[cell.textLabel setText:entry ];
-    cell.textLabel.text = entry;
+    [cell.textLabel setText:entry];
     return cell;
 }
 

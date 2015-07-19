@@ -10,7 +10,6 @@
 #import "MOHomeViewController.h"
 #import "MOSelfViewController.h"
 #import "MODiscoveryViewController.h"
-#import "MOOthersViewController.h"
 #import "MOQuickOrderTableViewController.h"
 #import "MOCommon.h"
 
@@ -30,7 +29,7 @@
     
     [self initDataCtrl];
     
-#if !(NETWORK_ACTIVE)
+#if (NETWORK_ACTIVE)
     [self.dataCtrl loadData];
     [self loadViewControllers];
 #else

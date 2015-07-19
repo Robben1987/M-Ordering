@@ -12,8 +12,6 @@
 
 
 @interface MOCommentViewController : UIViewController
-//@interface MOCommentViewController : UITableViewController
-
 
 @property(nonatomic, retain)MODataController*   dataCtrl;
 @property(nonatomic, retain)MOOrderEntry*       orderEntry;

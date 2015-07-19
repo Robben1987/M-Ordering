@@ -107,36 +107,6 @@
 }
 
 #pragma mark返回每行的单元格
-/*- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    MOMenuEntry* entry = nil;
-    
-    //如果当前是UISearchDisplayController内部的tableView则使用搜索数据
-    if(tableView == self.searchDisplayController.searchResultsTableView)
-    {
-        entry =_searchEntrys[indexPath.row];
-    }else
-    {
-        MOMenuGroup* group = _groups[indexPath.section];
-        entry = group.entrys[indexPath.row];
-    }
-    
-    static NSString *cellIdentifier = @"UITableViewCellIdentifierKey1";
-    
-    //首先根据标识去缓存池取
-    UITableViewCell *cell=[self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    //如果缓存池没有取到则重新创建并放到缓存池中
-    if(!cell)
-    {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-    }
-    
-    cell.textLabel.text = entry.entryName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%u", entry.index];
-    
-    return cell;
-}*/
-#pragma mark返回每行的单元格
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MOMenuEntry* entry = nil;
@@ -162,7 +132,7 @@
     {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         
-        UIButton* order = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 50, 50)];
+        UIButton* order = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, MO_TABLEVIEW_CELL_HEIGHT, MO_TABLEVIEW_CELL_HEIGHT)];
         [order setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [order addTarget:self action:@selector(touchOrder:) forControlEvents:UIControlEventTouchUpInside];
         [order setTag:indexPath.row];
@@ -223,12 +193,10 @@
     
 }
 
-#pragma mark - 代理方法
-
 #pragma mark 设置每行高度（每行高度可以不一样）
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;
+    return MO_TABLEVIEW_CELL_HEIGHT;
 }
 
 #pragma mark 返回每组头标题名称
@@ -241,14 +209,6 @@
     
     MOMenuGroup* group=_groups[section];
     return group.groupName;
-}
-
-#pragma mark 返回每组尾部说明
--(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    //MOMenuGroup* group=_groups[section];
-    //return group.detail;
-    return nil;
 }
 
 #pragma mark 返回每组标题索引
@@ -268,23 +228,6 @@
     [_searchBar resignFirstResponder];//退出键盘
     return indexPath;
 }
-
-#if 0
-#pragma mark 设置分组标题内容高度
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if(section==0)
-    {
-        return 50;
-    }
-    return 40;
-}
-
-#pragma mark 设置尾部说明内容高度
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 40;
-}
-#endif
 
 #pragma mark 重写状态样式方法
 -(UIStatusBarStyle)preferredStatusBarStyle
@@ -311,7 +254,6 @@
     }];
 }
 
-#pragma mark - 搜索框代理
 #pragma mark - UISearchDisplayController代理方法
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
