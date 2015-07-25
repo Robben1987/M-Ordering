@@ -176,6 +176,7 @@
         MOMenuViewController* menu = [MOMenuViewController initWithTitle:title
                                                                 style:UITableViewStylePlain
                                                              dataCtrl:self.dataCtrl];
+        [menu setHidesBottomBarWhenPushed:YES];
         [self.navigationController pushViewController:menu animated:YES];
     }
 }

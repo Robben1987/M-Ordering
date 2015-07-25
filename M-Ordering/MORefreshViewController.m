@@ -44,16 +44,7 @@ const NSInteger MORefreshFooterHeight = 50;
     [super viewDidLoad];
     //self.automaticallyAdjustsScrollViewInsets = NO;
     
-    //get statusbar rect
-    //CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
-    //get navigationbar rect
-    //CGRect rectNav = self.navigationController.navigationBar.frame;
-    
-    //CGFloat height = (rectStatus.size.height+rectNav.size.height);
-    //CGRect tableFrame = CGRectMake(0, height, self.view.bounds.size.width,(self.view.bounds.size.height - height));
-    
     _tableView = [[MORefreshTableView alloc] initWithFrame:self.view.bounds showRefreshHeader:YES showRefreshFooter:NO];
-    //_tableView = [[MORefreshTableView alloc] initWithFrame:tableFrame showRefreshHeader:YES showRefreshFooter:NO];
     _tableView.refreshHeaderHeight = MORefreshHeaderHeight;
     _tableView.refreshFooterHeight = MORefreshFooterHeight;
     _tableView.dataSource = self;
@@ -164,6 +155,7 @@ const NSInteger MORefreshFooterHeight = 50;
     [orderEntry.menuEntry setIndex:[menuEntry index]];
     
     MOCommentViewController* commentView = [[MOCommentViewController alloc] initWithComment:orderEntry andDataCtrl:self.dataCtrl];
+    [commentView setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:commentView animated:YES];
     //[self presentViewController:commentView animated:YES completion:nil];
 }
@@ -241,5 +233,16 @@ const NSInteger MORefreshFooterHeight = 50;
 
 
 
+-(void)viewWillAppear:(BOOL)animated
+{
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+}
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 @end
 

@@ -43,8 +43,6 @@
 {
     [super loadView];
     
-    //[self.navigationController.tabBarController.tabBar setHidden:YES];
-    
     //1. UITableView
     [self.tableView setDataSource:self];
     
@@ -356,5 +354,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
 }
 @end

@@ -141,8 +141,9 @@
     {
         if(indexPath.row == 0)
         {
-            MOTableViewController* vc = [MOTableViewController initWithTitle:@"self" type:MOSelfInfoTableView dataCtrl:self.dataCtrl];
-            
+            MOTableViewController* vc = [MOTableViewController initWithTitle:@"我的信息" type:MOSelfInfoTableView dataCtrl:self.dataCtrl];
+            [vc setHidesBottomBarWhenPushed:YES];
+
             __weak UITableView* table = self.tableView;
             [vc setCallBack:^(void)
             {
@@ -157,6 +158,7 @@
         {
             MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
             [vc setTitle:@"订餐记录"];
+            [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
             
         }

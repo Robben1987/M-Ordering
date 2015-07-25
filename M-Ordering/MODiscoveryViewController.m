@@ -95,6 +95,7 @@
         {
             MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType: MO_REFRESH_OTHERS andDataCtrl: self.dataCtrl];
             [vc setTitle:@"朋友们点了什么"];
+            [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else if(indexPath.section == 1)
@@ -103,6 +104,7 @@
         {
             MOShakeViewController* vc = [[MOShakeViewController alloc] initWithDataCtrl: self.dataCtrl];
             [vc setTitle:@"摇一摇点餐"];
+            [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
         }
     }else

@@ -29,7 +29,7 @@
     
     [self initDataCtrl];
     
-#if (NETWORK_ACTIVE)
+#if !(NETWORK_ACTIVE)
     [self.dataCtrl loadData];
     [self loadViewControllers];
 #else
