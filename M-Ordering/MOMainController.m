@@ -6,6 +6,8 @@
 //  Copyright (c) 2015年 Li Robben. All rights reserved.
 //
 
+#import "Reachability.h"
+
 #import "MOMainController.h"
 #import "MOHomeViewController.h"
 #import "MOSelfViewController.h"
@@ -15,6 +17,7 @@
 
 @interface MOMainController ()
 {
+    Reachability* _internetReachability;
 }
 @end
 
@@ -26,6 +29,8 @@
     NSLog(@"main:%d", ++num);
     
     [super viewDidLoad];
+    
+    [self addObserver];
     
     [self initDataCtrl];
     
@@ -90,5 +95,53 @@
     [self setViewControllers:viewControllers animated:YES];
 }
 
+#pragma mark - add observer
+- (void)addObserver
+{
+    /*
+     Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method reachabilityChanged will be called.
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    _internetReachability = [Reachability reachabilityForInternetConnection];
+    [_internetReachability startNotifier];
+}
+- (void) reachabilityChanged:(NSNotification *)note
+{
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    
+   	if (curReach == _internetReachability)
+    {
+        NetworkStatus netStatus = [curReach currentReachabilityStatus];
+        switch (netStatus)
+        {
+            case NotReachable:
+            {
+                MO_SHOW_FAIL(@"客官，网络未连接!");
+                break;
+            }
+            case ReachableViaWWAN:
+            {
+                MO_SHOW_SUCC(@"客官，移动网络已连接!");
+                break;
+            }
+            case ReachableViaWiFi:
+            {
+                MO_SHOW_SUCC(@"客官，WIFI已连接!");
+                break;
+            }
+            default:
+                break;
+        }
+
+    }
+}
+
+- (void)dealloc
+{
+    [_internetReachability stopNotifier];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
 
 @end

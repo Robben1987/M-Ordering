@@ -14,7 +14,6 @@
 
 @interface AppDelegate ()
 {
-    //MOLoginViewController* _loginCtrl;
     MOMainController*        _tabBarCtrl;
 }
 @end
