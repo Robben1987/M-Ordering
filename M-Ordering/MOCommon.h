@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD+MJ.h"
 
-#define NETWORK_ACTIVE (0)
+#define NETWORK_ACTIVE (1)
 
 #if NETWORK_ACTIVE
 #define HTTP_URL_REFERER (@"http://10.2.2.188/")
@@ -24,8 +24,8 @@
 #define HTTP_URL_OTHER_ORDERS (@"http://10.2.2.188/Menu.asp?at=otherslog")
 #define HTTP_URL_PASSWORD (@"http://10.2.2.188/menu.asp?at=editpsw")
 #define HTTP_URL_MONEY (@"http://10.2.2.188/menu.asp?at=money")
-#define HTTP_URL_ORDER (@"http://10.2.2.188/Menu.asp?at=eat&Fid=%d")
-#define HTTP_URL_CANCEL (@"http://10.2.2.188/Menu.asp?at=rmdd&ddid=%d")
+#define HTTP_URL_ORDER (@"http://10.2.2.188/Menu.asp?at=eat&Fid=")
+#define HTTP_URL_CANCEL (@"http://10.2.2.188/Menu.asp?at=rmdd&ddid=")
 #define HTTP_URL_COMMENT (@"http://10.2.2.188/Menu.asp?at=addpl") //send comment
 #define HTTP_URL_COMMENTS (@"http://10.2.2.188/Menu.asp?at=pl&Fid=")//get comments
 #define HTTP_URL_ORDER_RANDOM (@"http://10.2.2.188/Menu.asp?at=sj")

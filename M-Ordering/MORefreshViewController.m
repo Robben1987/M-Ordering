@@ -186,11 +186,7 @@ const NSInteger MORefreshFooterHeight = 50;
 }
 -(void)sendOrder:(UIAlertView *)alertView
 {
-    NSString* result = nil;
-    if(![self.dataCtrl sendOrder: (unsigned)alertView.tag])
-    {
-        result = @"网络错误...";
-    }
+    NSString* result = [self.dataCtrl sendOrder: (unsigned)alertView.tag];
     
     [self performSelectorOnMainThread:@selector(showResult:) withObject:result waitUntilDone:NO];
 }

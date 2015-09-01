@@ -109,8 +109,8 @@
     NSRange rangEnd=[tableStart rangeOfString:@"</table>"];
     NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location + rangEnd.length)]];
     
-    //NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
-    NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
+    NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    //NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
     
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     NSArray *elements  = [xpathParser searchWithXPathQuery:@"//tr"];
@@ -141,8 +141,8 @@
 }
 +(void)getRestaurants:(NSMutableDictionary*)dic fromHtml:(NSString*)htmlString
 {
-    NSData *htmlData=[htmlString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
-    //NSData *htmlData=[htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    //NSData *htmlData=[htmlString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
+    NSData *htmlData=[htmlString dataUsingEncoding:NSUTF8StringEncoding];
     
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     NSArray *elements  = [xpathParser searchWithXPathQuery:@"//a"];
@@ -538,7 +538,7 @@
     NSString* html = [[NSString alloc] initWithData:recv encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
     NSLog(@"body:\n%@", html);
     
-    if([MODataOperation isSendCommentSuccessfully: html])
+    if(![MODataOperation isSendCommentSuccessfully: html])
     {
         NSLog(@"comment failed");
         return FALSE;

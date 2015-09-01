@@ -67,7 +67,7 @@
     
 #endif
     
-    NSString* file = MO_DATA_FILE(self.account.userName);
+    /*NSString* file = MO_DATA_FILE(self.account.userName);
     if([MODataOperation isFileExist: file])
     {
         MO_LOG(@"data file exist...");
@@ -79,7 +79,7 @@
         self.otherOders = [NSMutableArray arrayWithArray:dataCtrl.otherOders];
         self.myFavourites = [NSMutableArray arrayWithArray:dataCtrl.myFavourites];
         
-    }else
+    }else*/
     {
         self.menuArray = [NSMutableArray array];
         self.restaurants = [NSMutableDictionary dictionary];
