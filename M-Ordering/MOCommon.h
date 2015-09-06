@@ -86,5 +86,6 @@
 #pragma mark - View
 #define MO_UIVIEW_WIDTH (0)
 
+#define CONTAIN_SUBSTRING(str, substr) ([(str) rangeOfString:(substr)].location != NSNotFound)
 
 #endif

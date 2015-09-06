@@ -10,6 +10,7 @@
 #import "MODataOperation.h"
 #import "MOMenuGroup.h"
 #import "MOMenuEntry.h"
+#import "MOOrderEntry.h"
 #import "MOCommon.h"
 #import "MOLoginViewController.h"
 
@@ -200,7 +201,9 @@
 }
 -(NSString*)cancelOrder:(unsigned)index
 {
-    NSString* result = [MODataOperation cancel: index];
+    [self updateMyHistory];
+    MOOrderEntry* orderEntry = [self.myHistory objectAtIndex:0];
+    NSString* result = [MODataOperation cancel: orderEntry.orderId];
 
     if(!result)
     {

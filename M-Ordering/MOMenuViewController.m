@@ -145,11 +145,7 @@
                         entry.price,
                         entry.commentNumber];
     [cell.detailTextLabel setText:detail];
-//#if (NETWORK_ACTIVE)
     if(entry.index != [self.dataCtrl ordered])
-//#else
-//    if(entry.index != 76)
-//#endif
     {
         [(UIButton*)cell.accessoryView setTitle:@"预定" forState:UIControlStateNormal];
     }else
@@ -159,36 +155,6 @@
     NSLog(@"textLabel: %@, detailTextLabel:%@", cell.textLabel, cell.detailTextLabel);
 
     return cell;
-}
-
--(void)initData
-{
-    //_menus = [[NSMutableArray alloc] initWithObjects:
-              //@"番茄炒蛋", @"青椒肉丝", @"回锅肉",@"番茄炒蛋", @"青椒肉丝", @"回锅肉", nil];
-    
-    _groups = [[NSMutableArray alloc]init];
-    
-    unsigned index = 0;
-    MOMenuEntry* entry1 = [MOMenuEntry initWithName:@"番茄炒蛋" andIndex:index++];
-    MOMenuEntry* entry2 = [MOMenuEntry initWithName:@"青椒肉丝" andIndex:index++];
-    MOMenuEntry* entry3 = [MOMenuEntry initWithName:@"回锅肉" andIndex:index++];
-    MOMenuEntry* entry4 = [MOMenuEntry initWithName:@"鸡腿饭" andIndex:index++];
-    MOMenuGroup* group1 = [MOMenuGroup initWithName:@"A" andDetail:@"With names beginning with A" andEntrys:[NSMutableArray arrayWithObjects:entry1, entry2,entry3,entry4,nil]];
-    [_groups addObject:group1];
-    
-    MOMenuEntry* entry5 = [MOMenuEntry initWithName:@"牛腩饭" andIndex:index++];
-    MOMenuEntry* entry6 = [MOMenuEntry initWithName:@"香汁排骨" andIndex:index++];
-    MOMenuEntry* entry7 = [MOMenuEntry initWithName:@"卤肉饭" andIndex:index++];
-    MOMenuEntry* entry8 = [MOMenuEntry initWithName:@"红烧肉" andIndex:index++];
-    MOMenuGroup* group2 = [MOMenuGroup initWithName:@"B" andDetail:@"With names beginning with B" andEntrys:[NSMutableArray arrayWithObjects:entry5, entry6,entry7,entry8,nil]];
-    [_groups addObject:group2];
-    
-    MOMenuEntry* entry9 = [MOMenuEntry initWithName:@"鱼香茄子" andIndex:index++];
-    MOMenuEntry* entry10 = [MOMenuEntry initWithName:@"宫保鸡丁" andIndex:index++];
-    MOMenuEntry* entry11 = [MOMenuEntry initWithName:@"水煮鱼" andIndex:index++];
-    MOMenuGroup* group3 = [MOMenuGroup initWithName:@"C" andDetail:@"With names beginning with C" andEntrys:[NSMutableArray arrayWithObjects:entry9, entry10,entry11, nil]];
-    [_groups addObject:group3];
-    
 }
 
 #pragma mark 设置每行高度（每行高度可以不一样）
@@ -264,7 +230,6 @@
 -(void)touchOrder:(UIButton*)button
 {
     _selectedIndexPath = [NSIndexPath indexPathForRow:button.tag inSection:0];
-    
     MOMenuEntry* entry = nil;
     NSString*    detail = nil;
     UIAlertView* alert = nil;
@@ -273,7 +238,7 @@
     {
         entry = [self.dataCtrl getOrderedMenuEntry];
         detail = [NSString stringWithFormat:@"%@ 的 %@", entry.restaurant, entry.entryName];
-        if([button.currentTitle isEqualToString:@"预订"])
+        if(![button.currentTitle isEqualToString:@"取消"])
         {
             MO_SHOW_FAIL(([NSString stringWithFormat:@"您已经预定了: %@", detail]));
             return;

@@ -13,9 +13,6 @@
 #import "MOCommon.h"
 
 
-#define CONTAIN_SUBSTRING(str, stubstr) ([(str) rangeOfString:(stubstr)].location != NSNotFound)
-
-
 @interface MODataOperation ()
 {
 }
@@ -99,9 +96,25 @@
 }
 
 #pragma mark- html method
-+(unsigned)getMenuList:(NSMutableArray*)array fromHtml:(NSString*)htmlString
+/*
+ <tr>
+ <td height="30" colspan="6">
+ <p align="right"><font color="#000080">首页 上一页</font>&nbsp;
+ <a href="Menu.asp?at=list&amp;page=2&amp;rid=18&amp;orders=98&amp;txtitle=">下一页</a> 
+ <a href="Menu.asp?at=list&amp;page=2&amp;rid=18&amp;orders=98&amp;txtitle=">尾页</a>
+ <font color="#000080">&nbsp;页次：</font>
+     <strong>
+         <font color="red">1</font>
+         <font color="#000080">/2</font>
+     </strong><font color="#000080">页</font> 
+ <font color="#000080">&nbsp;共<b>38</b>条记录 <b>30</b>条记录/页</font>
+ </p>
+ </td>
+ </tr>
+ */
++(NSString*)getMenuList:(NSMutableArray*)array fromHtml:(NSString*)htmlString
 {
-    static unsigned pageNum = 0;
+    NSMutableString* urlString = nil;
     
     NSRange rangStart=[htmlString rangeOfString:@"<table class=\"en\""];
     NSMutableString *tableStart=[[NSMutableString alloc]initWithString:[htmlString substringFromIndex:rangStart.location]];
@@ -109,8 +122,11 @@
     NSRange rangEnd=[tableStart rangeOfString:@"</table>"];
     NSMutableString *tableString=[[NSMutableString alloc]initWithString:[tableStart substringToIndex:(rangEnd.location + rangEnd.length)]];
     
+#if NETWORK_ACTIVE
+    NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
+#else
     NSData *htmlData=[tableString dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)];
-    //NSData *htmlData=[tableString dataUsingEncoding: NSUTF8StringEncoding];
+#endif
     
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
     NSArray *elements  = [xpathParser searchWithXPathQuery:@"//tr"];
@@ -122,22 +138,29 @@
         MOMenuEntry* entry = [MOMenuEntry initWithName:[children[1] content] andIndex:[[children[0] content] intValue]];
         [entry setPrice:[[children[2] content] floatValue]];
         [entry setChosedTimes:[[children[3] content] intValue]];
-        //NSString* name = [[entry restaurant] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
         [entry setRestaurant:[[children[4] content] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
         [entry setCommentNumber:[[children[5] content] intValue]];
         //[entry dumpEntry];
         [array addObject:entry];
     }
     
-    if(!pageNum)
+    //get next page
+    NSArray* tds = [elements[elements.count-1] children];
+    NSArray* ps  = [tds[0] children];
+    NSArray* children =[ps[0] children];
+    
+    for(unsigned j = 1; j < children.count; j++)
     {
-        NSArray* nexts  = [xpathParser searchWithXPathQuery:@"//strong"];
-        NSArray* children = [nexts[0] children];
-        NSString* page = [[children[children.count - 1] content] substringFromIndex:1];
-        pageNum = [page intValue];
+        if([[children[j] content] isEqualToString: @"下一页"])
+        {
+            NSString* href = [children[j] objectForKey:@"href"];
+            NSLog(@"next url:%@", [children[j] objectForKey:@"href"]);
+            urlString = [NSMutableString stringWithString:HTTP_URL_REFERER];
+            [urlString appendString: href];
+        }
     }
     
-    return pageNum;
+    return urlString;
 }
 +(void)getRestaurants:(NSMutableDictionary*)dic fromHtml:(NSString*)htmlString
 {
@@ -380,23 +403,26 @@
     
     //get restaurants
     NSString* htmlBody = [MODataOperation sendHttpRequestSync:HTTP_URL_RESTAURANT];
+    if(!htmlBody)
+    {
+        NSLog(@"get url(%@) failed", HTTP_URL_RESTAURANT);
+        return FALSE;
+    }
     [MODataOperation getRestaurants:restaurants fromHtml:htmlBody];
     
     // get menu list
-    unsigned pageNum = 0xffffffff;
-    for(unsigned index = 1; index <= pageNum; index++)
+    NSString* url = HTTP_URL_MENU_LIST;
+    do
     {
-        NSString* url = [NSString stringWithFormat:HTTP_URL_MENU_NEXT, index];
-        NSString* html = [MODataOperation sendHttpRequestSync:url];
-        if(!html)
+        htmlBody = [MODataOperation sendHttpRequestSync: url];
+        if(!htmlBody)
         {
             NSLog(@"get url(%@) failed", url);
             return FALSE;
         }
-        unsigned num = [MODataOperation getMenuList:menus fromHtml:html];
         
-        if(pageNum == 0xffffffff) pageNum = num;
-    }
+        url = [MODataOperation getMenuList:menus fromHtml:htmlBody];
+    } while (url);
     
 #else
     NSString* html = [MODataOperation getHtmlfromUrl:HTTP_URL_RESTAURANT];

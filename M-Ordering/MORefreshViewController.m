@@ -228,10 +228,6 @@ const NSInteger MORefreshFooterHeight = 50;
 }
 
 
-
--(void)viewWillAppear:(BOOL)animated
-{
-}
 -(void)viewWillDisappear:(BOOL)animated
 {
 }

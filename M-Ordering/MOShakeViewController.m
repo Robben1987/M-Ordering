@@ -135,7 +135,7 @@
         MOMenuEntry* entry = [[self.dataCtrl menuArray] objectAtIndex:index];
         NSString* info = [NSString stringWithFormat:@"%@(%@)", entry.entryName, entry.restaurant];
         UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"恭喜您,摇到了" message:info delegate:self cancelButtonTitle:@"再摇一次" otherButtonTitles:@"就点这个", nil];
-        [alert setTag: index];
+        [alert setTag: entry.index];
         [alert show];
         
         _angle = 30.0;
