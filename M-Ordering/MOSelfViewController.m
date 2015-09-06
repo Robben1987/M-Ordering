@@ -154,20 +154,33 @@
         }
     }else if(indexPath.section == 1)
     {
-        if(indexPath.row == 1)
+        if(indexPath.row == 0)
+        {
+            UIViewController* vc = [[UIViewController alloc] init];
+            [vc.view setBackgroundColor:[UIColor blueColor]];
+            [vc setTitle:@"收藏"];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        else if(indexPath.row == 1)
         {
             MORefreshViewController* vc = [[MORefreshViewController alloc] initWithType:MO_REFRESH_MY_HISTORY andDataCtrl: self.dataCtrl];
             [vc setTitle:@"订餐记录"];
             [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
             
+        }else if(indexPath.row == 2)
+        {
+            UIViewController* vc = [[UIViewController alloc] init];
+            [vc.view setBackgroundColor:[UIColor yellowColor]];
+            [vc setTitle:@"提醒"];
+            [self.navigationController pushViewController:vc animated:YES];
         }
     }else
     {
-        MOCommentViewController* vc = [[MOCommentViewController alloc] init];
-        [vc setTitle:@"评论"];
+        UIViewController* vc = [[UIViewController alloc] init];
+        [vc.view setBackgroundColor:[UIColor yellowColor]];
+        [vc setTitle:@"设置"];
         [self.navigationController pushViewController:vc animated:YES];
-        //[self presentModalViewController:vc animated:YES];
     }
 }
 

@@ -227,7 +227,15 @@ const NSInteger MORefreshFooterHeight = 50;
     [NSThread detachNewThreadSelector:@selector(downloadData) toTarget:self withObject:nil];
 }
 
-
+-(void)viewWillAppear:(BOOL)animated
+{
+}
+- (void)viewDidAppear:(BOOL)animated
+{
+    //if the contentInset is updated, the scrollViewDidScroll will be trigged
+    _tableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0);
+    [_tableView scrollViewDidEndDragging: _tableView willDecelerate:NO];
+}
 -(void)viewWillDisappear:(BOOL)animated
 {
 }

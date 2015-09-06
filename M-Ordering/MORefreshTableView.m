@@ -97,7 +97,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     static int i = 1;
-    NSLog(@"%d times", i++);
+    NSLog(@"scrollViewDidScroll:%d times", i++);
     
     /*MO_SHOW_POINT(@"scrollView contentOffset", scrollView.contentOffset);
     MO_SHOW_SIZE(@"scrollView contentSize", scrollView.contentSize);
@@ -124,6 +124,7 @@
     //拉动足够距离，状态变更为“松开....”
     if (self.isShowRefreshHeader && _refreshHeader)
     {
+        NSLog(@"scrollView.contentOffset.y: %f", scrollView.contentOffset.y);
         if (_refreshHeader.state == MORefreshViewStateDrag
             && scrollView.contentOffset.y < -self.refreshHeaderHeight - 10.f
             && !_headerRefreshing
@@ -153,6 +154,7 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    NSLog(@"scrollViewDidEndDragging:");
     /*MO_SHOW_POINT(@"scrollView contentOffset", scrollView.contentOffset);
      MO_SHOW_SIZE(@"scrollView contentSize", scrollView.contentSize);
      MO_SHOW_RECT(@"scrollView frame", scrollView.frame);

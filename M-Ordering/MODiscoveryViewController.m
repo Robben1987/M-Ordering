@@ -107,9 +107,19 @@
             [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
         }
+        else
+        {
+            UIViewController* vc = [[UIViewController alloc] init];
+            [vc.view setBackgroundColor:[UIColor grayColor]];
+            [vc setTitle:@"预定按摩"];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }else
     {
-        
+        UIViewController* vc = [[UIViewController alloc] init];
+        [vc.view setBackgroundColor:[UIColor yellowColor]];
+        [vc setTitle:@"图片"];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
