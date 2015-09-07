@@ -203,7 +203,7 @@ const NSInteger MORefreshFooterHeight = 50;
 }
 - (void)downloadData
 {
-    sleep(5);
+    //sleep(5);
     NSString* str = nil;
     BOOL result = FALSE;
 

@@ -17,12 +17,9 @@
                                    UISearchDisplayDelegate,
                                    UIAlertViewDelegate>
 {
-    NSMutableArray*            _menus;
-    NSMutableArray*            _groups;
     UISearchBar*               _searchBar;
     UISearchDisplayController* _searchDisplayController;
     NSMutableArray*            _searchEntrys;//符合条件的搜索联系人
-    UIButton* _button;
     NSIndexPath*               _selectedIndexPath;
     
 }
@@ -82,7 +79,6 @@
         return 1;
     }
     
-    //return _groups.count;
     return 1;
 }
 
@@ -93,6 +89,7 @@
     {
         return _searchEntrys.count;
     }
+    
     NSUInteger count = 0;
     if([self.title isEqual:@"快速订餐"])
     {
@@ -101,6 +98,7 @@
     {
         count = [[self.dataCtrl getMenuListByRestaurant: self.title] count];
     }
+    
     return count;
 }
 
@@ -112,7 +110,7 @@
     //如果当前是UISearchDisplayController内部的tableView则使用搜索数据
     if(tableView == self.searchDisplayController.searchResultsTableView)
     {
-        entry =_searchEntrys[indexPath.row];
+        entry = _searchEntrys[indexPath.row];
     }else
     {
         if([self.title isEqual:@"快速订餐"])
@@ -157,7 +155,7 @@
     return cell;
 }
 
-#pragma mark 设置每行高度（每行高度可以不一样）
+#pragma mark 设置每行高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return MO_TABLEVIEW_CELL_HEIGHT;
@@ -171,19 +169,7 @@
         return @"搜索结果";
     }
     
-    MOMenuGroup* group=_groups[section];
-    return group.groupName;
-}
-
-#pragma mark 返回每组标题索引
--(NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-{
-    NSMutableArray* indexs=[[NSMutableArray alloc] init];
-    for(MOMenuGroup* group in _groups)
-    {
-        [indexs addObject: group.groupName];
-    }
-    return indexs;
+    return nil;
 }
 
 #pragma mark 选中之前
@@ -202,20 +188,25 @@
 #pragma mark 搜索形成新数据
 -(void)searchDataWithKeyWord:(NSString *)keyWord
 {
-    _searchEntrys=[NSMutableArray array];
-    [_groups enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    _searchEntrys = [NSMutableArray array];
+    
+    void (^enumerateBlock)(id, NSUInteger, BOOL*) = ^(id obj, NSUInteger idx, BOOL *stop)
     {
-        MOMenuGroup* group = obj;
-        [group.entrys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+        MOMenuEntry* entry = obj;
+        if ([entry.entryName.uppercaseString containsString:keyWord.uppercaseString]
+            ||[[NSString stringWithFormat:@"%u", entry.index] containsString:keyWord])
         {
-            MOMenuEntry* entry = obj;
-            if ([entry.entryName.uppercaseString containsString:keyWord.uppercaseString]
-                ||[[NSString stringWithFormat:@"%u", entry.index] containsString:keyWord])
-            {
-                [_searchEntrys addObject:entry];
-            }
-        }];
-    }];
+            [_searchEntrys addObject:entry];
+        }
+    };
+
+    if([self.title isEqual:@"快速订餐"])
+    {
+        [[self.dataCtrl menuArray] enumerateObjectsUsingBlock: enumerateBlock];
+    }else
+    {
+        [[self.dataCtrl getMenuListByRestaurant: self.title] enumerateObjectsUsingBlock: enumerateBlock];
+    }
 }
 
 #pragma mark - UISearchDisplayController代理方法
