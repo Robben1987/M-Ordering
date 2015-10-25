@@ -54,7 +54,10 @@
     [account setEmail:[userDefaults       stringForKey:@"email"]];
     [account setSection:[userDefaults     stringForKey:@"section"]];
     NSData* image = [userDefaults         objectForKey:@"image"];
-    [account setPortraitImage:[UIImage imageWithData:image]];
+    if(image)
+        [account setPortraitImage:[UIImage imageWithData:image]];
+    else
+        [account setPortraitImage:[UIImage imageNamed:@"Robben.jpg"]];
     
     return account;
 }

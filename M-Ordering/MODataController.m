@@ -15,7 +15,7 @@
 #import "MOLoginViewController.h"
 
 
-#define MO_DATA_FILE(name) [NSString stringWithFormat:@"%@.data", name]
+#define MO_DATA_FILE(name) [NSString stringWithFormat:@"mo_%@.data", name]
 
 @interface MODataController ()
 {   
