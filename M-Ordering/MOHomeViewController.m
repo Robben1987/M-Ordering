@@ -53,7 +53,7 @@
     _groups = [[NSMutableArray alloc]init];
     
     //1. Top Img
-    NSArray* pages = @[@"top.jpg", @"top.jpg"];
+    NSArray* pages = @[@"mavenir", @"mitel"];
     MOImageScrollView* topImgView = [[MOImageScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, MO_HOME_AD_IMAGE_HEIGHT) pages:pages];
     
     NSArray* group1 = @[topImgView];

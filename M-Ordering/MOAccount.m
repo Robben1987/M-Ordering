@@ -17,7 +17,14 @@
 
 #define MO_ACCOUNT_SECTION      @"部门"
 
+#define MO_ACCOUNT_DEFAULT_IMAGE        @"Robben.jpg"
 
+#define MO_ACCOUNT_DEFAULT_USERNAME     @"Mitel"
+#define MO_ACCOUNT_DEFAULT_PHONE        @"888888"
+#define MO_ACCOUNT_DEFAULT_SKYPE        @"Mitel-China"
+#define MO_ACCOUNT_DEFAULT_EMAIL        @"Mitel-China@mitel.com"
+
+#define MO_ACCOUNT_DEFAULT_SECTION      @"Mavenir"
 
 @implementation MOAccount
 
@@ -46,19 +53,29 @@
 
 +(MOAccount*)loadAccount:(NSUserDefaults*)userDefaults
 {
-    MOAccount* account =
-    [MOAccount initWithName:[userDefaults stringForKey:@"userName"]
-                andPassword:[userDefaults stringForKey:@"password"]];
-    [account setPhone:[userDefaults       stringForKey:@"phone"]];
-    [account setSkype:[userDefaults       stringForKey:@"skype"]];
-    [account setEmail:[userDefaults       stringForKey:@"email"]];
-    [account setSection:[userDefaults     stringForKey:@"section"]];
-    NSData* image = [userDefaults         objectForKey:@"image"];
-    if(image)
-        [account setPortraitImage:[UIImage imageWithData:image]];
-    else
-        [account setPortraitImage:[UIImage imageNamed:@"Robben.jpg"]];
+    MOAccount* account = [MOAccount account];
     
+    NSString* userName = [userDefaults stringForKey:@"userName"];
+    if(!userName)
+    {
+        [account setUserName: MO_ACCOUNT_DEFAULT_USERNAME];
+        [account setPassword: MO_ACCOUNT_DEFAULT_USERNAME];
+        [account setPhone:    MO_ACCOUNT_DEFAULT_PHONE];
+        [account setSkype:    MO_ACCOUNT_DEFAULT_SKYPE];
+        [account setEmail:    MO_ACCOUNT_DEFAULT_EMAIL];
+        [account setSection:  MO_ACCOUNT_DEFAULT_SECTION];
+        [account setPortraitImage:[UIImage imageNamed:MO_ACCOUNT_DEFAULT_IMAGE]];
+    }else
+    {
+        [account setUserName: userName];
+        [account setPassword:[userDefaults    stringForKey:@"password"]];
+        [account setPhone:[userDefaults       stringForKey:@"phone"]];
+        [account setSkype:[userDefaults       stringForKey:@"skype"]];
+        [account setEmail:[userDefaults       stringForKey:@"email"]];
+        [account setSection:[userDefaults     stringForKey:@"section"]];
+        NSData* image = [userDefaults         objectForKey:@"image"];
+        [account setPortraitImage:[UIImage imageWithData:image]];
+    }
     return account;
 }
 
